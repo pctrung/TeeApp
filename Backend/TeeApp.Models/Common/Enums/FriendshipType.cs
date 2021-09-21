@@ -3,6 +3,6 @@
     public enum FriendshipType
     {
         Pending,
-        Accept
+        Accepted
     }
 }

@@ -78,10 +78,11 @@ namespace TeeApp.Api
             services.AddTransient<IStorageService, StorageService>();
 
             services.AddTransient<IPostService, PostService>();
+            services.AddTransient<IFriendService, FriendService>();
 
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
-                cfg.AddProfile(new MappingProfile(provider.GetService<IHttpContextAccessor>()));
+                cfg.AddProfile(new MappingProfile(provider.GetService<IHttpContextAccessor>(), provider.GetService<ICurrentUser>()));
             }).CreateMapper());
 
             services.AddDbContext<TeeAppDbContext>(options =>

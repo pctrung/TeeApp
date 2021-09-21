@@ -118,7 +118,7 @@ namespace TeeApp.Application.Services
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
-                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Cannot find user: " + _currentUser.UserName);
+                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Not found user: " + _currentUser.UserName);
             }
 
             if (!string.IsNullOrWhiteSpace(request.FirstName))
@@ -205,7 +205,7 @@ namespace TeeApp.Application.Services
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
-                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Cannot find user: " + _currentUser.UserName);
+                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Not found user: " + _currentUser.UserName);
             }
 
             var responseUser = _mapper.Map<UserViewModel>(user);

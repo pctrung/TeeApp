@@ -1,17 +1,31 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TeeApp.Models.Common;
-using TeeApp.Models.RequestModels.Friends;
+using TeeApp.Models.RequestModels.Common;
+using TeeApp.Models.ViewModels;
 
 namespace TeeApp.Application.Interfaces
 {
     public interface IFriendService
     {
-        Task<ApiResult<bool>> AddFriendAsync(string userName);
+        Task<ApiResult<List<FriendshipViewModel>>> GetFriendListAsync(PaginationRequestBase request);
 
-        Task<ApiResult<bool>> UnfriendAsync(string userName);
+        ApiResult<List<UserViewModel>> GetBlockedListAsync(PaginationRequestBase request);
 
-        Task<ApiResult<bool>> BlockfriendAsync(string userName);
+        ApiResult<List<UserViewModel>> GetFollowingListAsync(PaginationRequestBase request);
 
-        Task<ApiResult<bool>> ResponseFriendRequestAsync(int id);
+        Task<ApiResult<string>> AddFriendAsync(string userName);
+
+        Task<ApiResult<string>> DeleteFriendshipAsync(string userName);
+
+        Task<ApiResult<string>> AcceptFriendRequestAsync(string userName);
+
+        Task<ApiResult<string>> BlockFriendAsync(string userName);
+
+        Task<ApiResult<string>> UnBlockFriendAsync(string userName);
+
+        Task<ApiResult<string>> FollowFriendAsync(string userName);
+
+        Task<ApiResult<string>> UnFollowFriendAsync(string userName);
     }
 }

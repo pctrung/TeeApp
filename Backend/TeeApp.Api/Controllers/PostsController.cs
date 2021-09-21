@@ -29,7 +29,6 @@ namespace TeeApp.Api.Controllers
                     {
                         return Created("", result.Data.Post);
                     }
-                case 200: return Ok(result);
                 case 403: return Forbid();
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);
