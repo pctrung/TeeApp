@@ -21,6 +21,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeeApp.Models", "TeeApp.Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TeeApp.Api", "TeeApp.Api\TeeApp.Api.csproj", "{183148A5-FD86-4DAA-BAD5-9188C9102B29}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UnitTests", "UnitTests", "{827FC5B7-FE61-493F-BA8A-F8420DE05968}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TeeApp.UnitTests", "TeeApp.UnitTests\TeeApp.UnitTests.csproj", "{6AFDF375-F209-41B4-8498-22173EE8F20A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +55,10 @@ Global
 		{183148A5-FD86-4DAA-BAD5-9188C9102B29}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{183148A5-FD86-4DAA-BAD5-9188C9102B29}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{183148A5-FD86-4DAA-BAD5-9188C9102B29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6AFDF375-F209-41B4-8498-22173EE8F20A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6AFDF375-F209-41B4-8498-22173EE8F20A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6AFDF375-F209-41B4-8498-22173EE8F20A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6AFDF375-F209-41B4-8498-22173EE8F20A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -62,6 +70,7 @@ Global
 		{A7B4B3CD-0DBD-4A01-B66C-39E262FA56D1} = {52E2D8ED-367D-4FC7-80F5-AA3C3199C0C2}
 		{B638FC46-D98B-43ED-9DEB-EF11D2682F10} = {AAC55DD3-BFC5-4B9A-8088-5E4B80B524F6}
 		{183148A5-FD86-4DAA-BAD5-9188C9102B29} = {37423A94-C91B-43DE-9464-09831FE0DD98}
+		{6AFDF375-F209-41B4-8498-22173EE8F20A} = {827FC5B7-FE61-493F-BA8A-F8420DE05968}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2780B592-647A-4592-8B88-05D7764869A4}

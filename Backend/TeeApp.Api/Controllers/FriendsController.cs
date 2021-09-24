@@ -12,7 +12,7 @@ namespace TeeApp.Api.Controllers
 {
     [Authorize]
     [ApiController]
-    [Route("api/[controller]")] 
+    [Route("api/[controller]")]
     public class FriendsController : ControllerBase
     {
         private readonly IFriendService _friendService;
@@ -26,7 +26,7 @@ namespace TeeApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetFriend([FromQuery] PaginationRequestBase request)
         {
-            var result = await _friendService.GetFriendPaginationAsync(request);
+            var result = await _friendService.GetFriendsPaginationAsync(request);
             return Ok(result);
         }
 
@@ -34,7 +34,7 @@ namespace TeeApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetFriendRequest([FromQuery] PaginationRequestBase request)
         {
-            var result = await _friendService.GetFriendRequestPaginationAsync(request);
+            var result = await _friendService.GetFriendRequestsPaginationAsync(request);
             return Ok(result);
         }
 
@@ -50,7 +50,7 @@ namespace TeeApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<FriendshipViewModel>> GetBlocked([FromQuery] PaginationRequestBase request)
         {
-            var result = _friendService.GetBlockedPaginationAsync(request);
+            var result = _friendService.GetBlockedPagination(request);
             return Ok(result);
         }
 
@@ -58,7 +58,7 @@ namespace TeeApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<FriendshipViewModel>> GetFollowing([FromQuery] PaginationRequestBase request)
         {
-            var result = _friendService.GetFollowingPaginationAsync(request);
+            var result = _friendService.GetFollowingPagination(request);
             return Ok(result);
         }
 
@@ -66,7 +66,7 @@ namespace TeeApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<FriendshipViewModel>> GetFollowers([FromQuery] PaginationRequestBase request)
         {
-            var result = _friendService.GetFollowerPaginationAsync(request);
+            var result = _friendService.GetFollowersPagination(request);
             return Ok(result);
         }
 

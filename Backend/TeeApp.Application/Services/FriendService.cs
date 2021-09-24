@@ -64,7 +64,7 @@ namespace TeeApp.Application.Services
                 .FirstOrDefaultAsync(x => x.RequestedUserId.Equals(user.Id) && x.RecievedUserId.Equals(_currentUser.Id));
         }
 
-        public async Task<PagedResult<FriendshipViewModel>> GetFriendPaginationAsync(PaginationRequestBase request)
+        public async Task<PagedResult<FriendshipViewModel>> GetFriendsPaginationAsync(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
 
@@ -93,7 +93,7 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public async Task<PagedResult<FriendshipViewModel>> GetFriendRequestPaginationAsync(PaginationRequestBase request)
+        public async Task<PagedResult<FriendshipViewModel>> GetFriendRequestsPaginationAsync(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
 
@@ -151,7 +151,7 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public PagedResult<UserViewModel> GetBlockedPaginationAsync(PaginationRequestBase request)
+        public PagedResult<UserViewModel> GetBlockedPagination(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
             request.Keyword = string.IsNullOrEmpty(request.Keyword) ? "" : request.Keyword.ToLower();
@@ -173,7 +173,7 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public PagedResult<UserViewModel> GetFollowingPaginationAsync(PaginationRequestBase request)
+        public PagedResult<UserViewModel> GetFollowingPagination(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
 
@@ -193,7 +193,7 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public PagedResult<UserViewModel> GetFollowerPaginationAsync(PaginationRequestBase request)
+        public PagedResult<UserViewModel> GetFollowersPagination(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
 
@@ -245,7 +245,7 @@ namespace TeeApp.Application.Services
                 await _context.Friendships.AddAsync(friendship);
                 await _context.SaveChangesAsync();
 
-                return ApiResult<string>.Created(null, "Friend request has been sent");
+                return ApiResult<string>.Ok(null, "Friend request has been sent");
             }
             if (friendship.Type == FriendshipType.Accepted)
             {
