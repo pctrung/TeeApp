@@ -1,14 +1,18 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using TeeApp.Application.Interfaces;
+using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.Common;
+using TeeApp.Models.ViewModels;
 
 namespace TeeApp.Api.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     [Authorize]
+    [ApiController]
+    [Route("api/[controller]")] 
     public class FriendsController : ControllerBase
     {
         private readonly IFriendService _friendService;
@@ -18,77 +22,106 @@ namespace TeeApp.Api.Controllers
             _friendService = friendService;
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] PaginationRequestBase request)
+        [HttpGet("/friends")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetFriend([FromQuery] PaginationRequestBase request)
         {
-            var result = await _friendService.GetFriendListAsync(request);
-
-            return result.StatusCode switch
-            {
-                200 => Ok(result.Data),
-                403 => Forbid(),
-                404 => NotFound(result.Message),
-                _ => BadRequest(result.Message),
-            };
+            var result = await _friendService.GetFriendPaginationAsync(request);
+            return Ok(result);
         }
 
-        [HttpGet("block")]
-        public IActionResult GetBlockedFriendList([FromQuery] PaginationRequestBase request)
+        [HttpGet("/friendRequests")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetFriendRequest([FromQuery] PaginationRequestBase request)
         {
-            var result = _friendService.GetBlockedListAsync(request);
-
-            return result.StatusCode switch
-            {
-                200 => Ok(result.Data),
-                403 => Forbid(),
-                404 => NotFound(result.Message),
-                _ => BadRequest(result.Message),
-            };
+            var result = await _friendService.GetFriendRequestPaginationAsync(request);
+            return Ok(result);
         }
 
-        [HttpGet("follow")]
-        public IActionResult GetFollowingList([FromQuery] PaginationRequestBase request)
+        [HttpGet("/myRequests")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetRequested([FromQuery] PaginationRequestBase request)
         {
-            var result = _friendService.GetFollowingListAsync(request);
-
-            return result.StatusCode switch
-            {
-                200 => Ok(result.Data),
-                403 => Forbid(),
-                404 => NotFound(result.Message),
-                _ => BadRequest(result.Message),
-            };
+            var result = await _friendService.GetRequestedPaginationAsync(request);
+            return Ok(result);
         }
 
-        [HttpPost("{userName}")]
-        public async Task<IActionResult> Post(string userName)
+        [HttpGet("/blocked")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<List<FriendshipViewModel>> GetBlocked([FromQuery] PaginationRequestBase request)
+        {
+            var result = _friendService.GetBlockedPaginationAsync(request);
+            return Ok(result);
+        }
+
+        [HttpGet("/following")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<List<FriendshipViewModel>> GetFollowing([FromQuery] PaginationRequestBase request)
+        {
+            var result = _friendService.GetFollowingPaginationAsync(request);
+            return Ok(result);
+        }
+
+        [HttpGet("/followers")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<List<FriendshipViewModel>> GetFollowers([FromQuery] PaginationRequestBase request)
+        {
+            var result = _friendService.GetFollowerPaginationAsync(request);
+            return Ok(result);
+        }
+
+        [HttpPatch("{userName}/addFriend")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AddFriend(string userName)
         {
             var result = await _friendService.AddFriendAsync(userName);
 
             return result.StatusCode switch
             {
-                201 => Created("", result.Message),
-                403 => Forbid(),
+                200 => Ok(result.Message),
                 404 => NotFound(result.Message),
                 _ => BadRequest(result.Message),
             };
         }
 
-        [HttpPut("{userName}")]
-        public async Task<IActionResult> Put(string userName)
+        [HttpPatch("{userName}/unfriend")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> Unfriend(string userName)
+        {
+            var result = await _friendService.DeleteFriendshipAsync(userName);
+
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Message),
+                404 => NotFound(result.Message),
+                _ => BadRequest(result.Message),
+            };
+        }
+
+        [HttpPatch("{userName}/accept")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> AcceptFriendRequest(string userName)
         {
             var result = await _friendService.AcceptFriendRequestAsync(userName);
 
             return result.StatusCode switch
             {
                 200 => Ok(result.Message),
-                403 => Forbid(),
                 404 => NotFound(result.Message),
                 _ => BadRequest(result.Message),
             };
         }
 
-        [HttpPost("{userName}/block")]
+        [HttpPatch("{userName}/block")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Block(string userName)
         {
             var result = await _friendService.BlockFriendAsync(userName);
@@ -96,13 +129,15 @@ namespace TeeApp.Api.Controllers
             return result.StatusCode switch
             {
                 200 => Ok(result.Message),
-                403 => Forbid(),
                 404 => NotFound(result.Message),
                 _ => BadRequest(result.Message),
             };
         }
 
-        [HttpDelete("{userName}/block")]
+        [HttpPatch("{userName}/unblock")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UnBlock(string userName)
         {
             var result = await _friendService.UnBlockFriendAsync(userName);
@@ -110,13 +145,15 @@ namespace TeeApp.Api.Controllers
             return result.StatusCode switch
             {
                 200 => Ok(result.Message),
-                403 => Forbid(),
                 404 => NotFound(result.Message),
                 _ => BadRequest(result.Message),
             };
         }
 
-        [HttpPost("{userName}/follow")]
+        [HttpPatch("{userName}/follow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Follow(string userName)
         {
             var result = await _friendService.FollowFriendAsync(userName);
@@ -124,13 +161,15 @@ namespace TeeApp.Api.Controllers
             return result.StatusCode switch
             {
                 200 => Ok(result.Message),
-                403 => Forbid(),
                 404 => NotFound(result.Message),
                 _ => BadRequest(result.Message),
             };
         }
 
-        [HttpDelete("{userName}/follow")]
+        [HttpPatch("{userName}/unfollow")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> UnFollow(string userName)
         {
             var result = await _friendService.UnFollowFriendAsync(userName);
@@ -138,21 +177,6 @@ namespace TeeApp.Api.Controllers
             return result.StatusCode switch
             {
                 200 => Ok(result.Message),
-                403 => Forbid(),
-                404 => NotFound(result.Message),
-                _ => BadRequest(result.Message),
-            };
-        }
-
-        [HttpDelete("{userName}")]
-        public async Task<IActionResult> Delete(string userName)
-        {
-            var result = await _friendService.DeleteFriendshipAsync(userName);
-
-            return result.StatusCode switch
-            {
-                200 => Ok(result.Message),
-                403 => Forbid(),
                 404 => NotFound(result.Message),
                 _ => BadRequest(result.Message),
             };

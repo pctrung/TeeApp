@@ -8,11 +8,17 @@ namespace TeeApp.Application.Interfaces
 {
     public interface IFriendService
     {
-        Task<ApiResult<List<FriendshipViewModel>>> GetFriendListAsync(PaginationRequestBase request);
+        Task<PagedResult<FriendshipViewModel>> GetFriendPaginationAsync(PaginationRequestBase request);
 
-        ApiResult<List<UserViewModel>> GetBlockedListAsync(PaginationRequestBase request);
+        Task<PagedResult<FriendshipViewModel>> GetFriendRequestPaginationAsync(PaginationRequestBase request);
 
-        ApiResult<List<UserViewModel>> GetFollowingListAsync(PaginationRequestBase request);
+        Task<PagedResult<FriendshipViewModel>> GetRequestedPaginationAsync(PaginationRequestBase request);
+
+        PagedResult<UserViewModel> GetBlockedPaginationAsync(PaginationRequestBase request);
+
+        PagedResult<UserViewModel> GetFollowingPaginationAsync(PaginationRequestBase request);
+
+        PagedResult<UserViewModel> GetFollowerPaginationAsync(PaginationRequestBase request);
 
         Task<ApiResult<string>> AddFriendAsync(string userName);
 

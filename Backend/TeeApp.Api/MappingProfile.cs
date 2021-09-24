@@ -44,11 +44,7 @@ namespace TeeApp.Api
                 CreateMap<Friendship, FriendshipViewModel>()
                     .ForMember(
                         des => des.User,
-                        act => act.MapFrom(src => src.RequestedUserId == currentUser.UserId ? src.RecievedUser : src.RequestedUser))
-                    .ForMember(
-                        des => des.Type,
-                        act => act.MapFrom(
-                            src => src.Type == FriendshipType.Accepted ? FriendListType.Friend : (src.RequestedUserId == currentUser.UserId ? FriendListType.FriendRequestByMe : FriendListType.FriendRequestToMe)));
+                        act => act.MapFrom(src => src.RequestedUserId == currentUser.UserId ? src.RecievedUser : src.RequestedUser));
             }
             else
             {

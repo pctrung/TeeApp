@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TeeApp.Application.Common;
 using TeeApp.Application.Identity;
 using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
@@ -30,6 +31,7 @@ namespace TeeApp.Application.Services
 
             _currentUser = _context.Users
                 .Include(x => x.Following)
+                .Include(x => x.Followers)
                 .Include(x => x.BlockedUsers)
                 .Include(x => x.BlockedByUsers)
                 .AsSplitQuery()
@@ -62,70 +64,153 @@ namespace TeeApp.Application.Services
                 .FirstOrDefaultAsync(x => x.RequestedUserId.Equals(user.Id) && x.RecievedUserId.Equals(_currentUser.Id));
         }
 
-        public async Task<ApiResult<List<FriendshipViewModel>>> GetFriendListAsync(PaginationRequestBase request)
+        public async Task<PagedResult<FriendshipViewModel>> GetFriendPaginationAsync(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-            request.Keyword = string.IsNullOrEmpty(request.Keyword) ? "" : request.Keyword.ToLower();
 
             // Filter friend contain keyword on first, last, user name
-            var friendshipList = await _context.Friendships
+            var friendships = await _context.Friendships
                 .Include(x => x.RequestedUser)
                 .Include(x => x.RecievedUser)
-                .Where(x =>
-                    !_currentUser.BlockedByUsers.Contains(x.RecievedUser) &&
-                    !_currentUser.BlockedByUsers.Contains(x.RequestedUser) &&
-                    !_currentUser.BlockedUsers.Contains(x.RecievedUser) &&
-                    !_currentUser.BlockedUsers.Contains(x.RequestedUser) &&
-                    ((x.RequestedUserId.Equals(_currentUser.Id) && 
-                    (x.RecievedUser.FirstName.ToLower().Contains(request.Keyword) || 
-                        x.RecievedUser.LastName.ToLower().Contains(request.Keyword) || 
-                        x.RecievedUser.UserName.ToLower().Contains(request.Keyword))) ||
-                    (x.RecievedUserId.Equals(_currentUser.Id) && 
-                    (x.RequestedUser.FirstName.ToLower().Contains(request.Keyword) ||
-                        x.RequestedUser.LastName.ToLower().Contains(request.Keyword) || 
-                        x.RequestedUser.UserName.ToLower().Contains(request.Keyword)))))
-                .OrderByDescending(x => x.RequestedDate)
-                .Paged(request.Page, request.Limit)
+                .AsQueryable()
+                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .Where(x => x.Type == FriendshipType.Accepted)
                 .AsSplitQuery()
                 .ToListAsync();
 
-            var result = _mapper.Map<List<FriendshipViewModel>>(friendshipList);
+            var totalRecords = friendships.Count;
+            var pagedFriendships = friendships.Paged(request.Page, request.Limit);
+            var pagedFriendshipViewModels = _mapper.Map<List<FriendshipViewModel>>(pagedFriendships);
 
-            return ApiResult<List<FriendshipViewModel>>.Ok(result, "Get friend list successful");
+            var result = new PagedResult<FriendshipViewModel>()
+            {
+                Items = pagedFriendshipViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecords
+            };
+            return result;
         }
 
-        public ApiResult<List<UserViewModel>> GetBlockedListAsync(PaginationRequestBase request)
+        public async Task<PagedResult<FriendshipViewModel>> GetFriendRequestPaginationAsync(PaginationRequestBase request)
+        {
+            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
+
+            // Filter friend contain keyword on first, last, user name
+            var friendships = await _context.Friendships
+                .Include(x => x.RequestedUser)
+                .Include(x => x.RecievedUser)
+                .AsQueryable()
+                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .Where(x => !x.RequestedUserId.Equals(_currentUser.Id) && x.Type == FriendshipType.Pending)
+                .AsSplitQuery()
+                .ToListAsync();
+
+            var totalRecords = friendships.Count;
+            var pagedFriendships = friendships.Paged(request.Page, request.Limit);
+            var pagedFriendshipViewModels = _mapper.Map<List<FriendshipViewModel>>(pagedFriendships);
+
+            var result = new PagedResult<FriendshipViewModel>()
+            {
+                Items = pagedFriendshipViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecords
+            };
+            return result;
+        }
+
+        public async Task<PagedResult<FriendshipViewModel>> GetRequestedPaginationAsync(PaginationRequestBase request)
+        {
+            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
+
+            // Filter friend contain keyword on first, last, user name
+            var friendships = await _context.Friendships
+                .Include(x => x.RequestedUser)
+                .Include(x => x.RecievedUser)
+                .AsQueryable()
+                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .Where(x => x.RequestedUserId.Equals(_currentUser.Id) && x.Type == FriendshipType.Pending)
+                .AsSplitQuery()
+                .ToListAsync();
+
+            var totalRecords = friendships.Count;
+            var pagedFriendships = friendships.Paged(request.Page, request.Limit);
+            var pagedFriendshipViewModels = _mapper.Map<List<FriendshipViewModel>>(pagedFriendships);
+
+            var result = new PagedResult<FriendshipViewModel>()
+            {
+                Items = pagedFriendshipViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecords
+            };
+            return result;
+        }
+
+        public PagedResult<UserViewModel> GetBlockedPaginationAsync(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
             request.Keyword = string.IsNullOrEmpty(request.Keyword) ? "" : request.Keyword.ToLower();
 
-            var blockedUsers = _currentUser.BlockedUsers
+            var pagedBlockedUsers = _currentUser.BlockedUsers
                 .Where(x => x.UserName.ToLower().Contains(request.Keyword) || x.FullName.ToLower().Contains(request.Keyword))
                 .OrderByDescending(x => x.FullName)
-                .AsQueryable()
-                .Paged(request.Page, request.Limit)
-                .ToList();
+                .Paged(request.Page, request.Limit);
 
-            var result = _mapper.Map<List<UserViewModel>>(blockedUsers);
-
-            return ApiResult<List<UserViewModel>>.Ok(result, "Get blocked user list successful");
+            var pagedBlockedUserViewModels = _mapper.Map<List<UserViewModel>>(pagedBlockedUsers);
+            var result = new PagedResult<UserViewModel>()
+            {
+                Items = pagedBlockedUserViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = _currentUser.BlockedUsers.Count
+            };
+            return result;
         }
 
-        public ApiResult<List<UserViewModel>> GetFollowingListAsync(PaginationRequestBase request)
+        public PagedResult<UserViewModel> GetFollowingPaginationAsync(PaginationRequestBase request)
         {
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-            request.Keyword = string.IsNullOrEmpty(request.Keyword) ? "" : request.Keyword.ToLower();
 
-            var following = _currentUser.Following
-                .Where(x => x.UserName.ToLower().Contains(request.Keyword) || x.FullName.ToLower().Contains(request.Keyword))
-                .OrderByDescending(x => x.FullName)
-                .AsQueryable()
-                .Paged(request.Page, request.Limit)
-                .ToList();
+            var pagedFollowingUsers = _currentUser.Following
+                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .Paged(request.Page, request.Limit);
 
-            var result = _mapper.Map<List<UserViewModel>>(following);
+            var pagedFollowingUserViewModels = _mapper.Map<List<UserViewModel>>(pagedFollowingUsers);
+            var result = new PagedResult<UserViewModel>()
+            {
+                Items = pagedFollowingUserViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = _currentUser.Following.Count
+            };
+            return result;
+        }
 
-            return ApiResult<List<UserViewModel>>.Ok(result, "Get following user list successful");
+        public PagedResult<UserViewModel> GetFollowerPaginationAsync(PaginationRequestBase request)
+        {
+            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
+
+            var pagedFollowerUsers = _currentUser.Followers
+                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .Paged(request.Page, request.Limit);
+
+            var pagedFollowerUserViewModels = _mapper.Map<List<UserViewModel>>(pagedFollowerUsers);
+            var result = new PagedResult<UserViewModel>()
+            {
+                Items = pagedFollowerUserViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = _currentUser.Followers.Count
+            };
+            return result;
         }
 
         public async Task<ApiResult<string>> AddFriendAsync(string userName)
@@ -133,7 +218,7 @@ namespace TeeApp.Application.Services
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found user " + userName);
+                return ApiResult<string>.NotFound(null, "Not found user " + userName);
             }
             if (IsBlocked(friend))
             {
@@ -187,7 +272,7 @@ namespace TeeApp.Application.Services
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found user " + userName);
+                return ApiResult<string>.NotFound(null, "Not found user " + userName);
             }
             if (IsBlocked(friend))
             {
@@ -198,7 +283,7 @@ namespace TeeApp.Application.Services
 
             if (friendRequest == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found friend request of " + friend.FullName);
+                return ApiResult<string>.NotFound(null, "Not found friend request of " + friend.FullName);
             }
 
             if (friendRequest.Type == FriendshipType.Accepted)
@@ -227,14 +312,14 @@ namespace TeeApp.Application.Services
                 .FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found user " + userName);
+                return ApiResult<string>.NotFound(null, "Not found user " + userName);
             }
 
             var friendship = await GetFriendshipAsync(friend);
 
             if (friendship == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found friendship with " + friend.FullName);
+                return ApiResult<string>.NotFound(null, "Not found friendship with " + friend.FullName);
             }
 
             _context.Friendships.Remove(friendship);
@@ -251,7 +336,7 @@ namespace TeeApp.Application.Services
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found user " + userName);
+                return ApiResult<string>.NotFound(null, "Not found user " + userName);
             }
 
             if (_currentUser.BlockedUsers.Contains(friend))
@@ -277,7 +362,7 @@ namespace TeeApp.Application.Services
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found user " + userName);
+                return ApiResult<string>.NotFound(null, "Not found user " + userName);
             }
 
             if (!_currentUser.BlockedUsers.Contains(friend))
@@ -296,7 +381,7 @@ namespace TeeApp.Application.Services
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found user " + userName);
+                return ApiResult<string>.NotFound(null, "Not found user " + userName);
             }
 
             if (IsBlocked(friend))
@@ -320,7 +405,7 @@ namespace TeeApp.Application.Services
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.BadRequest(null, "Not found user " + userName);
+                return ApiResult<string>.NotFound(null, "Not found user " + userName);
             }
 
             if (!_currentUser.Following.Contains(friend))
