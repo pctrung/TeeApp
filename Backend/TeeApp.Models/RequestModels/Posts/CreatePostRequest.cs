@@ -1,12 +1,12 @@
 ﻿using System.ComponentModel;
-using TeeApp.Models.Common.Enums;
+using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Models.RequestModels.Posts
 {
     public class CreatePostRequest
     {
         public string Content { get; set; }
-         
+
         public PrivacyType Privacy { get; set; }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using TeeApp.Models.Common.Enums;
 
 namespace TeeApp.Models.ViewModels
 {

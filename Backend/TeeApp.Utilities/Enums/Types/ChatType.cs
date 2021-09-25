@@ -1,4 +1,4 @@
-﻿namespace TeeApp.Models.Common.Enums
+﻿namespace TeeApp.Utilities.Enums.Types
 {
     public enum ChatType
     {

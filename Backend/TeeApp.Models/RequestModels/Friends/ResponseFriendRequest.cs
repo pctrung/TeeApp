@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TeeApp.Models.Common.Enums;
+using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Models.RequestModels.Friends
 {

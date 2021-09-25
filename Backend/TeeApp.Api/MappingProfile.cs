@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using System;
 using TeeApp.Application.Identity;
 using TeeApp.Data.Entities;
-using TeeApp.Models.Common.Enums;
 using TeeApp.Models.ViewModels;
 using TeeApp.Utilities.Constants;
 

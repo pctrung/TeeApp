@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using TeeApp.Utilities.Enums.Common;
 
 namespace TeeApp.Data.Entities
 {
@@ -10,6 +11,9 @@ namespace TeeApp.Data.Entities
         public string LastName { get; set; }
         public string FullName { get => $"{LastName} {FirstName}"; }
         public string AvatarFileName { get; set; }
+        public string AboutMe { get; set; }
+        public Gender Gender { get; set; }
+        public DateTime DateOfBirth { get; set; }
         public DateTime DateCreated { get; set; }
         public List<Chat> CreatedChats { get; set; }
         public List<Chat> JoinedChats { get; set; }

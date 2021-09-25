@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using TeeApp.Models.Common;
-using TeeApp.Models.Common.Enums;
+using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Models.ViewModels
 {

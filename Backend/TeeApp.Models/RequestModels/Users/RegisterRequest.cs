@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using TeeApp.Utilities.Enums.Common;
 
 namespace TeeApp.Models.RequestModels.Users
 {
@@ -32,5 +34,9 @@ namespace TeeApp.Models.RequestModels.Users
         [DataType(DataType.EmailAddress)]
         [RegularExpression("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", ErrorMessage = "Email is invalid")]
         public string Email { get; set; }
+
+        public string AboutMe { get; set; }
+        public Gender Gender { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }

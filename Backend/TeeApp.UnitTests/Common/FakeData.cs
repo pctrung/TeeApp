@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using TeeApp.Application.Identity;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
-using TeeApp.Models.Common.Enums;
+using TeeApp.Utilities.Enums.Types;
 using TeeApp.Models.ViewModels;
 
 namespace TeeApp.UnitTests.Common

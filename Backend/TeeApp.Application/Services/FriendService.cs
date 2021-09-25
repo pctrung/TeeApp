@@ -10,9 +10,9 @@ using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Models.Common;
-using TeeApp.Models.Common.Enums;
 using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Enums.Types;
 using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
@@ -73,7 +73,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.RequestedUser)
                 .Include(x => x.RecievedUser)
                 .AsQueryable()
-                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Where(x => x.Type == FriendshipType.Accepted)
                 .AsSplitQuery()
                 .ToListAsync();
@@ -102,7 +102,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.RequestedUser)
                 .Include(x => x.RecievedUser)
                 .AsQueryable()
-                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Where(x => !x.RequestedUserId.Equals(_currentUser.Id) && x.Type == FriendshipType.Pending)
                 .AsSplitQuery()
                 .ToListAsync();
@@ -131,7 +131,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.RequestedUser)
                 .Include(x => x.RecievedUser)
                 .AsQueryable()
-                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Where(x => x.RequestedUserId.Equals(_currentUser.Id) && x.Type == FriendshipType.Pending)
                 .AsSplitQuery()
                 .ToListAsync();
@@ -178,7 +178,7 @@ namespace TeeApp.Application.Services
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
 
             var pagedFollowingUsers = _currentUser.Following
-                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Paged(request.Page, request.Limit);
 
             var pagedFollowingUserViewModels = _mapper.Map<List<UserViewModel>>(pagedFollowingUsers);
@@ -198,7 +198,7 @@ namespace TeeApp.Application.Services
             request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
 
             var pagedFollowerUsers = _currentUser.Followers
-                .FilterBlockedAndKeyword(_currentUser, request.Keyword)
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Paged(request.Page, request.Limit);
 
             var pagedFollowerUserViewModels = _mapper.Map<List<UserViewModel>>(pagedFollowerUsers);

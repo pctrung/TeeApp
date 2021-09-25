@@ -1,5 +1,5 @@
 ﻿using System;
-using TeeApp.Models.Common.Enums;
+using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Data.Entities
 {

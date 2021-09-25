@@ -184,7 +184,10 @@ namespace TeeApp.Application.Services
                 LastName = request.LastName.Trim(),
                 UserName = request.Username.Trim(),
                 DateCreated = DateTime.Now,
-                Email = request.Email
+                Email = request.Email,
+                AboutMe = request.AboutMe,
+                Gender = request.Gender,
+                DateOfBirth = request.DateOfBirth,
             };
 
             var result = await _userManager.CreateAsync(user, request.Password);

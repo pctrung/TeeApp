@@ -8,6 +8,7 @@ using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Models.Common;
+using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.RequestModels.Posts;
 using TeeApp.Models.ResponseModels.Posts;
 using TeeApp.Models.ViewModels;
@@ -25,7 +26,9 @@ namespace TeeApp.Application.Services
             _context = context;
             _mapper = mapper;
 
-            _currentUser = _context.Users.Include(x => x.Followers).FirstOrDefault(x => x.Id.Equals(currentUser.UserId));
+            _currentUser = _context.Users
+                .Include(x => x.Followers)
+                .FirstOrDefault(x => x.Id.Equals(currentUser.UserId));
 
             if (_currentUser == null)
             {
@@ -37,6 +40,11 @@ namespace TeeApp.Application.Services
         {
             var result = post.Creator.Id.Equals(_currentUser.Id);
             return result;
+        }
+
+        public Task<ApiResult<PagedResult<PostViewModel>>> GetAllPagination(PaginationRequestBase request)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<ApiResult<PostViewModel>> GetByIdAsync(int postId)

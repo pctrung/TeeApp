@@ -9,12 +9,12 @@ using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Models.Common;
-using TeeApp.Models.Common.Enums;
 using TeeApp.Models.RequestModels.Chats;
 using TeeApp.Models.RequestModels.Messages;
 using TeeApp.Models.ResponseModels.Chats;
 using TeeApp.Models.ResponseModels.Messages;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Enums.Types;
 using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
