@@ -185,6 +185,53 @@ namespace TeeApp.UnitTests.Common
                     Creator = User1,
                     DateCreated = DateTime.Now,
                     Privacy = PrivacyType.Public,
+                    Comments = new()
+                    {
+                        new Comment()
+                        {
+                            Id = 1,
+                            Content = "Comment from user 1",
+                            Creator = User1
+                        },
+                        new Comment()
+                        {
+                            Id = 2,
+                            Content = "Comment from user 2",
+                            Creator = User2
+                        },
+                        new Comment()
+                        {
+                            Id = 3,
+                            Content = "Comment from main user",
+                            Creator = MainUser
+                        }
+                    },
+                    Reactions = new()
+                    {
+                        new Reaction()
+                        {
+                            Id = 1,
+                            Creator = User1,
+                            Type = 0,
+                        },
+                        new Reaction()
+                        {
+                            Id = 2,
+                            Creator = User2,
+                            Type = 0,
+                        },
+                        new Reaction()
+                        {
+                            Id = 3,
+                            Creator = MainUser,
+                            Type = 0,
+                        }
+                    },
+                    Photos = new()
+                    {
+                        new Photo { Id = 1, Caption = "", ImageFileName = "fake" },
+                        new Photo { Id = 2, Caption = "", ImageFileName = "fake2" },
+                    }
                 },
                 new Post()
                 {
@@ -241,6 +288,53 @@ namespace TeeApp.UnitTests.Common
                     Creator = MainUser,
                     DateCreated = DateTime.Now,
                     Privacy = PrivacyType.Public,
+                    Comments = new()
+                    {
+                        new Comment()
+                        {
+                            Id = 11,
+                            Content = "Comment from user 1",
+                            Creator = User1
+                        },
+                        new Comment()
+                        {
+                            Id = 12,
+                            Content = "Comment from user 2",
+                            Creator = User2
+                        },
+                        new Comment()
+                        {
+                            Id = 13,
+                            Content = "Comment from main user",
+                            Creator = MainUser
+                        }
+                    },
+                    Reactions = new()
+                    {
+                        new Reaction()
+                        {
+                            Id = 11,
+                            Creator = User1,
+                            Type = 0,
+                        },
+                        new Reaction()
+                        {
+                            Id = 12,
+                            Creator = User2,
+                            Type = 0,
+                        },
+                        new Reaction()
+                        {
+                            Id = 13,
+                            Creator = MainUser,
+                            Type = 0,
+                        }
+                    },
+                    Photos = new()
+                    {
+                        new Photo { Id = 11, Caption = "", ImageFileName = "fake11" },
+                        new Photo { Id = 12, Caption = "", ImageFileName = "fake12" },
+                    }
                 });
 
             context.SaveChanges();

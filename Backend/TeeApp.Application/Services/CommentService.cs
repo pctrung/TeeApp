@@ -66,7 +66,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<CommentResponse>.ForBid(null);
+                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post");
             }
             var comment = new Comment()
             {
@@ -110,7 +110,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<CommentResponse>.ForBid(null);
+                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post");
             }
 
             var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);
@@ -155,7 +155,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<CommentResponse>.ForBid(null);
+                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post");
             }
 
             var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);

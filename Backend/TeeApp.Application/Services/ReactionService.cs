@@ -66,7 +66,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.ForBid(null);
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot reaction this post");
             }
             var reaction = new Reaction()
             {
@@ -110,7 +110,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.ForBid(null);
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot reaction this post");
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Id == reactionId);
@@ -155,7 +155,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.ForBid(null);
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot reaction this post");
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Id == reactionId);
