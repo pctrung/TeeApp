@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TeeApp.Application.Common;
 using TeeApp.Application.Identity;
 using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
@@ -12,6 +14,7 @@ using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.RequestModels.Posts;
 using TeeApp.Models.ResponseModels.Posts;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
 {
@@ -27,7 +30,12 @@ namespace TeeApp.Application.Services
             _mapper = mapper;
 
             _currentUser = _context.Users
+                .Include(x => x.Following)
                 .Include(x => x.Followers)
+                .Include(x => x.BlockedByUsers)
+                .Include(x => x.BlockedUsers)
+                .AsSplitQuery()
+                .OrderBy(x => x.DateCreated)
                 .FirstOrDefault(x => x.Id.Equals(currentUser.UserId));
 
             if (_currentUser == null)
@@ -42,16 +50,64 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public Task<ApiResult<PagedResult<PostViewModel>>> GetAllPagination(PaginationRequestBase request)
+        public async Task<PagedResult<PostViewModel>> GetAllPaginationAsync(PaginationRequestBase request)
         {
-            throw new NotImplementedException();
+            var posts = await _context.Posts
+                .Where(x => (_currentUser.Id.Equals(x.Creator.Id) || _currentUser.Following.Contains(x.Creator)) && x.DateDeleted == null)
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
+                .Include(x => x.Comments)
+                .Include(x => x.Reactions)
+                .Include(x => x.Photos)
+                .AsSplitQuery()
+                .ToListAsync();
+
+            var totalRecords = posts.Count;
+            var pagedPosts = posts.Paged(request.Page, request.Limit);
+            var pagedPostsViewModels = _mapper.Map<List<PostViewModel>>(pagedPosts);
+
+            var result = new PagedResult<PostViewModel>()
+            {
+                Items = pagedPostsViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecords
+            };
+            return result;
+        }
+
+        public async Task<PagedResult<PostViewModel>> GetMyPostsPaginationAsync(PaginationRequestBase request)
+        {
+            var posts = await _context.Posts
+                .Where(x => _currentUser.Id.Equals(x.Creator.Id) && x.DateDeleted == null)
+                .Include(x => x.Comments)
+                .Include(x => x.Reactions)
+                .Include(x => x.Photos)
+                .AsSplitQuery()
+                .ToListAsync();
+
+            var totalRecords = posts.Count;
+            var pagedPosts = posts.Paged(request.Page, request.Limit);
+            var pagedPostsViewModels = _mapper.Map<List<PostViewModel>>(pagedPosts);
+
+            var result = new PagedResult<PostViewModel>()
+            {
+                Items = pagedPostsViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecords
+            };
+            return result;
         }
 
         public async Task<ApiResult<PostViewModel>> GetByIdAsync(int postId)
         {
             var post = await _context.Posts
+                .Where(x => x.DateDeleted == null)
                 .Include(x => x.Reactions)
                 .Include(x => x.Comments)
+                .Include(x => x.Photos)
                 .FirstOrDefaultAsync(x => x.Id == postId);
 
             if (post == null)
@@ -82,7 +138,7 @@ namespace TeeApp.Application.Services
 
             if (post.Id < 0)
             {
-                return ApiResult<PostResponse>.BadRequest(null, "Cannot create post. Something went wrong!");
+                return ApiResult<PostResponse>.ServerError(null, "Cannot create post. Something went wrong!");
             }
 
             var postViewModel = _mapper.Map<PostViewModel>(post);
@@ -98,7 +154,7 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult<PostResponse>> UpdateAsync(int postId, UpdatePostRequest request)
         {
-            var post = await _context.Posts.FindAsync(postId);
+            var post = await _context.Posts.Where(x => x.Id == postId && x.DateDeleted == null).FirstOrDefaultAsync();
 
             if (post == null)
             {
@@ -129,7 +185,7 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult<PostResponse>> DeleteAsync(int postId)
         {
-            var post = await _context.Posts.FindAsync(postId);
+            var post = await _context.Posts.Where(x => x.Id == postId && x.DateDeleted == null).FirstOrDefaultAsync();
 
             if (post == null)
             {

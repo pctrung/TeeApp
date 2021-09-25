@@ -9,7 +9,9 @@ namespace TeeApp.Application.Interfaces
 {
     public interface IPostService
     {
-        Task<ApiResult<PagedResult<PostViewModel>>> GetAllPagination(PaginationRequestBase request);
+        Task<PagedResult<PostViewModel>> GetAllPaginationAsync(PaginationRequestBase request);
+
+        Task<PagedResult<PostViewModel>> GetMyPostsPaginationAsync(PaginationRequestBase request);
 
         Task<ApiResult<PostViewModel>> GetByIdAsync(int postId);
 

@@ -114,23 +114,12 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult<UserViewModel>> UpdateUserAsync(UpdateUserRequest request)
         {
-            bool isChanged = false;
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
                 return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Not found user: " + _currentUser.UserName);
             }
 
-            if (!string.IsNullOrWhiteSpace(request.FirstName))
-            {
-                isChanged = true;
-                user.FirstName = request.FirstName.Trim();
-            }
-            if (!string.IsNullOrWhiteSpace(request.LastName))
-            {
-                isChanged = true;
-                user.LastName = request.LastName.Trim();
-            }
             if (request.Avatar != null)
             {
                 try
@@ -144,7 +133,6 @@ namespace TeeApp.Application.Services
                             var currentFileName = user.AvatarFileName;
                             await _storageService.DeleteFileAsync(currentFileName);
                         }
-                        isChanged = true;
                         user.AvatarFileName = fileName;
                     }
                 }
@@ -153,13 +141,13 @@ namespace TeeApp.Application.Services
                     return ApiResult<UserViewModel>.BadRequest(null, e.Message);
                 }
             }
+            user.FirstName = request.FirstName.Trim();
+            user.LastName = request.LastName.Trim();
+            user.AboutMe = request.AboutMe.Trim();
+            user.Gender = request.Gender;
+            user.DateOfBirth = request.DateOfBirth;
 
             await _context.SaveChangesAsync();
-
-            if (!isChanged)
-            {
-                return ApiResult<UserViewModel>.BadRequest(null, "Nothing is changed!");
-            }
 
             var responseUser = _mapper.Map<UserViewModel>(user);
 

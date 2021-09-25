@@ -1,14 +1,16 @@
 ﻿using System.Threading.Tasks;
 using TeeApp.Models.Common;
+using TeeApp.Models.RequestModels.Comments;
+using TeeApp.Models.ResponseModels.Comments;
 
 namespace TeeApp.Application.Interfaces
 {
     public interface ICommentService
     {
-        Task<ApiResult<bool>> CreateAsync();
+        Task<ApiResult<CommentResponse>> CreateAsync(int postId, CommentRequest request);
 
-        Task<ApiResult<bool>> UpdateAsync(int id);
+        Task<ApiResult<CommentResponse>> UpdateAsync(int postId, int commentId, CommentRequest request);
 
-        Task<ApiResult<bool>> DeleteAsync(int id);
+        Task<ApiResult<CommentResponse>> DeleteAsync(int postId, int commentId);
     }
 }

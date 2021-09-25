@@ -1,14 +1,16 @@
 ﻿using System.Threading.Tasks;
 using TeeApp.Models.Common;
+using TeeApp.Models.RequestModels.Reactions;
+using TeeApp.Models.ResponseModels.Reactions;
 
 namespace TeeApp.Application.Interfaces
 {
     public interface IReactionService
     {
-        Task<ApiResult<bool>> CreateAsync();
+        Task<ApiResult<ReactionResponse>> CreateAsync(int postId, ReactionRequest request);
 
-        Task<ApiResult<bool>> UpdateAsync(int id);
+        Task<ApiResult<ReactionResponse>> UpdateAsync(int postId, int reactionId, ReactionRequest request);
 
-        Task<ApiResult<bool>> DeleteAsync(int id);
+        Task<ApiResult<ReactionResponse>> DeleteAsync(int postId, int reactionId);
     }
 }

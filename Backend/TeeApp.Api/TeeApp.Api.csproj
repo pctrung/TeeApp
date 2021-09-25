@@ -21,4 +21,8 @@
     <ProjectReference Include="..\TeeApp.Hubs\TeeApp.Hubs.csproj" />
     <ProjectReference Include="..\TeeApp.Models\TeeApp.Models.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
 </Project>

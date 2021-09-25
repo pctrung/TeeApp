@@ -78,6 +78,9 @@ namespace TeeApp.Api
             services.AddTransient<IStorageService, StorageService>();
 
             services.AddTransient<IPostService, PostService>();
+            services.AddTransient<ICommentService, CommentService>();
+            services.AddTransient<IReactionService, ReactionService>();
+            services.AddTransient<IPostPhotoService, PostPhotoService>();
             services.AddTransient<IFriendService, FriendService>();
 
             services.AddSingleton(provider => new MapperConfiguration(cfg =>

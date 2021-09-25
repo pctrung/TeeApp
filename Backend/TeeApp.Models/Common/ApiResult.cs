@@ -22,5 +22,26 @@
         public static ApiResult<T> ForBid(T result, string message = "You do not have permission to access this resource") => new(result) { StatusCode = 403, Message = message };
 
         public static ApiResult<T> NotFound(T result, string message = "Not found resources") => new(result) { StatusCode = 404, Message = message };
+
+        public static ApiResult<T> ServerError(T result, string message = "Server error") => new(result) { StatusCode = 500, Message = message };
+    }
+
+    public class ApiResult
+    {
+        public int StatusCode { get; set; }
+
+        public string Message { get; set; }
+
+        public static ApiResult Ok(string message = "Action successfully") => new() { StatusCode = 200, Message = message };
+
+        public static ApiResult Created(string message = "Created") => new() { StatusCode = 201, Message = message };
+
+        public static ApiResult BadRequest(string message = "Something went wrong") => new() { StatusCode = 400, Message = message };
+
+        public static ApiResult ForBid(string message = "You do not have permission to access this resource") => new() { StatusCode = 403, Message = message };
+
+        public static ApiResult NotFound(string message = "Not found resources") => new() { StatusCode = 404, Message = message };
+
+        public static ApiResult ServerError(string message = "Server error") => new() { StatusCode = 500, Message = message };
     }
 }

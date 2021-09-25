@@ -4,11 +4,8 @@ using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Models.RequestModels.Reactions
 {
-    public class CreateReactionRequest
+    public class ReactionRequest
     {
-        [Required(ErrorMessage = "Please enter Post Id")]
-        public int PostId { get; set; }
-
         [DefaultValue(ReactionType.Like)]
         public ReactionType Type { get; set; }
     }

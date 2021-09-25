@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.ComponentModel.DataAnnotations;
+using TeeApp.Utilities.Enums.Common;
 
 namespace TeeApp.Models.RequestModels.Users
 {
@@ -12,5 +14,8 @@ namespace TeeApp.Models.RequestModels.Users
         public string LastName { get; set; }
 
         public IFormFile Avatar { get; set; }
+        public string AboutMe { get; set; }
+        public Gender Gender { get; set; }
+        public DateTime DateOfBirth { get; set; }
     }
 }

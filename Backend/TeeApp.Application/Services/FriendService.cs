@@ -22,7 +22,6 @@ namespace TeeApp.Application.Services
         private readonly TeeAppDbContext _context;
         private readonly IMapper _mapper;
         private readonly User _currentUser;
-        private const int DEFAULT_LIMIT = 50;
 
         public FriendService(IMapper mapper, TeeAppDbContext context, ICurrentUser currentUser)
         {
@@ -66,14 +65,11 @@ namespace TeeApp.Application.Services
 
         public async Task<PagedResult<FriendshipViewModel>> GetFriendsPaginationAsync(PaginationRequestBase request)
         {
-            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-
             // Filter friend contain keyword on first, last, user name
             var friendships = await _context.Friendships
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Include(x => x.RequestedUser)
                 .Include(x => x.RecievedUser)
-                .AsQueryable()
-                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Where(x => x.Type == FriendshipType.Accepted)
                 .AsSplitQuery()
                 .ToListAsync();
@@ -95,14 +91,11 @@ namespace TeeApp.Application.Services
 
         public async Task<PagedResult<FriendshipViewModel>> GetFriendRequestsPaginationAsync(PaginationRequestBase request)
         {
-            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-
             // Filter friend contain keyword on first, last, user name
             var friendships = await _context.Friendships
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Include(x => x.RequestedUser)
                 .Include(x => x.RecievedUser)
-                .AsQueryable()
-                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Where(x => !x.RequestedUserId.Equals(_currentUser.Id) && x.Type == FriendshipType.Pending)
                 .AsSplitQuery()
                 .ToListAsync();
@@ -124,14 +117,11 @@ namespace TeeApp.Application.Services
 
         public async Task<PagedResult<FriendshipViewModel>> GetRequestedPaginationAsync(PaginationRequestBase request)
         {
-            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-
             // Filter friend contain keyword on first, last, user name
             var friendships = await _context.Friendships
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Include(x => x.RequestedUser)
                 .Include(x => x.RecievedUser)
-                .AsQueryable()
-                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Where(x => x.RequestedUserId.Equals(_currentUser.Id) && x.Type == FriendshipType.Pending)
                 .AsSplitQuery()
                 .ToListAsync();
@@ -153,11 +143,8 @@ namespace TeeApp.Application.Services
 
         public PagedResult<UserViewModel> GetBlockedPagination(PaginationRequestBase request)
         {
-            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-            request.Keyword = string.IsNullOrEmpty(request.Keyword) ? "" : request.Keyword.ToLower();
-
             var pagedBlockedUsers = _currentUser.BlockedUsers
-                .Where(x => x.UserName.ToLower().Contains(request.Keyword) || x.FullName.ToLower().Contains(request.Keyword))
+                .Where(x => x.UserName.ToLower().Contains(request.Keyword) || x.FullName.ToLower().Contains(request.Keyword.ToLower()))
                 .OrderByDescending(x => x.FullName)
                 .Paged(request.Page, request.Limit);
 
@@ -175,8 +162,6 @@ namespace TeeApp.Application.Services
 
         public PagedResult<UserViewModel> GetFollowingPagination(PaginationRequestBase request)
         {
-            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-
             var pagedFollowingUsers = _currentUser.Following
                 .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Paged(request.Page, request.Limit);
@@ -195,8 +180,6 @@ namespace TeeApp.Application.Services
 
         public PagedResult<UserViewModel> GetFollowersPagination(PaginationRequestBase request)
         {
-            request.Limit = request.Limit > 0 ? request.Limit : DEFAULT_LIMIT;
-
             var pagedFollowerUsers = _currentUser.Followers
                 .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Paged(request.Page, request.Limit);
@@ -213,16 +196,16 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public async Task<ApiResult<string>> AddFriendAsync(string userName)
+        public async Task<ApiResult> AddFriendAsync(string userName)
         {
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found user " + userName);
+                return ApiResult.NotFound("Not found user " + userName);
             }
             if (IsBlocked(friend))
             {
-                return ApiResult<string>.BadRequest(null, "Cannot send friend request to " + friend.FullName);
+                return ApiResult.BadRequest("Cannot send friend request to " + friend.FullName);
             }
 
             var friendship = await GetFriendshipAsync(friend);
@@ -245,11 +228,11 @@ namespace TeeApp.Application.Services
                 await _context.Friendships.AddAsync(friendship);
                 await _context.SaveChangesAsync();
 
-                return ApiResult<string>.Ok(null, "Friend request has been sent");
+                return ApiResult.Ok("Friend request has been sent");
             }
             if (friendship.Type == FriendshipType.Accepted)
             {
-                return ApiResult<string>.BadRequest(null, "You are already a friend of " + friend.FullName);
+                return ApiResult.BadRequest("You are already a friend of " + friend.FullName);
             }
             if (friendship.RequestedUserId.Equals(friend.Id))
             {
@@ -262,33 +245,33 @@ namespace TeeApp.Application.Services
                 }
 
                 await _context.SaveChangesAsync();
-                return ApiResult<string>.Ok(null, "Accepted friend request from " + friend.FullName);
+                return ApiResult.Ok("Accepted friend request from " + friend.FullName);
             }
-            return ApiResult<string>.BadRequest(null, "Friend request has already been sent");
+            return ApiResult.BadRequest("Friend request has already been sent");
         }
 
-        public async Task<ApiResult<string>> AcceptFriendRequestAsync(string userName)
+        public async Task<ApiResult> AcceptFriendRequestAsync(string userName)
         {
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found user " + userName);
+                return ApiResult.NotFound("Not found user " + userName);
             }
             if (IsBlocked(friend))
             {
-                return ApiResult<string>.BadRequest(null, "Cannot accept friend request from " + friend.FullName);
+                return ApiResult.BadRequest("Cannot accept friend request from " + friend.FullName);
             }
 
             var friendRequest = await GetFriendRequestFromAsync(friend);
 
             if (friendRequest == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found friend request of " + friend.FullName);
+                return ApiResult.NotFound("Not found friend request of " + friend.FullName);
             }
 
             if (friendRequest.Type == FriendshipType.Accepted)
             {
-                return ApiResult<string>.BadRequest(null, "You are already a friend of " + friend.FullName);
+                return ApiResult.BadRequest("You are already a friend of " + friend.FullName);
             }
 
             friendRequest.Type = FriendshipType.Accepted;
@@ -301,10 +284,10 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
-            return ApiResult<string>.Ok(null, "Accepted friend request from " + friend.FullName);
+            return ApiResult.Ok("Accepted friend request from " + friend.FullName);
         }
 
-        public async Task<ApiResult<string>> DeleteFriendshipAsync(string userName)
+        public async Task<ApiResult> DeleteFriendshipAsync(string userName)
         {
             var friend = await _context.Users
                 .Include(x => x.Following)
@@ -312,14 +295,14 @@ namespace TeeApp.Application.Services
                 .FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found user " + userName);
+                return ApiResult.NotFound("Not found user " + userName);
             }
 
             var friendship = await GetFriendshipAsync(friend);
 
             if (friendship == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found friendship with " + friend.FullName);
+                return ApiResult.NotFound("Not found friendship with " + friend.FullName);
             }
 
             _context.Friendships.Remove(friendship);
@@ -328,20 +311,20 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
-            return ApiResult<string>.Ok(null, "Delete friendship successfully");
+            return ApiResult.Ok("Delete friendship successfully");
         }
 
-        public async Task<ApiResult<string>> BlockFriendAsync(string userName)
+        public async Task<ApiResult> BlockFriendAsync(string userName)
         {
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found user " + userName);
+                return ApiResult.NotFound("Not found user " + userName);
             }
 
             if (_currentUser.BlockedUsers.Contains(friend))
             {
-                return ApiResult<string>.BadRequest(null, "Already blocked " + friend.FullName);
+                return ApiResult.BadRequest("Already blocked " + friend.FullName);
             }
 
             var friendship = await GetFriendshipAsync(friend);
@@ -354,69 +337,69 @@ namespace TeeApp.Application.Services
             _currentUser.BlockedUsers.Add(friend);
             await _context.SaveChangesAsync();
 
-            return ApiResult<string>.Ok(null, "Blocked " + friend.FullName);
+            return ApiResult.Ok("Blocked " + friend.FullName);
         }
 
-        public async Task<ApiResult<string>> UnBlockFriendAsync(string userName)
+        public async Task<ApiResult> UnBlockFriendAsync(string userName)
         {
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found user " + userName);
+                return ApiResult.NotFound("Not found user " + userName);
             }
 
             if (!_currentUser.BlockedUsers.Contains(friend))
             {
-                return ApiResult<string>.BadRequest(null, friend.FullName + " has not been blocked");
+                return ApiResult.BadRequest(friend.FullName + " has not been blocked");
             }
 
             _currentUser.BlockedUsers.Remove(friend);
             await _context.SaveChangesAsync();
 
-            return ApiResult<string>.Ok(null, "Unblocked " + friend.FullName);
+            return ApiResult.Ok("Unblocked " + friend.FullName);
         }
 
-        public async Task<ApiResult<string>> FollowFriendAsync(string userName)
+        public async Task<ApiResult> FollowFriendAsync(string userName)
         {
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found user " + userName);
+                return ApiResult.NotFound("Not found user " + userName);
             }
 
             if (IsBlocked(friend))
             {
-                return ApiResult<string>.BadRequest(null, "Cannot follow " + friend.FullName);
+                return ApiResult.BadRequest("Cannot follow " + friend.FullName);
             }
 
             if (_currentUser.Following.Contains(friend))
             {
-                return ApiResult<string>.BadRequest(null, "Already followed " + friend.FullName);
+                return ApiResult.BadRequest("Already followed " + friend.FullName);
             }
 
             _currentUser.Following.Add(friend);
             await _context.SaveChangesAsync();
 
-            return ApiResult<string>.Ok(null, "Followed " + friend.FullName);
+            return ApiResult.Ok("Followed " + friend.FullName);
         }
 
-        public async Task<ApiResult<string>> UnFollowFriendAsync(string userName)
+        public async Task<ApiResult> UnFollowFriendAsync(string userName)
         {
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
-                return ApiResult<string>.NotFound(null, "Not found user " + userName);
+                return ApiResult.NotFound("Not found user " + userName);
             }
 
             if (!_currentUser.Following.Contains(friend))
             {
-                return ApiResult<string>.BadRequest(null, friend.FullName + " has not been followed");
+                return ApiResult.BadRequest(friend.FullName + " has not been followed");
             }
 
             _currentUser.Following.Remove(friend);
             await _context.SaveChangesAsync();
 
-            return ApiResult<string>.Ok(null, "Unfollowed " + friend.FullName);
+            return ApiResult.Ok("Unfollowed " + friend.FullName);
         }
     }
 }

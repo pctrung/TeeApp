@@ -40,7 +40,7 @@ namespace TeeApp.Application.Common
             return query;
         }
 
-        public static List<User> FilterBlockedAndRequestWithoutPagination(this List<User> source, User currentUser, PaginationRequestBase request)
+        public static IList<User> FilterBlockedAndRequestWithoutPagination(this IList<User> source, User currentUser, PaginationRequestBase request)
         {
             var query = source
                 .Where(

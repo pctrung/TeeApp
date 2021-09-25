@@ -173,6 +173,76 @@ namespace TeeApp.UnitTests.Common
                 }
             );
 
+            // Post fake data
+            // Total 8 post
+            // 3 post from following and main user
+
+            context.Posts.AddRange(
+                new Post()
+                {
+                    Id = 1,
+                    Content = "Post From User1",
+                    Creator = User1,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                },
+                new Post()
+                {
+                    Id = 2,
+                    Content = "Post From User2",
+                    Creator = User2,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                },
+                new Post()
+                {
+                    Id = 3,
+                    Content = "Post From User3",
+                    Creator = User3,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                },
+                new Post()
+                {
+                    Id = 4,
+                    Content = "Post From User4",
+                    Creator = User4,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                },
+                new Post()
+                {
+                    Id = 5,
+                    Content = "Post From User5",
+                    Creator = User5,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                },
+                new Post()
+                {
+                    Id = 6,
+                    Content = "Post From User6",
+                    Creator = User6,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                },
+                new Post()
+                {
+                    Id = 7,
+                    Content = "Post From User7",
+                    Creator = User7,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                },
+                new Post()
+                {
+                    Id = 8,
+                    Content = "My Post",
+                    Creator = MainUser,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
+                });
+
             context.SaveChanges();
             return context;
         }

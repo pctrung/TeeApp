@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using Moq;
 using System.Linq;
 using System.Threading.Tasks;
 using TeeApp.Application.Identity;
 using TeeApp.Application.Services;
 using TeeApp.Data.EF;
-using TeeApp.Data.Entities;
 using TeeApp.Models.RequestModels.Common;
 using TeeApp.UnitTests.Common;
 using Xunit;
@@ -18,7 +16,7 @@ namespace TeeApp.UnitTests.Application
         // Most of arrange in FakeData class
 
         [Fact]
-        public async Task GetFriend_ReturnsList()
+        public async Task GetFriends_ReturnsList()
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -40,7 +38,7 @@ namespace TeeApp.UnitTests.Application
         }
 
         [Fact]
-        public async Task GetFriend_ReturnsEmpty()
+        public async Task GetFriends_ReturnsEmpty()
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -65,7 +63,7 @@ namespace TeeApp.UnitTests.Application
         }
 
         [Fact]
-        public async Task GetFriendRequest_ReturnsList()
+        public async Task GetFriendRequests_ReturnsList()
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -87,7 +85,7 @@ namespace TeeApp.UnitTests.Application
         }
 
         [Fact]
-        public async Task GetFriendRequest_ReturnsEmpty()
+        public async Task GetFriendRequests_ReturnsEmpty()
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();

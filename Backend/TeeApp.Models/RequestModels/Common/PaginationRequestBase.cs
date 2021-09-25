@@ -8,16 +8,22 @@ namespace TeeApp.Models.RequestModels.Common
     {
         private int _limit;
         private string _keyword;
+        private int _page;
+        private const int DEFAULT_LIMIT = 50;
 
         [DefaultValue(1)]
         [Range(0, int.MaxValue, ErrorMessage = "Only positive number allowed")]
-        public virtual int Page { get; set; }
+        public virtual int Page
+        {
+            get => _page > 0 ? _page : 1;
+            set => _page = value;
+        }
 
         [DefaultValue(0)]
         [Range(0, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public virtual int Limit
         {
-            get => (_limit == 0) ? 10 : _limit;
+            get => (_limit == 0) ? DEFAULT_LIMIT : _limit;
             set => _limit = (value == 0) ? int.MaxValue : value;
         }
 

@@ -20,18 +20,18 @@ namespace TeeApp.Application.Interfaces
 
         PagedResult<UserViewModel> GetFollowersPagination(PaginationRequestBase request);
 
-        Task<ApiResult<string>> AddFriendAsync(string userName);
+        Task<ApiResult> AddFriendAsync(string userName);
 
-        Task<ApiResult<string>> DeleteFriendshipAsync(string userName);
+        Task<ApiResult> DeleteFriendshipAsync(string userName);
 
-        Task<ApiResult<string>> AcceptFriendRequestAsync(string userName);
+        Task<ApiResult> AcceptFriendRequestAsync(string userName);
 
-        Task<ApiResult<string>> BlockFriendAsync(string userName);
+        Task<ApiResult> BlockFriendAsync(string userName);
 
-        Task<ApiResult<string>> UnBlockFriendAsync(string userName);
+        Task<ApiResult> UnBlockFriendAsync(string userName);
 
-        Task<ApiResult<string>> FollowFriendAsync(string userName);
+        Task<ApiResult> FollowFriendAsync(string userName);
 
-        Task<ApiResult<string>> UnFollowFriendAsync(string userName);
+        Task<ApiResult> UnFollowFriendAsync(string userName);
     }
 }

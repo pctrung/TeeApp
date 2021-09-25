@@ -3,11 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TeeApp.Models.RequestModels.PostPhotos
 {
-    public class CreatePostPhotoRequest
+    public class PostPhotoRequest
     {
-        [Required(ErrorMessage = "Please enter Post Id")]
-        public int PostId { get; set; }
-
         [Required(ErrorMessage = "Image cannot be null")]
         public IFormFile Image { get; set; }
 
