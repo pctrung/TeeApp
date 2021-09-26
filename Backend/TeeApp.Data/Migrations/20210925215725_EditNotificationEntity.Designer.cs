@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeeApp.Data.EF;
 
 namespace TeeApp.Data.Migrations
 {
     [DbContext(typeof(TeeAppDbContext))]
-    partial class TeeAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210925215725_EditNotificationEntity")]
+    partial class EditNotificationEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -335,15 +337,12 @@ namespace TeeApp.Data.Migrations
                     b.Property<bool>("IsRead")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("PostId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ReactionType")
-                        .HasColumnType("int");
-
-                    b.Property<string>("RecipientId")
+                    b.Property<string>("NotifierId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int?>("PostId")
+                        .HasColumnType("int");
 
                     b.Property<int>("Type")
                         .HasColumnType("int");
@@ -352,9 +351,9 @@ namespace TeeApp.Data.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.HasIndex("PostId");
+                    b.HasIndex("NotifierId");
 
-                    b.HasIndex("RecipientId");
+                    b.HasIndex("PostId");
 
                     b.ToTable("Notifications");
                 });
@@ -729,21 +728,21 @@ namespace TeeApp.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("TeeApp.Data.Entities.User", "Notifier")
+                        .WithMany("Notifications")
+                        .HasForeignKey("NotifierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("TeeApp.Data.Entities.Post", "Post")
                         .WithMany()
                         .HasForeignKey("PostId");
 
-                    b.HasOne("TeeApp.Data.Entities.User", "Recipient")
-                        .WithMany("Notifications")
-                        .HasForeignKey("RecipientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Creator");
 
-                    b.Navigation("Post");
+                    b.Navigation("Notifier");
 
-                    b.Navigation("Recipient");
+                    b.Navigation("Post");
                 });
 
             modelBuilder.Entity("TeeApp.Data.Entities.Photo", b =>

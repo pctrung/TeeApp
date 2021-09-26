@@ -66,9 +66,18 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot reaction this post");
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
             }
-            var reaction = new Reaction()
+
+            // check exists reaction
+            var reaction = post.Reactions.Where(x => x.Creator.Id.Equals(_currentUser.Id)).FirstOrDefault();
+
+            if (reaction != null)
+            {
+                return ApiResult<ReactionResponse>.BadRequest(null, "Already reacted this post");
+            }
+
+            reaction = new Reaction()
             {
                 Type = request.Type,
                 Creator = _currentUser,
@@ -87,6 +96,7 @@ namespace TeeApp.Application.Services
             {
                 Reaction = _mapper.Map<ReactionViewModel>(reaction),
                 PostId = post.Id,
+                PostCreatorUserName = post.Creator.UserName,
                 RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
             };
 
@@ -110,7 +120,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot reaction this post");
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Id == reactionId);
@@ -132,6 +142,7 @@ namespace TeeApp.Application.Services
             {
                 Reaction = _mapper.Map<ReactionViewModel>(reaction),
                 PostId = post.Id,
+                PostCreatorUserName = post.Creator.UserName,
                 RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
             };
 
@@ -155,7 +166,7 @@ namespace TeeApp.Application.Services
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot reaction this post");
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Id == reactionId);
@@ -176,6 +187,7 @@ namespace TeeApp.Application.Services
             {
                 Reaction = new ReactionViewModel() { Id = reactionId },
                 PostId = post.Id,
+                PostCreatorUserName = post.Creator.UserName,
                 RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
             };
 

@@ -12,13 +12,7 @@ namespace TeeApp.Data.Configurations
             builder.HasKey(x => x.Id);
             builder.HasOne(x => x.Post).WithMany();
             builder.HasOne(x => x.Creator).WithMany().IsRequired();
-            builder.HasMany(x => x.Notifiers).WithMany(x => x.Notifications)
-                .UsingEntity(
-                    join =>
-                    {
-                        join.ToTable("UserNotifications");
-                    }
-                );
+            builder.HasOne(x => x.Recipient).WithMany(x => x.Notifications).IsRequired();
         }
     }
 }

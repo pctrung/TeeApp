@@ -82,6 +82,7 @@ namespace TeeApp.Api
             services.AddTransient<IReactionService, ReactionService>();
             services.AddTransient<IPostPhotoService, PostPhotoService>();
             services.AddTransient<IFriendService, FriendService>();
+            services.AddTransient<INotificationService, NotificationService>();
 
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
@@ -193,6 +194,7 @@ namespace TeeApp.Api
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>(Configuration["ChatHubUrl"]);
+                endpoints.MapHub<AppHub>(Configuration["AppHubUrl"]);
             });
         }
     }

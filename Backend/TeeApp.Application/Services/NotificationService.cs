@@ -1,0 +1,177 @@
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using TeeApp.Application.Identity;
+using TeeApp.Application.Interfaces;
+using TeeApp.Data.EF;
+using TeeApp.Data.Entities;
+using TeeApp.Models.Common;
+using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Enums.Types;
+using TeeApp.Utilities.Extentions;
+
+namespace TeeApp.Application.Services
+{
+    public class NotificationService : INotificationService
+    {
+        private readonly TeeAppDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly User _currentUser;
+
+        public NotificationService(IMapper mapper, TeeAppDbContext context, ICurrentUser currentUser)
+        {
+            _context = context;
+            _mapper = mapper;
+
+            _currentUser = _context.Users.Find(currentUser.UserId);
+
+            if (_currentUser == null)
+            {
+                throw new Exception("Cannot get current user. Something went wrong!");
+            }
+        }
+
+        public async Task<PagedResult<NotificationViewModel>> GetAllAsync(PagedResultBase request)
+        {
+            var notifications = await _context.Notifications.Where(x => x.Recipient.Id.Equals(_currentUser.Id)).ToListAsync();
+
+            var totalRecord = notifications.Count;
+            notifications = notifications.Paged(request.Page, request.Limit).ToList();
+
+            var notificationViewModels = _mapper.Map<List<NotificationViewModel>>(notifications);
+
+            var result = new PagedResult<NotificationViewModel>()
+            {
+                Items = notificationViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecord
+            };
+
+            return result;
+        }
+
+        public async Task ReadNotificationAsync(int id)
+        {
+            var notification = await _context.Notifications.FindAsync(id);
+            if (notification != null && notification.Recipient.Id.Equals(_currentUser.Id))
+            {
+                notification.IsRead = true;
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task<NotificationViewModel> CreateFollowNotificationAsync(string userName)
+        {
+            var notifier = await _context.Users
+                .Where(x => x.UserName.Equals(userName))
+                .Include(x => x.Notifications)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+            if (notifier == null)
+            {
+                return null;
+            }
+
+            var notification = new Notification()
+            {
+                Creator = _currentUser,
+                DateCreated = DateTime.Now,
+                Recipient = notifier,
+                Type = NotificationType.Follow
+            };
+
+            notifier.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<NotificationViewModel>(notification);
+        }
+
+        public async Task<NotificationViewModel> CreateFriendRequestNotificationAsync(string userName)
+        {
+            var notifier = await _context.Users
+                .Where(x => x.UserName.Equals(userName))
+                .Include(x => x.Notifications)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+            if (notifier == null)
+            {
+                return null;
+            }
+
+            var notification = new Notification()
+            {
+                Creator = _currentUser,
+                DateCreated = DateTime.Now,
+                Recipient = notifier,
+                Type = NotificationType.FriendRequest
+            };
+
+            notifier.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<NotificationViewModel>(notification);
+        }
+
+        public async Task<NotificationViewModel> CreateCommentNotificationAsync(int postId)
+        {
+            var post = await _context.Posts
+                .Where(x => x.Id == postId)
+                .Include(x => x.Creator)
+                .ThenInclude(x => x.Notifications)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+            if (post == null)
+            {
+                return null;
+            }
+
+            var notification = new Notification()
+            {
+                Creator = _currentUser,
+                DateCreated = DateTime.Now,
+                Recipient = post.Creator,
+                Post = post,
+                Type = NotificationType.Comment
+            };
+
+            post.Creator.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<NotificationViewModel>(notification);
+        }
+
+        public async Task<NotificationViewModel> CreateReactionNotificationAsync(int postId, ReactionType reactionType)
+        {
+            var post = await _context.Posts
+                .Where(x => x.Id == postId)
+                .Include(x => x.Creator)
+                .ThenInclude(x => x.Notifications)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+            if (post == null)
+            {
+                return null;
+            }
+
+            var notification = new Notification()
+            {
+                Creator = _currentUser,
+                DateCreated = DateTime.Now,
+                Recipient = post.Creator,
+                Post = post,
+                Type = NotificationType.Reaction,
+                ReactionType = reactionType
+            };
+
+            post.Creator.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<NotificationViewModel>(notification);
+        }
+    }
+}

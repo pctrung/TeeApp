@@ -60,8 +60,30 @@ namespace TeeApp.UnitTests.Application
         }
 
         [Theory]
-        [InlineData(1)] // post from friend
-        [InlineData(8)] // post from current user
+        [InlineData(1)] // 1 is post current user already reacted
+        public async Task CreateReaction_WithAlreadyReactedPost_ReturnsBadRequest(int postId)
+        {
+            // Arrange
+            TeeAppDbContext context = FakeData.GetInMemoryDbTest();
+            IMapper mapper = FakeData.GetIMapperTest();
+            Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+
+            var service = new ReactionService(mapper, context, currentUserMock.Object);
+            var request = new ReactionRequest()
+            {
+                Type = 0
+            };
+
+            // Act
+            var result = await service.CreateAsync(postId, request);
+
+            // Assert
+            Assert.Equal(400, result.StatusCode);
+        }
+
+        [Theory]
+        [InlineData(2)] // post from friend
+        [InlineData(9)] // post from current user
         public async Task CreateReaction_WithValidRequest_ReturnsCreated(int postId)
         {
             // Arrange

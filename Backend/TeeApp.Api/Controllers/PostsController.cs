@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 using TeeApp.Application.Interfaces;
+using TeeApp.Hubs.Hubs;
+using TeeApp.Hubs.Interfaces;
 using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.Comments;
 using TeeApp.Models.RequestModels.Common;
@@ -22,13 +25,17 @@ namespace TeeApp.Api.Controllers
         private readonly IPostPhotoService _postPhotoService;
         private readonly ICommentService _commentService;
         private readonly IReactionService _reactionService;
+        private readonly INotificationService _notificationService;
+        private readonly IHubContext<AppHub, IAppClient> _appHub;
 
-        public PostsController(IPostService postService, IPostPhotoService postPhotoService, ICommentService commentService, IReactionService reactionService)
+        public PostsController(IHubContext<AppHub, IAppClient> appHub, IPostService postService, IPostPhotoService postPhotoService, ICommentService commentService, IReactionService reactionService, INotificationService notificationService)
         {
+            _appHub = appHub;
             _postService = postService;
             _postPhotoService = postPhotoService;
             _commentService = commentService;
             _reactionService = reactionService;
+            _notificationService = notificationService;
         }
 
         [HttpGet]
@@ -71,6 +78,7 @@ namespace TeeApp.Api.Controllers
             {
                 case 201:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceivePost(result.Data.Post);
                         return Created("", result.Data.Post);
                     }
                 default: return BadRequest(result.Message);
@@ -89,6 +97,7 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedPost(result.Data.Post);
                         return Ok(result.Data.Post);
                     }
                 case 403: return Forbid();
@@ -108,6 +117,7 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).DeletePost(postId);
                         return Ok(result.Message);
                     }
                 case 403: return Forbid();
@@ -165,6 +175,10 @@ namespace TeeApp.Api.Controllers
             {
                 case 201:
                     {
+                        var notification = await _notificationService.CreateCommentNotificationAsync(postId);
+
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveComment(result.Data);
+
                         return Created("", result.Data.Comment);
                     }
                 case 404: return NotFound(result.Message);
@@ -184,6 +198,7 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedComment(result.Data);
                         return Ok(result.Data.Comment);
                     }
                 case 403: return Forbid();
@@ -203,6 +218,7 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).DeleteComment(postId, commentId);
                         return Ok(result.Message);
                     }
                 case 403: return Forbid();
@@ -222,6 +238,10 @@ namespace TeeApp.Api.Controllers
             {
                 case 201:
                     {
+                        var notification = await _notificationService.CreateReactionNotificationAsync(postId, result.Data.Reaction.Type);
+
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveReaction(result.Data);
+
                         return Created("", result.Data.Reaction);
                     }
                 case 404: return NotFound(result.Message);
@@ -241,6 +261,8 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedReaction(result.Data);
+
                         return Ok(result.Data.Reaction);
                     }
                 case 403: return Forbid();
@@ -260,6 +282,8 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).DeleteReaction(postId, reactionId);
+
                         return Ok(result.Message);
                     }
                 case 403: return Forbid();

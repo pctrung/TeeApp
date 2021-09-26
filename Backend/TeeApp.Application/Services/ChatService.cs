@@ -27,6 +27,98 @@ namespace TeeApp.Application.Services
         private readonly IStorageService _storageService;
         private const int DEFAULT_LIMIT = 30;
 
+        public async Task<ApiResult<List<ChatViewModel>>> GetAllAsync()
+        {
+            var query = _context.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .ThenInclude(x => x.ReadByUsers)
+                .OrderBy(x => x.DateCreated)
+                .AsSplitQuery();
+
+            var chats = await query.Where(x => x.Participants.Contains(_currentUser)).ToListAsync();
+
+            var numOfUnreadMessagesByChatId = new Dictionary<int, int>();
+            var readByUserNamesByChatId = new Dictionary<int, List<string>>();
+
+            chats.ForEach(x =>
+            {
+                var numOfUnreadMessages = x.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)).Count();
+                numOfUnreadMessagesByChatId.Add(x.Id, numOfUnreadMessages);
+
+                var lastMessage = x.Messages.LastOrDefault();
+                readByUserNamesByChatId.Add(x.Id, lastMessage?.ReadByUsers.Select(x => x.UserName).ToList());
+            });
+
+            var chatViewModel = new List<ChatViewModel>();
+
+            if (chats.Any())
+            {
+                chatViewModel = _mapper.Map<List<ChatViewModel>>(chats);
+            }
+
+            // get all chat just take page 1 of every chat
+            chatViewModel.ForEach(x =>
+            {
+                x.Keyword = "";
+                x.Page = 1;
+                x.Limit = DEFAULT_LIMIT;
+                x.TotalRecords = x.Messages.Count;
+                x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).ToList();
+                x.NumOfUnreadMessages = numOfUnreadMessagesByChatId[x.Id];
+                x.ReadByUserNames = readByUserNamesByChatId[x.Id];
+            });
+
+            var result = ApiResult<List<ChatViewModel>>.Ok(chatViewModel, "Get chat successfully");
+
+            return result;
+        }
+
+        public async Task<ApiResult<ChatViewModel>> GetByIdAsync(int chatId, GetChatRequest request)
+        {
+            var chat = await _context.Chats
+                .Include(x => x.Participants)
+                .Include(x => x.Messages)
+                .ThenInclude(x => x.ReadByUsers)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(x => x.Id == chatId);
+            if (chat == null)
+            {
+                return ApiResult<ChatViewModel>.NotFound(null, "Not found chat with id: " + chatId);
+            }
+
+            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
+            if (!isHaveAccess)
+            {
+                return ApiResult<ChatViewModel>.ForBid(null, "You do not have permission to access this chat");
+            }
+
+            chat.Messages = chat.Messages.AsQueryable().Where(x => string.IsNullOrEmpty(x.Content) || x.Content.Contains(request.Keyword ?? "")).ToList();
+
+            var numOfUnreadMessages = chat.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)).Count();
+
+            var totalMessage = chat.Messages.Count;
+            var pageCount = (double)totalMessage / DEFAULT_LIMIT;
+            var totalPage = (int)Math.Ceiling(pageCount);
+
+            request.Page = request.Page > 0 ? request.Page : 1;
+            request.Page = request.Page <= totalPage ? request.Page : totalPage;
+            chat.Messages = chat.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
+
+            var lastMessage = chat.Messages.LastOrDefault();
+            var readByUserNames = lastMessage?.ReadByUsers.Select(x => x.UserName).ToList();
+
+            var result = _mapper.Map<ChatViewModel>(chat);
+            result.Keyword = request.Keyword;
+            result.Page = request.Page;
+            result.Limit = DEFAULT_LIMIT;
+            result.TotalRecords = totalMessage;
+            result.NumOfUnreadMessages = numOfUnreadMessages;
+            result.ReadByUserNames = readByUserNames;
+
+            return ApiResult<ChatViewModel>.Ok(result, "Get chat successfully, id: " + chatId);
+        }
+
         public ChatService(IMapper mapper, TeeAppDbContext context, ICurrentUser currentUser, IStorageService storageService)
         {
             _context = context;
@@ -186,98 +278,6 @@ namespace TeeApp.Application.Services
             {
                 return ApiResult<CreateChatResponse>.BadRequest(null, "Cannot create chat. Something went wrong!");
             }
-        }
-
-        public async Task<ApiResult<ChatViewModel>> GetByIdAsync(int chatId, GetChatRequest request)
-        {
-            var chat = await _context.Chats
-                .Include(x => x.Participants)
-                .Include(x => x.Messages)
-                .ThenInclude(x => x.ReadByUsers)
-                .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == chatId);
-            if (chat == null)
-            {
-                return ApiResult<ChatViewModel>.NotFound(null, "Not found chat with id: " + chatId);
-            }
-
-            var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
-            if (!isHaveAccess)
-            {
-                return ApiResult<ChatViewModel>.ForBid(null, "You do not have permission to access this chat");
-            }
-
-            chat.Messages = chat.Messages.AsQueryable().Where(x => string.IsNullOrEmpty(x.Content) || x.Content.Contains(request.Keyword ?? "")).ToList();
-
-            var numOfUnreadMessages = chat.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)).Count();
-
-            var totalMessage = chat.Messages.Count;
-            var pageCount = (double)totalMessage / DEFAULT_LIMIT;
-            var totalPage = (int)Math.Ceiling(pageCount);
-
-            request.Page = request.Page > 0 ? request.Page : 1;
-            request.Page = request.Page <= totalPage ? request.Page : totalPage;
-            chat.Messages = chat.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(request.Page, DEFAULT_LIMIT).ToList();
-
-            var lastMessage = chat.Messages.LastOrDefault();
-            var readByUserNames = lastMessage?.ReadByUsers.Select(x => x.UserName).ToList();
-
-            var result = _mapper.Map<ChatViewModel>(chat);
-            result.Keyword = request.Keyword;
-            result.Page = request.Page;
-            result.Limit = DEFAULT_LIMIT;
-            result.TotalRecords = totalMessage;
-            result.NumOfUnreadMessages = numOfUnreadMessages;
-            result.ReadByUserNames = readByUserNames;
-
-            return ApiResult<ChatViewModel>.Ok(result, "Get chat successfully, id: " + chatId);
-        }
-
-        public async Task<ApiResult<List<ChatViewModel>>> GetAllAsync()
-        {
-            var query = _context.Chats
-                .Include(x => x.Participants)
-                .Include(x => x.Messages)
-                .ThenInclude(x => x.ReadByUsers)
-                .OrderBy(x => x.DateCreated)
-                .AsSplitQuery();
-
-            var chats = await query.Where(x => x.Participants.Contains(_currentUser)).ToListAsync();
-
-            var numOfUnreadMessagesByChatId = new Dictionary<int, int>();
-            var readByUserNamesByChatId = new Dictionary<int, List<string>>();
-
-            chats.ForEach(x =>
-            {
-                var numOfUnreadMessages = x.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)).Count();
-                numOfUnreadMessagesByChatId.Add(x.Id, numOfUnreadMessages);
-
-                var lastMessage = x.Messages.LastOrDefault();
-                readByUserNamesByChatId.Add(x.Id, lastMessage?.ReadByUsers.Select(x => x.UserName).ToList());
-            });
-
-            var chatViewModel = new List<ChatViewModel>();
-
-            if (chats.Any())
-            {
-                chatViewModel = _mapper.Map<List<ChatViewModel>>(chats);
-            }
-
-            // get all chat just take page 1 of every chat
-            chatViewModel.ForEach(x =>
-            {
-                x.Keyword = "";
-                x.Page = 1;
-                x.Limit = DEFAULT_LIMIT;
-                x.TotalRecords = x.Messages.Count;
-                x.Messages = x.Messages.AsQueryable().OrderByDescending(x => x.DateCreated).Paged(1, DEFAULT_LIMIT).ToList();
-                x.NumOfUnreadMessages = numOfUnreadMessagesByChatId[x.Id];
-                x.ReadByUserNames = readByUserNamesByChatId[x.Id];
-            });
-
-            var result = ApiResult<List<ChatViewModel>>.Ok(chatViewModel, "Get chat successfully");
-
-            return result;
         }
 
         public async Task<ApiResult<CreateChatResponse>> UpdateGroupChatAsync(int chatId, UpdateGroupChatRequest request)

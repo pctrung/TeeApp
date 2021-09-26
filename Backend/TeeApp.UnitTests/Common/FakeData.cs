@@ -335,6 +335,14 @@ namespace TeeApp.UnitTests.Common
                         new Photo { Id = 11, Caption = "", ImageFileName = "fake11" },
                         new Photo { Id = 12, Caption = "", ImageFileName = "fake12" },
                     }
+                },
+                new Post()
+                {
+                    Id = 9,
+                    Content = "My Post",
+                    Creator = MainUser,
+                    DateCreated = DateTime.Now,
+                    Privacy = PrivacyType.Public,
                 });
 
             context.SaveChanges();

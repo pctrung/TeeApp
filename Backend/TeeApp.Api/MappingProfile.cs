@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using System;
+using TeeApp.Application.Common;
 using TeeApp.Application.Identity;
 using TeeApp.Data.Entities;
 using TeeApp.Models.ViewModels;
@@ -38,6 +39,8 @@ namespace TeeApp.Api
                 CreateMap<Photo, PhotoViewModel>();
                 CreateMap<Comment, CommentViewModel>();
                 CreateMap<Reaction, ReactionViewModel>();
+                CreateMap<Notification, NotificationViewModel>()
+                    .ForMember(des => des.NotificationContent, act => act.MapFrom(src => src.GetNotificationContent()));
 
                 // map friend to friendship view model
                 CreateMap<Friendship, FriendshipViewModel>()

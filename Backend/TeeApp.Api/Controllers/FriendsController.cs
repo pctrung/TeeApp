@@ -16,10 +16,12 @@ namespace TeeApp.Api.Controllers
     public class FriendsController : ControllerBase
     {
         private readonly IFriendService _friendService;
+        private readonly INotificationService _notificationService;
 
-        public FriendsController(IFriendService friendService)
+        public FriendsController(IFriendService friendService, INotificationService notificationService)
         {
             _friendService = friendService;
+            _notificationService = notificationService;
         }
 
         [HttpGet("/friends")]
@@ -78,11 +80,15 @@ namespace TeeApp.Api.Controllers
         {
             var result = await _friendService.AddFriendAsync(userName);
 
-            return result.StatusCode switch
+            switch (result.StatusCode)
             {
-                200 => Ok(result.Message),
-                404 => NotFound(result.Message),
-                _ => BadRequest(result.Message),
+                case 200:
+                    {
+                        var notification = _notificationService.CreateFriendRequestNotificationAsync(userName);
+                        return Ok(result.Message);
+                    }
+                case 404: return NotFound(result.Message);
+                default: return BadRequest(result.Message);
             };
         }
 
@@ -158,11 +164,15 @@ namespace TeeApp.Api.Controllers
         {
             var result = await _friendService.FollowFriendAsync(userName);
 
-            return result.StatusCode switch
+            switch (result.StatusCode)
             {
-                200 => Ok(result.Message),
-                404 => NotFound(result.Message),
-                _ => BadRequest(result.Message),
+                case 200:
+                    {
+                        var notification = _notificationService.CreateFollowNotificationAsync(userName);
+                        return Ok(result.Message);
+                    }
+                case 404: return NotFound(result.Message);
+                default: return BadRequest(result.Message);
             };
         }
 

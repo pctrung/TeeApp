@@ -30,8 +30,9 @@ namespace TeeApp.UnitTests.Application
             var list = await postService.GetAllPaginationAsync(request);
 
             // Assert
-            Assert.Equal(3, list.Items.Count);
-            Assert.Equal(3, list.TotalRecords);
+            // fake data include 4 valid post
+            Assert.Equal(4, list.Items.Count);
+            Assert.Equal(4, list.TotalRecords);
             Assert.Equal(50, list.Limit);
             Assert.Equal(1, list.Page);
             Assert.Equal(1, list.PageCount);

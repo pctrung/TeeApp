@@ -2,7 +2,9 @@
 {
     public enum NotificationType
     {
-        PostNotification,
-        FriendNotification
+        Comment,
+        Reaction,
+        FriendRequest,
+        Follow,
     }
 }

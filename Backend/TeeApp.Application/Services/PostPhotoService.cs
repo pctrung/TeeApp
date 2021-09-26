@@ -71,7 +71,8 @@ namespace TeeApp.Application.Services
                         var photo = new Photo()
                         {
                             Caption = request.Caption,
-                            ImageFileName = fileName
+                            ImageFileName = fileName,
+                            DateCreated = DateTime.Now,
                         };
                         post.Photos.Add(photo);
                         await _context.SaveChangesAsync();
@@ -120,7 +121,7 @@ namespace TeeApp.Application.Services
             catch (Exception e)
             {
                 return ApiResult.BadRequest(e.Message);
-            } 
+            }
         }
     }
 }

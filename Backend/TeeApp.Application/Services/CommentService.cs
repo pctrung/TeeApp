@@ -87,6 +87,7 @@ namespace TeeApp.Application.Services
             {
                 Comment = _mapper.Map<CommentViewModel>(comment),
                 PostId = post.Id,
+                PostCreatorUserName = post.Creator.UserName,
                 RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
             };
 
@@ -132,6 +133,7 @@ namespace TeeApp.Application.Services
             {
                 Comment = _mapper.Map<CommentViewModel>(comment),
                 PostId = post.Id,
+                PostCreatorUserName = post.Creator.UserName,
                 RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
             };
 
@@ -176,6 +178,7 @@ namespace TeeApp.Application.Services
             {
                 Comment = new CommentViewModel() { Id = commentId },
                 PostId = post.Id,
+                PostCreatorUserName = post.Creator.UserName,
                 RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
             };
 
