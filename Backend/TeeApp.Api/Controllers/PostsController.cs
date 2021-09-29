@@ -177,6 +177,7 @@ namespace TeeApp.Api.Controllers
                     {
                         var notification = await _notificationService.CreateCommentNotificationAsync(postId);
 
+                        await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
                         await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveComment(result.Data);
 
                         return Created("", result.Data.Comment);
@@ -240,6 +241,7 @@ namespace TeeApp.Api.Controllers
                     {
                         var notification = await _notificationService.CreateReactionNotificationAsync(postId, result.Data.Reaction.Type);
 
+                        await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
                         await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveReaction(result.Data);
 
                         return Created("", result.Data.Reaction);

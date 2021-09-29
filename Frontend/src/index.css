@@ -1,0 +1,77 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  @import url("https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;1,200;1,300;1,400;1,600;1,700;1,800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+
+  /* width */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 100vh;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #e9eaee;
+    border-radius: 100vh;
+    border: 0px solid #edf2f7;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #e2e3e8;
+    transition: all 0.2s ease-in-out;
+  }
+  ::-webkit-scrollbar-thumb:active {
+    background: #dadadf;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Dark mode */
+
+  /* Handle */
+  .dark ::-webkit-scrollbar-thumb {
+    background: #242526;
+    border-radius: 100vh;
+    border: 0px solid #edf2f7;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* Handle on hover */
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #454849;
+    transition: all 0.2s ease-in-out;
+  }
+  /* Handle on active */
+  .dark ::-webkit-scrollbar-thumb:active {
+    background: #3a3b3c;
+    transition: all 0.2s ease-in-out;
+  }
+
+  /* expand css */
+  .text-center-middle::before {
+    text-align: center;
+    vertical-align: middle;
+  }
+
+  .transition-base {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .max-row-2 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+}

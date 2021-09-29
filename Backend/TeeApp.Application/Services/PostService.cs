@@ -58,6 +58,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Comments)
                 .Include(x => x.Reactions)
                 .Include(x => x.Photos)
+                .OrderByDescending(x => x.DateCreated)
                 .AsSplitQuery()
                 .ToListAsync();
 
@@ -83,6 +84,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Comments)
                 .Include(x => x.Reactions)
                 .Include(x => x.Photos)
+                .OrderByDescending(x => x.DateCreated)
                 .AsSplitQuery()
                 .ToListAsync();
 

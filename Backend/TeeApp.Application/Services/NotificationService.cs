@@ -9,6 +9,7 @@ using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Models.Common;
+using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.ViewModels;
 using TeeApp.Utilities.Enums.Types;
 using TeeApp.Utilities.Extentions;
@@ -26,7 +27,11 @@ namespace TeeApp.Application.Services
             _context = context;
             _mapper = mapper;
 
-            _currentUser = _context.Users.Find(currentUser.UserId);
+            _currentUser = _context.Users
+                .Include(x => x.Notifications)
+                .AsSplitQuery()
+                .OrderBy(x => x.DateCreated)
+                .FirstOrDefault(x => x.Id.Equals(currentUser.UserId));
 
             if (_currentUser == null)
             {
@@ -34,9 +39,16 @@ namespace TeeApp.Application.Services
             }
         }
 
-        public async Task<PagedResult<NotificationViewModel>> GetAllAsync(PagedResultBase request)
+        public async Task<PagedResult<NotificationViewModel>> GetAllAsync(PaginationRequestBase request)
         {
-            var notifications = await _context.Notifications.Where(x => x.Recipient.Id.Equals(_currentUser.Id)).ToListAsync();
+            var notifications = await _context.Notifications
+                .Include(x => x.Creator)
+                .Include(x => x.Recipient)
+                .Include(x => x.Post)
+                .Where(x => x.Recipient.Id.Equals(_currentUser.Id))
+                .OrderByDescending(x => x.DateCreated)
+                .AsSplitQuery()
+                .ToListAsync();
 
             var totalRecord = notifications.Count;
             notifications = notifications.Paged(request.Page, request.Limit).ToList();
@@ -55,7 +67,7 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public async Task ReadNotificationAsync(int id)
+        public async Task ReadByIdAsync(int id)
         {
             var notification = await _context.Notifications.FindAsync(id);
             if (notification != null && notification.Recipient.Id.Equals(_currentUser.Id))
@@ -63,6 +75,16 @@ namespace TeeApp.Application.Services
                 notification.IsRead = true;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task ReadAllAsync()
+        {
+            _currentUser.Notifications
+                .Where(x => !x.IsRead)
+                .ToList()
+                .ForEach(x => x.IsRead = true);
+
+            await _context.SaveChangesAsync();
         }
 
         public async Task<NotificationViewModel> CreateFollowNotificationAsync(string userName)
@@ -109,6 +131,32 @@ namespace TeeApp.Application.Services
                 DateCreated = DateTime.Now,
                 Recipient = notifier,
                 Type = NotificationType.FriendRequest
+            };
+
+            notifier.Notifications.Add(notification);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<NotificationViewModel>(notification);
+        }
+
+        public async Task<NotificationViewModel> CreateAcceptedFriendRequestNotificationAsync(string userName)
+        {
+            var notifier = await _context.Users
+                .Where(x => x.UserName.Equals(userName))
+                .Include(x => x.Notifications)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
+            if (notifier == null)
+            {
+                return null;
+            }
+
+            var notification = new Notification()
+            {
+                Creator = _currentUser,
+                DateCreated = DateTime.Now,
+                Recipient = notifier,
+                Type = NotificationType.AcceptedFriendRequest
             };
 
             notifier.Notifications.Add(notification);

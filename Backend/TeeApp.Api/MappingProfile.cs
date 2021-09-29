@@ -40,7 +40,9 @@ namespace TeeApp.Api
                 CreateMap<Comment, CommentViewModel>();
                 CreateMap<Reaction, ReactionViewModel>();
                 CreateMap<Notification, NotificationViewModel>()
-                    .ForMember(des => des.NotificationContent, act => act.MapFrom(src => src.GetNotificationContent()));
+                    .ForMember(des => des.Content, act => act.MapFrom(src => src.GetNotificationContent()))
+                    .ForMember(des => des.RecipientUserName, act => act.MapFrom(src => src.Recipient.UserName))
+                    .ForMember(des => des.PostId, act => act.MapFrom(src => src.Post.Id));
 
                 // map friend to friendship view model
                 CreateMap<Friendship, FriendshipViewModel>()

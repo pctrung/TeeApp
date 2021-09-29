@@ -172,8 +172,7 @@ namespace TeeApp.Application.Services
                 LastName = request.LastName.Trim(),
                 UserName = request.Username.Trim(),
                 DateCreated = DateTime.Now,
-                Email = request.Email,
-                AboutMe = request.AboutMe,
+                Email = request.Email, 
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,
             };

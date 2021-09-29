@@ -3,11 +3,11 @@
 namespace TeeApp.Models.ViewModels
 {
     public class NotificationViewModel : ViewModelBase
-    {
-        public UserViewModel Notifier { get; set; }
+    { 
         public NotificationType Type { get; set; }
-        public PostViewModel Post { get; set; }
+        public string RecipientUserName { get; set; }
+        public int PostId { get; set; }
         public bool IsRead { get; set; }
-        public string NotificationContent { get; set; }
+        public string Content { get; set; }
     }
 }

@@ -33,9 +33,7 @@ namespace TeeApp.Models.RequestModels.Users
         [Required(ErrorMessage = "Please enter email")]
         [DataType(DataType.EmailAddress)]
         [RegularExpression("^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$", ErrorMessage = "Email is invalid")]
-        public string Email { get; set; }
-
-        public string AboutMe { get; set; }
+        public string Email { get; set; } 
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
     }

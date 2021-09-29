@@ -5,6 +5,7 @@
         Comment,
         Reaction,
         FriendRequest,
+        AcceptedFriendRequest,
         Follow,
     }
 }

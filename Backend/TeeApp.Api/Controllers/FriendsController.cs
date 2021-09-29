@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using TeeApp.Application.Interfaces;
+using TeeApp.Hubs.Hubs;
+using TeeApp.Hubs.Interfaces;
 using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.ViewModels;
@@ -17,14 +20,16 @@ namespace TeeApp.Api.Controllers
     {
         private readonly IFriendService _friendService;
         private readonly INotificationService _notificationService;
+        private readonly IHubContext<AppHub, IAppClient> _appHub;
 
-        public FriendsController(IFriendService friendService, INotificationService notificationService)
+        public FriendsController(IHubContext<AppHub, IAppClient> appHub, IFriendService friendService, INotificationService notificationService)
         {
+            _appHub = appHub;
             _friendService = friendService;
             _notificationService = notificationService;
         }
 
-        [HttpGet("/friends")]
+        [HttpGet]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetFriend([FromQuery] PaginationRequestBase request)
         {
@@ -84,7 +89,9 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
-                        var notification = _notificationService.CreateFriendRequestNotificationAsync(userName);
+                        var notification = await _notificationService.CreateFriendRequestNotificationAsync(userName);
+                        await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
+
                         return Ok(result.Message);
                     }
                 case 404: return NotFound(result.Message);
@@ -116,11 +123,17 @@ namespace TeeApp.Api.Controllers
         {
             var result = await _friendService.AcceptFriendRequestAsync(userName);
 
-            return result.StatusCode switch
+            switch (result.StatusCode)
             {
-                200 => Ok(result.Message),
-                404 => NotFound(result.Message),
-                _ => BadRequest(result.Message),
+                case 200:
+                    {
+                        var notification = await _notificationService.CreateAcceptedFriendRequestNotificationAsync(userName);
+                        await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
+
+                        return Ok(result.Message);
+                    }
+                case 404: return NotFound(result.Message);
+                default: return BadRequest(result.Message);
             };
         }
 
@@ -168,7 +181,9 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
-                        var notification = _notificationService.CreateFollowNotificationAsync(userName);
+                        var notification = await _notificationService.CreateFollowNotificationAsync(userName);
+                        await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
+
                         return Ok(result.Message);
                     }
                 case 404: return NotFound(result.Message);

@@ -135,8 +135,7 @@ namespace TeeApp.Api
 
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) &&
-                                (path.StartsWithSegments(Configuration["ChatHubUrl"])))
+                            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments(Configuration["ChatHubUrl"]) || path.StartsWithSegments(Configuration["AppHubUrl"])))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;
