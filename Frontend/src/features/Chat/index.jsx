@@ -13,7 +13,7 @@ import { updateOnlineUserNameList } from "app/userSlice";
 import useChatApi from "hooks/useChatApi";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChatClient } from "utils/Constant";
+import { ChatClient } from "utils/Constants";
 
 function Chat() {
   const dispatch = useDispatch();
@@ -36,7 +36,6 @@ function Chat() {
           console.error("Connection failed: ", error);
         });
     }
-
     fetchData();
   }, []);
 

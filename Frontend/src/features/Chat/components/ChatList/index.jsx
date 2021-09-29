@@ -4,7 +4,8 @@ import ImageCircle from "components/ImageCircle";
 import moment from "moment";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { ChatType, DefaultName } from "utils/Constant";
+import { DefaultName } from "utils/Constants";
+import { ChatType } from "utils/Enums";
 import CreateChat from "../CreateChat";
 
 function ChatList({ className, chats, setIsOpen }) {
@@ -77,7 +78,7 @@ function ChatList({ className, chats, setIsOpen }) {
               return (
                 <div
                   key={Date.now() + index}
-                  className="relative select-none w-full h-16 flex flex-start cursor-pointer hover:bg-gray-100 p-2  rounded-lg transition-base dark:hover:bg-dark-third dark:text-dark-txt"
+                  className="relative select-none w-full h-16 flex flex-start items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-base dark:hover:bg-dark-third dark:text-dark-txt"
                   onClick={() => handleClick(chat.id)}
                 >
                   {chat.numOfUnreadMessages > 0 && (
@@ -96,7 +97,7 @@ function ChatList({ className, chats, setIsOpen }) {
                     participants={chat?.participants}
                   />
 
-                  <div className="font-primary flex flex-col pl-3 justify-between truncate w-full">
+                  <div className="font-primary flex flex-col pl-3 justify-between items-start h-full truncate w-full">
                     <div className="flex justify-between items-center w-full min-w-0 space-x-3">
                       <span
                         className={
@@ -131,7 +132,11 @@ function ChatList({ className, chats, setIsOpen }) {
                             : "")
                         }
                       >
-                        {lastMessage.content ?? ""}
+                        {lastMessage.content
+                          ? lastMessage.content
+                          : lastMessage.imageUrl
+                          ? "Sent you an image"
+                          : ""}
                       </span>
                     </div>
                   </div>

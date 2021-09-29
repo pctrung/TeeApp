@@ -5,7 +5,8 @@ import useChatApi from "hooks/useChatApi";
 import useUserApi from "hooks/useUserApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { ChatType, DefaultName } from "utils/Constant";
+import { DefaultName } from "utils/Constants";
+import { ChatType } from "utils/Enums";
 
 function CreateChat({ isOpen, setIsOpen }) {
   const [selectedMode, setSelectedMode] = useState(ChatType.PRIVATE);

@@ -1,19 +1,10 @@
+const DefaultLimit = {
+  NOTIFICATION: 50,
+};
+
 const DefaultName = {
   NO_NAME_GROUP: "No name",
   NO_NAME_USER: "Unknown",
-};
-
-const ChatType = {
-  PRIVATE: 1,
-  GROUP: 2,
-};
-
-const NotificationType = {
-  COMMENT: 0,
-  REACTION: 1,
-  FRIEND_REQUEST: 2,
-  ACCEPTED_FRIEND_REQUEST: 3,
-  FOLLOW: 4,
 };
 
 const ChatClient = {
@@ -37,18 +28,4 @@ const AppClient = {
   DELETE_REACTION: "DeleteReaction",
   RECEIVE_NOTIFICATION: "ReceiveNotification",
 };
-
-const Gender = {
-  MALE: 0,
-  FEMALE: 1,
-  OTHER: 2,
-};
-
-export {
-  ChatType,
-  DefaultName,
-  ChatClient,
-  AppClient,
-  Gender,
-  NotificationType,
-};
+export { DefaultName, ChatClient, AppClient, DefaultLimit };

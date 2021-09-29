@@ -18,6 +18,7 @@ using TeeApp.Application.Services;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Hubs.Hubs;
+using TeeApp.Utilities.Constants;
 
 namespace TeeApp.Api
 {
@@ -135,7 +136,7 @@ namespace TeeApp.Api
 
                             // If the request is for our hub...
                             var path = context.HttpContext.Request.Path;
-                            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments(Configuration["ChatHubUrl"]) || path.StartsWithSegments(Configuration["AppHubUrl"])))
+                            if (!string.IsNullOrEmpty(accessToken) && (path.StartsWithSegments(Configuration[SystemConstants.CHAT_HUB_CONFIG]) || path.StartsWithSegments(Configuration[SystemConstants.APP_HUB_CONFIG])))
                             {
                                 // Read the token out of the query string
                                 context.Token = accessToken;

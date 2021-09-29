@@ -1,3 +1,4 @@
+import { DefaultLimit } from "utils/Constants.js";
 import useApi from "./useApi.js";
 
 const baseApiUrl = "/notifications";
@@ -7,6 +8,9 @@ export default function useNotificationApi() {
 
   const notificationApi = {
     getAll: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.NOTIFICATION };
+      }
       const url = `${baseApiUrl}`;
       return Api.get(url, { params });
     },

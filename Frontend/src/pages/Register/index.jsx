@@ -6,7 +6,7 @@ import useUserApi from "hooks/useUserApi";
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
-import { Gender } from "utils/Constant";
+import { Gender } from "utils/Enums";
 import * as yup from "yup";
 
 function Register() {

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using TeeApp.Utilities.Constants;
 using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Models.RequestModels.Common
@@ -8,8 +9,7 @@ namespace TeeApp.Models.RequestModels.Common
     {
         private int _limit;
         private string _keyword;
-        private int _page;
-        private const int DEFAULT_LIMIT = 50;
+        private int _page; 
 
         [DefaultValue(1)]
         [Range(0, int.MaxValue, ErrorMessage = "Only positive number allowed")]
@@ -23,7 +23,7 @@ namespace TeeApp.Models.RequestModels.Common
         [Range(0, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public virtual int Limit
         {
-            get => (_limit == 0) ? DEFAULT_LIMIT : _limit;
+            get => (_limit == 0) ? SystemConstants.DEFAULT_LIMIT : _limit;
             set => _limit = (value == 0) ? int.MaxValue : value;
         }
 

@@ -11,8 +11,8 @@ namespace TeeApp.Application.Common
             {
                 NotificationType.Follow => $"{source.Creator.FullName} has started following you.",
                 NotificationType.FriendRequest => $"{source.Creator.FullName} sent you a friend request.",
-                NotificationType.Comment => source.Creator.Id.Equals(source.Recipient.Id) ? "You" : source.Creator.FullName + " commented on your post.",
-                _ => source.Creator.Id.Equals(source.Recipient.Id) ? "You" : source.Creator.FullName + " reacted your post.",
+                NotificationType.Comment => (source.Creator.Id.Equals(source.Recipient.Id) ? "You" : source.Creator.FullName) + " commented on your post.",
+                _ => (source.Creator.Id.Equals(source.Recipient.Id) ? "You" : source.Creator.FullName) + " reacted your post.",
             };
 
             return content;

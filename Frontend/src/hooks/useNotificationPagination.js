@@ -1,14 +1,17 @@
-import { appendMessageToChat } from "app/chatSlice";
 import { useEffect, useState } from "react";
+import useNotificationApi from "hooks/useNotificationApi";
+import { loadNotification } from "app/appSlice";
 import { useDispatch } from "react-redux";
-import useChatApi from "./useChatApi";
 
-export default function useMessagePagination(currentChat, page) {
+export default function useNotificationPagination(
+  notifications = {},
+  page = 1,
+) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isHasMore, setIsHasMore] = useState(false);
+  const [isHasMore, setIsHasMore] = useState(notifications.pageCount > page);
 
-  const chatApi = useChatApi();
+  const notificationApi = useNotificationApi();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -17,10 +20,10 @@ export default function useMessagePagination(currentChat, page) {
       setError(false);
 
       const request = { page };
-      chatApi
-        .getById(currentChat.id, request)
+      notificationApi
+        .getAll(request)
         .then((response) => {
-          dispatch(appendMessageToChat(response));
+          dispatch(loadNotification(response));
           setIsHasMore(page < response.pageCount);
           setIsLoading(false);
         })
@@ -29,10 +32,6 @@ export default function useMessagePagination(currentChat, page) {
         });
     }
   }, [page]);
-
-  useEffect(() => {
-    setIsHasMore(page < currentChat.pageCount);
-  }, [currentChat]);
 
   return { isLoading, error, isHasMore };
 }

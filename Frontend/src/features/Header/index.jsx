@@ -188,7 +188,7 @@ function Header({ user }) {
                   }}
                 />
                 {chatNotification > 0 && !isOpenChatList && (
-                  <span className="w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
+                  <span className="animate-fadeIn w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
                     {chatNotification > 9 ? "9+" : chatNotification}
                   </span>
                 )}
@@ -215,7 +215,7 @@ function Header({ user }) {
                   }}
                 />
                 {notificationNumber > 0 && !isOpenNotificationList && (
-                  <span className="w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
+                  <span className="animate-fadeIn w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
                     {notificationNumber > 9 ? "9+" : notificationNumber}
                   </span>
                 )}

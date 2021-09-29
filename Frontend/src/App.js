@@ -17,7 +17,7 @@ import Register from "pages/Register";
 import { setCurrentUser } from "app/userSlice";
 import useUserApi from "hooks/useUserApi";
 import Chat from "features/Chat";
-import { AppClient } from "utils/Constant";
+import { AppClient } from "utils/Constants";
 import { HubConnectionBuilder } from "@microsoft/signalr";
 
 function App() {

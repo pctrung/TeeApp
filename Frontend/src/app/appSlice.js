@@ -33,6 +33,16 @@ const notifications = createSlice({
     addNotification: (state, action) => {
       state?.items?.push(action.payload);
     },
+    loadNotification: (state, action) => {
+      if (action.payload) {
+        const notification = action.payload;
+        state.totalRecords = notification.totalRecords;
+        state.limit = notification.limit;
+        state.page = notification.page;
+        state.pageCount = notification.pageCount;
+        state.items = state.items.concat(notification.items);
+      }
+    },
     readAllNotification: (state, action) => {
       state?.items?.filter((x) => !x.isRead)?.forEach((x) => (x.isRead = true));
     },
@@ -65,5 +75,6 @@ export const {
   refreshNotification,
   readAllNotification,
   readNotificationById,
+  loadNotification,
 } = notifications.actions;
 export default reducer;
