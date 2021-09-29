@@ -183,7 +183,7 @@ function Register() {
           history.push("/login");
         }}
       />
-      <div className="animate-fadeIn fixed inset-0 bg-white dark:bg-dark-primary z-10 h-screen grid lg:grid-cols-2 place-items-center gap-32 md:px-32 px-6 overflow-auto py-20">
+      <div className="animate-fadeIn fixed inset-0 bg-white dark:bg-dark-primary z-10 h-screen grid lg:grid-cols-2 place-items-center gap-32 md:px-32 px-6 overflow-auto pt-10 pb-20 md:py-0">
         <img src={LoginPageImage} alt="login" className="lg:block hidden" />
         <form
           onSubmit={handleSubmit(onSubmit)}

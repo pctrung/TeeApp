@@ -177,6 +177,7 @@ namespace TeeApp.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "TeeApp v1"));
             }
+            app.UseExceptionHandler("/error");
 
             app.UseStaticFiles();
 

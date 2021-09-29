@@ -1,20 +1,16 @@
-import { setCurrentUser } from "app/userSlice";
 import LoginPageImage from "assets/img/login-page.svg";
 import Button from "components/Button";
 import Input from "components/Input";
 import useUserApi from "hooks/useUserApi";
 import Logo from "logo-shadow.png";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [username, setUsername] = useState("");
   const [error, setError] = useState("");
   const [password, setPassword] = useState("");
   const [isDirty, setIsDirty] = useState(false);
-  const history = useHistory();
-  const dispatch = useDispatch();
 
   const userApi = useUserApi();
 
@@ -35,10 +31,7 @@ function Login() {
       .login(request)
       .then((response) => {
         window.localStorage.setItem("token", response);
-        userApi.getCurrentUser().then((response) => {
-          dispatch(setCurrentUser(response));
-        });
-        history.push("/");
+        window.location.href = process.env.PUBLIC_URL + "/";
       })
       .catch((error) => {
         var message =

@@ -18,7 +18,7 @@ function ClickableIcon({
 }) {
   colorClass =
     !colorClass || colorClass === ""
-      ? "bg-gray-100 hover:bg-gray-300 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:border-dark-third dark:active:bg-dark-third"
+      ? "bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:border-dark-third dark:active:bg-dark-third"
       : colorClass;
 
   colorIconClass =

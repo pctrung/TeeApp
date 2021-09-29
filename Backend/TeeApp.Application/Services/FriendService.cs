@@ -39,7 +39,7 @@ namespace TeeApp.Application.Services
 
             if (_currentUser == null)
             {
-                throw new Exception("Cannot get current user. Something went wrong!");
+                throw new Exception("Unable to identify user. Please login and try again!");
             }
         }
 
@@ -245,7 +245,11 @@ namespace TeeApp.Application.Services
                 }
 
                 await _context.SaveChangesAsync();
-                return ApiResult.Ok("Accepted friend request from " + friend.FullName);
+                return new ApiResult()
+                {
+                    Message = "Accepted friend request from " + friend.FullName,
+                    StatusCode = 2001
+                };
             }
             return ApiResult.BadRequest("Friend request has already been sent");
         }

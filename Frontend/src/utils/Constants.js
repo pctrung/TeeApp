@@ -1,5 +1,6 @@
 const DefaultLimit = {
   NOTIFICATION: 50,
+  POST: 50,
 };
 
 const DefaultName = {

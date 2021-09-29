@@ -195,7 +195,7 @@ namespace TeeApp.Application.Services
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
-                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Not found user: " + _currentUser.UserName);
+                return ApiResult<UserViewModel>.BadRequest(null, "Unable to identify user. Please login and try again");
             }
 
             var responseUser = _mapper.Map<UserViewModel>(user);

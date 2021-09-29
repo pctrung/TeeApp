@@ -129,7 +129,7 @@ namespace TeeApp.Application.Services
 
             if (_currentUser == null)
             {
-                throw new Exception("Cannot get current user. Something went wrong!");
+                throw new Exception("Unable to identify user. Please login and try again!");
             }
         }
 

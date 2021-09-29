@@ -7,21 +7,25 @@ import useDarkMode from "hooks/useDarkMode";
 import ConfirmModal from "components/ConfirmModal";
 import { setCurrentUser } from "app/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Button from "components/Button";
 import ChatList from "features/Chat/components/ChatList";
 import NotificationList from "features/Header/components/NotificationList";
 import useNotificationApi from "hooks/useNotificationApi";
 import { refreshNotification } from "app/appSlice";
+import useUserApi from "hooks/useUserApi";
 
-function Header({ user }) {
+function Header() {
   const history = useHistory();
   const dispatch = useDispatch();
-  const notificationApi = useNotificationApi();
+
+  const user = useSelector((state) => state.users.currentUser);
+  const userApi = useUserApi();
 
   const [chatNotification, setChatNotification] = useState(0);
-  const [notificationNumber, setNotificationNumber] = useState(0);
   const chats = useSelector((state) => state.chats.chats);
+
   const notifications = useSelector((state) => state.app.notifications);
+  const [notificationNumber, setNotificationNumber] = useState(0);
+  const notificationApi = useNotificationApi();
 
   const { darkMode, setDarkMode } = useDarkMode();
 
@@ -40,11 +44,13 @@ function Header({ user }) {
   const ref = useRef();
 
   useEffect(() => {
-    if (notificationApi) {
-      notificationApi.getAll().then((response) => {
-        dispatch(refreshNotification(response));
-      });
-    }
+    notificationApi.getAll().then((response) => {
+      dispatch(refreshNotification(response));
+    });
+
+    userApi.getCurrentUser().then((response) => {
+      dispatch(setCurrentUser(response));
+    });
   }, []);
 
   useEffect(() => {
@@ -100,9 +106,7 @@ function Header({ user }) {
   };
   function logout() {
     window.localStorage.removeItem("token");
-    dispatch(setCurrentUser({}));
-
-    history.push("/login");
+    window.location.href = process.env.PUBLIC_URL + "/login";
   }
 
   function openConfirmModal(
@@ -154,148 +158,135 @@ function Header({ user }) {
               <i className="bx bx-search absolute text-xl top-1/2 left-3 transform text-gray-400 -translate-y-1/2 cursor-pointer"></i>
             </form>
           </div>
-          {user.userName ? (
-            <ul className="flex items-center space-x-2" ref={ref}>
-              <li
-                className="active:transform active:scale-95 p-1 h-full rounded-full flex items-center dark:hover:bg-dark-third hover:bg-gray-200 transition-base cursor-pointer select-none mr-3"
-                onClick={() => goToProfile(user.userName)}
-              >
-                <ImageCircle src={user.avatarUrl} size="sm" />
-                <span className="px-2 font-semibold">{user.firstName}</span>
-              </li>
-              <li className="relative">
+          <ul className="flex items-center space-x-2" ref={ref}>
+            <li
+              className="active:transform active:scale-95 p-1 h-full rounded-full flex items-center dark:hover:bg-dark-third hover:bg-gray-200 transition-base cursor-pointer select-none mr-3"
+              onClick={() => goToProfile(user.userName)}
+            >
+              <ImageCircle src={user.avatarUrl} size="sm" />
+              <span className="px-2 font-semibold">{user.firstName}</span>
+            </li>
+            <li className="relative">
+              <ClickableIcon
+                className={
+                  "p-2 " +
+                  " " +
+                  (isOpenChatList
+                    ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-100"
+                    : "")
+                }
+                iconClass="bx bxs-message-rounded-dots"
+                colorClass={
+                  isOpenChatList
+                    ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-900 dark:hover:bg-green-800 dark:active:bg-green-700 "
+                    : ""
+                }
+                colorIconClass={
+                  isOpenChatList ? "text-green-600 dark:text-green-400" : ""
+                }
+                onClick={() => {
+                  setIsOpenChatList(!isOpenChatList);
+                  setIsOpenMenu(false);
+                  setIsOpenNotificationList(false);
+                }}
+              />
+              {chatNotification > 0 && !isOpenChatList && (
+                <span className="animate-fadeIn w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
+                  {chatNotification > 9 ? "9+" : chatNotification}
+                </span>
+              )}
+            </li>
+            <li className="relative">
+              <span className="dark:bg-green-600"></span>
+              <ClickableIcon
+                className="p-2"
+                colorClass={
+                  isOpenNotificationList
+                    ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-900 dark:hover:bg-green-800 dark:active:bg-green-700 "
+                    : ""
+                }
+                iconClass="bx bxs-bell"
+                colorIconClass={
+                  isOpenNotificationList
+                    ? "text-green-600 dark:text-green-400"
+                    : ""
+                }
+                onClick={() => {
+                  setIsOpenChatList(false);
+                  setIsOpenMenu(false);
+                  setIsOpenNotificationList(!isOpenNotificationList);
+                }}
+              />
+              {notificationNumber > 0 && !isOpenNotificationList && (
+                <span className="animate-fadeIn w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
+                  {notificationNumber > 9 ? "9+" : notificationNumber}
+                </span>
+              )}
+            </li>
+            <li>
+              <div className="relative">
                 <ClickableIcon
-                  className={
-                    "p-2 " +
-                    " " +
-                    (isOpenChatList
-                      ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-100"
-                      : "")
-                  }
-                  iconClass="bx bxs-message-rounded-dots"
+                  iconClass="bx bx-caret-down"
                   colorClass={
-                    isOpenChatList
+                    isOpenMenu
                       ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-900 dark:hover:bg-green-800 dark:active:bg-green-700 "
                       : ""
                   }
                   colorIconClass={
-                    isOpenChatList ? "text-green-600 dark:text-green-400" : ""
+                    isOpenMenu ? "text-green-600 dark:text-green-400" : ""
                   }
                   onClick={() => {
-                    setIsOpenChatList(!isOpenChatList);
-                    setIsOpenMenu(false);
+                    setIsOpenMenu(!isOpenMenu);
+                    setIsOpenChatList(false);
                     setIsOpenNotificationList(false);
                   }}
                 />
-                {chatNotification > 0 && !isOpenChatList && (
-                  <span className="animate-fadeIn w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
-                    {chatNotification > 9 ? "9+" : chatNotification}
-                  </span>
+                {isOpenMenu && (
+                  <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
+                    <button
+                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                      onClick={() => setDarkMode(!darkMode)}
+                    >
+                      <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
+                        <i
+                          className={
+                            "text-center-middle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx " +
+                            " " +
+                            (darkMode ? " bx-sun" : " bx-moon")
+                          }
+                        ></i>
+                      </span>
+                      <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
+                    </button>
+                    <button
+                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                      onClick={() => {
+                        openConfirmModal("Do you want to log out?", logout);
+                      }}
+                    >
+                      <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
+                        <i className="text-center-middle bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                      </span>
+                      <span>Log Out</span>
+                    </button>
+                  </div>
                 )}
-              </li>
-              <li className="relative">
-                <span className="dark:bg-green-600"></span>
-                <ClickableIcon
-                  className="p-2"
-                  colorClass={
-                    isOpenNotificationList
-                      ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-900 dark:hover:bg-green-800 dark:active:bg-green-700 "
-                      : ""
-                  }
-                  iconClass="bx bxs-bell"
-                  colorIconClass={
-                    isOpenNotificationList
-                      ? "text-green-600 dark:text-green-400"
-                      : ""
-                  }
-                  onClick={() => {
-                    setIsOpenChatList(false);
-                    setIsOpenMenu(false);
-                    setIsOpenNotificationList(!isOpenNotificationList);
-                  }}
-                />
-                {notificationNumber > 0 && !isOpenNotificationList && (
-                  <span className="animate-fadeIn w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
-                    {notificationNumber > 9 ? "9+" : notificationNumber}
-                  </span>
-                )}
-              </li>
-              <li>
-                <div className="relative">
-                  <ClickableIcon
-                    iconClass="bx bx-caret-down"
-                    colorClass={
-                      isOpenMenu
-                        ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-900 dark:hover:bg-green-800 dark:active:bg-green-700 "
-                        : ""
-                    }
-                    colorIconClass={
-                      isOpenMenu ? "text-green-600 dark:text-green-400" : ""
-                    }
-                    onClick={() => {
-                      setIsOpenMenu(!isOpenMenu);
-                      setIsOpenChatList(false);
-                      setIsOpenNotificationList(false);
-                    }}
+                {isOpenChatList && (
+                  <ChatList
+                    chats={chats}
+                    className="absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 "
                   />
-                  {isOpenMenu && (
-                    <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
-                      <button
-                        className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-base transform active:scale-95 dark:hover:bg-dark-third"
-                        onClick={() => setDarkMode(!darkMode)}
-                      >
-                        <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                          <i
-                            className={
-                              "text-center-middle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx " +
-                              " " +
-                              (darkMode ? " bx-sun" : " bx-moon")
-                            }
-                          ></i>
-                        </span>
-                        <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
-                      </button>
-                      <button
-                        className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-base transform active:scale-95 dark:hover:bg-dark-third"
-                        onClick={() => {
-                          openConfirmModal("Do you want to log out?", logout);
-                        }}
-                      >
-                        <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                          <i className="text-center-middle bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
-                        </span>
-                        <span>Log Out</span>
-                      </button>
-                    </div>
-                  )}
-                  {isOpenChatList && (
-                    <ChatList
-                      chats={chats}
-                      className="absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 "
-                    />
-                  )}
-                  {isOpenNotificationList && (
-                    <NotificationList
-                      notifications={notifications}
-                      setIsOpen={setIsOpenNotificationList}
-                      className="absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 overflow-y-auto "
-                    />
-                  )}
-                </div>
-              </li>
-            </ul>
-          ) : (
-            <>
-              <div className="flex space-x-2 items-center">
-                <Link to="/register">
-                  <Button outline>Sign up</Button>
-                </Link>
-                <Link to="/login">
-                  <Button>Log in</Button>
-                </Link>
+                )}
+                {isOpenNotificationList && (
+                  <NotificationList
+                    notifications={notifications}
+                    setIsOpen={setIsOpenNotificationList}
+                    className="absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 overflow-y-auto "
+                  />
+                )}
               </div>
-            </>
-          )}
+            </li>
+          </ul>
         </div>
       </div>
     </>

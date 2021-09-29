@@ -94,6 +94,13 @@ namespace TeeApp.Api.Controllers
 
                         return Ok(result.Message);
                     }
+                case 2001:
+                    {
+                        var notification = await _notificationService.CreateAcceptedFriendRequestNotificationAsync(userName);
+                        await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
+
+                        return Ok(result.Message);
+                    }
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);
             };

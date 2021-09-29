@@ -30,7 +30,7 @@ function ChatList({ className, chats, setIsOpen }) {
         className={
           className +
           " " +
-          "bg-white dark:bg-dark-secondary shadow-lg rounded-xl px-4 py-4 border dark:border-dark-hover"
+          "bg-white dark:bg-dark-secondary shadow-lg rounded-xl px-4 pt-4 pb-2 border dark:border-dark-hover"
         }
       >
         <div className="relative ">
@@ -147,7 +147,7 @@ function ChatList({ className, chats, setIsOpen }) {
         <a
           href={process.env.REACT_APP_CHAT_APP_URL}
           target="_blank"
-          className="font-bold text-center text-green-500 hover:text-green-600 cursor-pointer block pt-2 mt-3 border-t-2 border-gray-100 dark:border-dark-third transition-base"
+          className="font-semibold text-center text-sm text-green-500 hover:text-green-600 cursor-pointer block pt-2 mt-3 border-t-2 border-gray-100 dark:border-dark-third transition-base"
         >
           See all in TeeChat!
         </a>

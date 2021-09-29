@@ -327,7 +327,7 @@ namespace TeeApp.UnitTests.Application
             var result = await friendService.AddFriendAsync(friendUserName);
 
             // Assert
-            Assert.Equal(200, result.StatusCode);
+            Assert.Equal(2001, result.StatusCode);
         }
 
         [Fact]

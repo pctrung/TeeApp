@@ -1,15 +1,15 @@
 import { readAllNotification, readNotificationById } from "app/appSlice";
 import ImageCircle from "components/ImageCircle";
-import LoadingSpinner from "components/LoadingSpinner";
+import Pagination from "components/Pagination";
 import useNotificationApi from "hooks/useNotificationApi";
 import useNotificationPagination from "hooks/useNotificationPagination";
 import moment from "moment";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NotificationType } from "utils/Enums";
 
-function NotificationList({ notifications, className, setIsOpen }) {
+function NotificationList({ notifications = {}, className, setIsOpen }) {
   const notificationApi = useNotificationApi();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -114,22 +114,14 @@ function NotificationList({ notifications, className, setIsOpen }) {
                   </div>
                 </>
               ))}
-          {isHasMore && !isLoading && (
-            <div className="flex">
-              <button
-                className="mx-auto mt-3 px-4 bg-gray-100 py-2 rounded-lg transform active:scale-95 hover:bg-gray-200 dark:hover:bg-dark-hover dark:bg-dark-third dark:text-gray-300 text-xs md:text-sm transition-all duration-200"
-                onClick={loadMore}
-              >
-                Load more notifications...
-              </button>
-            </div>
-          )}
-          {isLoading && (
-            <div className="flex justify-center mt-2">
-              <LoadingSpinner />
-            </div>
-          )}
-          {error && <div className="text-red-500 text-center ">{error}</div>}
+          <Pagination
+            className="mt-2"
+            onClick={loadMore}
+            isLoading={isLoading}
+            error={error}
+            isHasMore={isHasMore}
+            loadMoreContent="Load more notifications..."
+          />
         </div>
         {notifications?.items?.length < 1 && (
           <span className="mt-2">Do not have any notifications</span>

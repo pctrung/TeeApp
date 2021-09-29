@@ -28,7 +28,7 @@ const popup = createSlice({
 
 const notifications = createSlice({
   name: "notifications",
-  initialState: [],
+  initialState: { items: [] },
   reducers: {
     addNotification: (state, action) => {
       state?.items?.push(action.payload);
