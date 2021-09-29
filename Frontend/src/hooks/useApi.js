@@ -84,12 +84,6 @@ export default function useApi() {
     };
     dispatch(setPopup(popup));
   }
-  function closePopup() {
-    const popup = {
-      isOpen: false,
-    };
-    dispatch(setPopup(popup));
-  }
 
   return Api;
 }

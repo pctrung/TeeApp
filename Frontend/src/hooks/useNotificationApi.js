@@ -1,17 +1,14 @@
-import { setIsLoading } from "app/appSlice.js";
-import { useDispatch } from "react-redux";
 import useApi from "./useApi.js";
 
 const baseApiUrl = "/notifications";
 
 export default function useNotificationApi() {
   const Api = useApi();
-  const dispatch = useDispatch();
 
   const notificationApi = {
-    getAll: () => {
+    getAll: (params) => {
       const url = `${baseApiUrl}`;
-      return Api.get(url);
+      return Api.get(url, { params });
     },
     readAll: () => {
       const url = `${baseApiUrl}/read`;

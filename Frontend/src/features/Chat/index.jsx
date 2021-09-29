@@ -4,21 +4,19 @@ import {
   addMessage,
   addNotification,
   addReadByUserName,
+  addSelectedId,
   editChat,
   editGroupAvatar,
   refreshChats,
-  addSelectedId,
 } from "app/chatSlice";
 import { updateOnlineUserNameList } from "app/userSlice";
 import useChatApi from "hooks/useChatApi";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router-dom";
 import { ChatClient } from "utils/Constant";
 
 function Chat() {
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const [connection, setConnection] = useState(null);
 
@@ -26,12 +24,6 @@ function Chat() {
   const selectedId = useSelector((state) => state.chats.selectedId);
 
   const chatApi = useChatApi();
-
-  function logout() {
-    window.localStorage.removeItem("token");
-    connection?.stop();
-    history.push("/login");
-  }
 
   useEffect(() => {
     async function fetchData() {

@@ -1,5 +1,5 @@
 import { combineReducers, createSlice } from "@reduxjs/toolkit";
-import jwt from "jwt-decode";
+//import jwt from "jwt-decode";
 
 const currentUser = createSlice({
   name: "currentUser",
@@ -32,11 +32,11 @@ export const { setCurrentUser } = currentUser.actions;
 export const { updateOnlineUserNameList } = onlineUserNameList.actions;
 export default reducer;
 
-function decodeCurrentUser() {
-  var token = window.localStorage.getItem("token");
-  if (token) {
-    const user = jwt(token);
-    return user;
-  }
-  return false;
-}
+// function decodeCurrentUser() {
+//   var token = window.localStorage.getItem("token");
+//   if (token) {
+//     const user = jwt(token);
+//     return user;
+//   }
+//   return false;
+// }
