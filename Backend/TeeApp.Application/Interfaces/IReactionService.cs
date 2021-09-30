@@ -9,8 +9,8 @@ namespace TeeApp.Application.Interfaces
     {
         Task<ApiResult<ReactionResponse>> CreateAsync(int postId, ReactionRequest request);
 
-        Task<ApiResult<ReactionResponse>> UpdateAsync(int postId, int reactionId, ReactionRequest request);
+        Task<ApiResult<ReactionResponse>> UpdateAsync(int postId, ReactionRequest request);
 
-        Task<ApiResult<ReactionResponse>> DeleteAsync(int postId, int reactionId);
+        Task<ApiResult<ReactionResponse>> DeleteAsync(int postId);
     }
 }

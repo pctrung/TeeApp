@@ -4,6 +4,8 @@
     {
         Like,
         Love,
+        Care,
+        Wow,
         Haha,
         Sad,
         Angry

@@ -251,13 +251,13 @@ namespace TeeApp.Api.Controllers
             }
         }
 
-        [HttpPut("{postId:int}/reactions/{reactionId:int}")]
+        [HttpPut("{postId:int}/reactions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UpdateReaction(int postId, int reactionId, ReactionRequest request)
+        public async Task<IActionResult> UpdateReaction(int postId, ReactionRequest request)
         {
-            var result = await _reactionService.UpdateAsync(postId, reactionId, request);
+            var result = await _reactionService.UpdateAsync(postId, request);
 
             switch (result.StatusCode)
             {
@@ -272,19 +272,19 @@ namespace TeeApp.Api.Controllers
             }
         }
 
-        [HttpDelete("{postId:int}/reactions/{reactionId:int}")]
+        [HttpDelete("{postId:int}/reactions")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> DeleteReaction(int postId, int reactionId)
+        public async Task<IActionResult> DeleteReaction(int postId)
         {
-            var result = await _reactionService.DeleteAsync(postId, reactionId);
+            var result = await _reactionService.DeleteAsync(postId);
 
             switch (result.StatusCode)
             {
                 case 200:
                     {
-                        await _appHub.Clients.Users(result.Data.RecipientUserNames).DeleteReaction(postId, reactionId);
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).DeleteReaction(postId, result.Data.Reaction.Id);
 
                         return Ok(result.Message);
                     }

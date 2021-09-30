@@ -103,7 +103,7 @@ namespace TeeApp.Application.Services
             return ApiResult<ReactionResponse>.Created(result);
         }
 
-        public async Task<ApiResult<ReactionResponse>> UpdateAsync(int postId, int reactionId, ReactionRequest request)
+        public async Task<ApiResult<ReactionResponse>> UpdateAsync(int postId, ReactionRequest request)
         {
             var post = await _context.Posts
                 .Where(x => x.Id == postId && x.DateDeleted == null)
@@ -123,7 +123,7 @@ namespace TeeApp.Application.Services
                 return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
             }
 
-            var reaction = post.Reactions.FirstOrDefault(x => x.Id == reactionId);
+            var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));
             if (reaction == null)
             {
                 return ApiResult<ReactionResponse>.NotFound(null, "Not found this reaction");
@@ -149,7 +149,7 @@ namespace TeeApp.Application.Services
             return ApiResult<ReactionResponse>.Ok(result);
         }
 
-        public async Task<ApiResult<ReactionResponse>> DeleteAsync(int postId, int reactionId)
+        public async Task<ApiResult<ReactionResponse>> DeleteAsync(int postId)
         {
             var post = await _context.Posts
                 .Where(x => x.Id == postId && x.DateDeleted == null)
@@ -169,7 +169,7 @@ namespace TeeApp.Application.Services
                 return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
             }
 
-            var reaction = post.Reactions.FirstOrDefault(x => x.Id == reactionId);
+            var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));
             if (reaction == null)
             {
                 return ApiResult<ReactionResponse>.NotFound(null, "Not found this reaction");
@@ -179,6 +179,7 @@ namespace TeeApp.Application.Services
                 return ApiResult<ReactionResponse>.ForBid(null);
             }
 
+            var reactionId = reaction.Id;
             _context.Reactions.Remove(reaction);
 
             await _context.SaveChangesAsync();
