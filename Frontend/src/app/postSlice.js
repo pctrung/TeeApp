@@ -36,7 +36,7 @@ const posts = createSlice({
       }
     },
     loadPost: (state, action) => {
-      if (action.payload) {
+      if (action.payload.page > state.page) {
         const posts = action.payload;
         state.totalRecords = posts.totalRecords;
         state.limit = posts.limit;

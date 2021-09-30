@@ -9,8 +9,6 @@ import { setCurrentUser } from "app/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ChatList from "features/Chat/components/ChatList";
 import NotificationList from "features/Header/components/NotificationList";
-import useNotificationApi from "hooks/useNotificationApi";
-import { refreshNotification } from "app/appSlice";
 import useUserApi from "hooks/useUserApi";
 
 function Header() {
@@ -20,20 +18,16 @@ function Header() {
   const user = useSelector((state) => state.users.currentUser);
   const userApi = useUserApi();
 
-  const [chatNotification, setChatNotification] = useState(0);
-  const chats = useSelector((state) => state.chats.chats);
-
-  const notifications = useSelector((state) => state.app.notifications);
+  const [chatNotificationNumber, setChatNotificationNumber] = useState(0);
   const [notificationNumber, setNotificationNumber] = useState(0);
-  const notificationApi = useNotificationApi();
 
   const { darkMode, setDarkMode } = useDarkMode();
-
   const [keyword, setKeyword] = useState("");
 
   const [isOpenChatList, setIsOpenChatList] = useState(false);
   const [isOpenNotificationList, setIsOpenNotificationList] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
+
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: "",
@@ -44,32 +38,10 @@ function Header() {
   const ref = useRef();
 
   useEffect(() => {
-    notificationApi.getAll().then((response) => {
-      dispatch(refreshNotification(response));
-    });
-
     userApi.getCurrentUser().then((response) => {
       dispatch(setCurrentUser(response));
     });
   }, []);
-
-  useEffect(() => {
-    if (notifications.items) {
-      var num = notifications.items.reduce((preNum, x) => {
-        return preNum + (x?.isRead ? 0 : 1);
-      }, 0);
-      setNotificationNumber(num);
-    }
-  }, [notifications]);
-
-  useEffect(() => {
-    if (chats) {
-      var num = chats.reduce((preNum, x) => {
-        return preNum + (x?.numOfUnreadMessages > 0 ? 1 : 0);
-      }, 0);
-      setChatNotification(num);
-    }
-  }, [chats]);
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -190,9 +162,9 @@ function Header() {
                   setIsOpenNotificationList(false);
                 }}
               />
-              {chatNotification > 0 && !isOpenChatList && (
+              {chatNotificationNumber > 0 && !isOpenChatList && (
                 <span className="animate-fadeIn w-4 h-4 absolute right-0 top-full transform -translate-y-3/4 text-tiny font-bold bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle select-none">
-                  {chatNotification > 9 ? "9+" : chatNotification}
+                  {chatNotificationNumber > 9 ? "9+" : chatNotificationNumber}
                 </span>
               )}
             </li>
@@ -271,19 +243,23 @@ function Header() {
                     </button>
                   </div>
                 )}
-                {isOpenChatList && (
-                  <ChatList
-                    chats={chats}
-                    className="absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 "
-                  />
-                )}
-                {isOpenNotificationList && (
-                  <NotificationList
-                    notifications={notifications}
-                    setIsOpen={setIsOpenNotificationList}
-                    className="absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 overflow-y-auto "
-                  />
-                )}
+                <ChatList
+                  setChatNotificationNumber={setChatNotificationNumber}
+                  className={
+                    "absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 " +
+                    " " +
+                    (isOpenChatList ? "" : "hidden")
+                  }
+                />
+                <NotificationList
+                  setIsOpen={setIsOpenNotificationList}
+                  className={
+                    "absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 overflow-y-auto " +
+                    " " +
+                    (isOpenNotificationList ? "" : "hidden")
+                  }
+                  setNotificationNumber={setNotificationNumber}
+                />
               </div>
             </li>
           </ul>

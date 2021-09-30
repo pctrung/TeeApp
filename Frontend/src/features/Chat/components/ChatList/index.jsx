@@ -2,19 +2,29 @@ import { addSelectedId } from "app/chatSlice";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
 import CreateChat from "../CreateChat";
 
-function ChatList({ className, chats, setIsOpen }) {
+function ChatList({ className, setChatNotificationNumber }) {
   const selectedIds = useSelector((state) => state.chats.selectedIds);
   const currentUser = useSelector((state) => state.users.currentUser);
   const dispatch = useDispatch();
   const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
+  const chats = useSelector((state) => state.chats.chats);
 
   const [keyword, setKeyword] = useState("");
+
+  useEffect(() => {
+    if (chats) {
+      const num = chats.reduce((preNum, x) => {
+        return preNum + (x?.numOfUnreadMessages > 0 ? 1 : 0);
+      }, 0);
+      setChatNotificationNumber(num);
+    }
+  }, [chats]);
 
   function handleClick(id) {
     if (selectedIds && !selectedIds.includes(id)) {

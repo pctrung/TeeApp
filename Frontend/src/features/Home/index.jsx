@@ -1,24 +1,12 @@
-import { refreshPost } from "app/postSlice";
 import Pagination from "components/Pagination";
 import SideBar from "features/Home/components/SideBar";
-import usePostApi from "hooks/usePostApi";
 import usePostPagination from "hooks/usePostPagination";
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useState } from "react";
 import Post from "./components/Post";
 
 function Home() {
   const [page, setPage] = useState(1);
-  const posts = useSelector((state) => state.posts.posts);
-  const { isHasMore, isLoading, error } = usePostPagination(posts, page);
-  const dispatch = useDispatch();
-  const postApi = usePostApi();
-
-  useEffect(() => {
-    postApi.getAll().then((response) => {
-      dispatch(refreshPost(response));
-    });
-  }, []);
+  const { posts, isHasMore, isLoading, error } = usePostPagination(page);
 
   function loadMore() {
     if (isHasMore) {

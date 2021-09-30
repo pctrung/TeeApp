@@ -45,13 +45,26 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Creator)
                 .Include(x => x.Recipient)
                 .Include(x => x.Post)
-                .Where(x => x.Recipient.Id.Equals(_currentUser.Id))
+                .Where(x => x.Recipient.Id.Equals(_currentUser.Id) && x.IsRead)
                 .OrderByDescending(x => x.DateCreated)
                 .AsSplitQuery()
                 .ToListAsync();
 
             var totalRecord = notifications.Count;
             notifications = notifications.Paged(request.Page, request.Limit).ToList();
+             
+            // not load unread notification when page > 1
+            if(request.Page == 1){
+                var unreadNotifications = await _context.Notifications
+                .Include(x => x.Creator)
+                .Include(x => x.Recipient)
+                .Include(x => x.Post)
+                .Where(x => x.Recipient.Id.Equals(_currentUser.Id) && !x.IsRead)
+                .OrderByDescending(x => x.DateCreated)
+                .AsSplitQuery()
+                .ToListAsync();
+                notifications.AddRange(unreadNotifications);
+            }
 
             var notificationViewModels = _mapper.Map<List<NotificationViewModel>>(notifications);
 

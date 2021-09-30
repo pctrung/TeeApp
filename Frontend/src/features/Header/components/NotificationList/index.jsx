@@ -4,15 +4,19 @@ import Pagination from "components/Pagination";
 import useNotificationApi from "hooks/useNotificationApi";
 import useNotificationPagination from "hooks/useNotificationPagination";
 import moment from "moment";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 import { NotificationType } from "utils/Enums";
+import Notification from "../Notification";
 
-function NotificationList({ notifications = {}, className, setIsOpen }) {
+function NotificationList({ className, setIsOpen, setNotificationNumber }) {
   const notificationApi = useNotificationApi();
   const dispatch = useDispatch();
   const history = useHistory();
+  const [page, setPage] = useState(1);
+  const { notifications, isHasMore, isLoading, error } =
+    useNotificationPagination(page);
 
   function handleClick(notification = {}) {
     if (!notification.isRead) {
@@ -36,11 +40,14 @@ function NotificationList({ notifications = {}, className, setIsOpen }) {
     setIsOpen(false);
   }
 
-  const [page, setPage] = useState(1);
-  const { isHasMore, isLoading, error } = useNotificationPagination(
-    notifications,
-    page,
-  );
+  useEffect(() => {
+    if (notifications.items) {
+      var num = notifications.items.reduce((preNum, x) => {
+        return preNum + (x?.isRead ? 0 : 1);
+      }, 0);
+      setNotificationNumber(num);
+    }
+  }, [notifications]);
 
   function loadMore() {
     if (isHasMore) {
@@ -74,44 +81,28 @@ function NotificationList({ notifications = {}, className, setIsOpen }) {
         <div className="overflow-y-auto max-h-full">
           {notifications &&
             [...notifications?.items]
+              .filter((x) => !x.isRead)
               .sort((a, b) => (a?.dateCreated < b?.dateCreated ? 1 : -1))
               ?.map((notification, index) => (
                 <>
-                  <div
+                  <Notification
+                    onClick={handleClick}
                     key={Date.now() + index}
-                    className="relative select-none w-full flex flex-start items-center cursor-pointer hover:bg-gray-100 p-2  rounded-lg transition-base dark:hover:bg-dark-third dark:text-dark-txt"
-                    onClick={() => handleClick(notification)}
-                  >
-                    {!notification?.isRead && (
-                      <span className="w-3 h-3 absolute right-0 top-1/2 transform -translate-y-1/2 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle"></span>
-                    )}
-                    <ImageCircle src={notification?.creator?.avatarUrl} />
-                    <div className="font-primary flex flex-col pl-3 justify-between w-full max-w-500">
-                      <div className="flex flex-col justify-between items-start w-full min-w-0">
-                        <span
-                          className={
-                            "text-gray-800 dark:text-dark-txt max-w-full overflow-ellipsis break-word max-row-2" +
-                            " " +
-                            (!notification?.isRead ? "font-bold" : "")
-                          }
-                        >
-                          {notification?.content}
-                        </span>
-                        <span
-                          className={
-                            "text-sm text-gray-500 truncate flex-shrink-0" +
-                            " " +
-                            (!notification?.isRead ? "font-bold" : "")
-                          }
-                        >
-                          {moment(
-                            new Date(notification?.dateCreated),
-                            "YYYYMMDD",
-                          ).fromNow()}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
+                    notification={notification}
+                  />
+                </>
+              ))}
+          {notifications &&
+            [...notifications?.items]
+              .filter((x) => x.isRead)
+              .sort((a, b) => (a?.dateCreated < b?.dateCreated ? 1 : -1))
+              ?.map((notification, index) => (
+                <>
+                  <Notification
+                    onClick={handleClick}
+                    key={Date.now() + index}
+                    notification={notification}
+                  />
                 </>
               ))}
           <Pagination

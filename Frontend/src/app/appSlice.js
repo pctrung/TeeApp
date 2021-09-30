@@ -34,7 +34,7 @@ const notifications = createSlice({
       state?.items?.push(action.payload);
     },
     loadNotification: (state, action) => {
-      if (action.payload) {
+      if (action.payload.page > state.page) {
         const notification = action.payload;
         state.totalRecords = notification.totalRecords;
         state.limit = notification.limit;

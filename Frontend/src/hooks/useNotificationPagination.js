@@ -1,29 +1,30 @@
 import { useEffect, useState } from "react";
 import useNotificationApi from "hooks/useNotificationApi";
-import { loadNotification } from "app/appSlice";
-import { useDispatch } from "react-redux";
+import { loadNotification, refreshNotification } from "app/appSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function useNotificationPagination(
-  notifications = {},
-  page = 1,
-) {
+export default function useNotificationPagination(page = 1) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isHasMore, setIsHasMore] = useState(notifications.pageCount > page);
+  const notifications = useSelector((state) => state.app.notifications);
+  const [isHasMore, setIsHasMore] = useState(true);
 
   const notificationApi = useNotificationApi();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (page > 1 && isHasMore) {
+    if (isHasMore) {
       setIsLoading(true);
       setError(false);
-
       const request = { page };
       notificationApi
         .getAll(request)
         .then((response) => {
-          dispatch(loadNotification(response));
+          if (page > 1) {
+            dispatch(loadNotification(response));
+          } else {
+            dispatch(refreshNotification(response));
+          }
           setIsHasMore(page < response.pageCount);
           setIsLoading(false);
         })
@@ -33,5 +34,5 @@ export default function useNotificationPagination(
     }
   }, [page]);
 
-  return { isLoading, error, isHasMore };
+  return { notifications, isLoading, error, isHasMore };
 }
