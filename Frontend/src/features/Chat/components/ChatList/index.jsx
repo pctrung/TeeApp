@@ -157,6 +157,7 @@ function ChatList({ className, setChatNotificationNumber }) {
         <a
           href={process.env.REACT_APP_CHAT_APP_URL}
           target="_blank"
+          rel="noreferrer"
           className="font-semibold text-center text-sm text-green-500 hover:text-green-600 cursor-pointer block pt-2 mt-3 border-t-2 border-gray-100 dark:border-dark-third transition-base"
         >
           See all in TeeChat!

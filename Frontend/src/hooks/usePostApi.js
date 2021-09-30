@@ -18,6 +18,18 @@ export default function usePostApi() {
       const url = `${baseApiUrl}/${id}`;
       return Api.get(url);
     },
+    addComment: (postId, request) => {
+      const url = `${baseApiUrl}/${postId}/comments`;
+      return Api.post(url, request);
+    },
+    updateComment: (postId, commentId, request) => {
+      const url = `${baseApiUrl}/${postId}/comments/${commentId}`;
+      return Api.put(url, request);
+    },
+    deleteComment: (postId, commentId) => {
+      const url = `${baseApiUrl}/${postId}/comments/${commentId}`;
+      return Api.delete(url);
+    },
   };
   return postApi;
 }

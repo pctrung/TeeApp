@@ -1,9 +1,7 @@
 import { readAllNotification, readNotificationById } from "app/appSlice";
-import ImageCircle from "components/ImageCircle";
 import Pagination from "components/Pagination";
 import useNotificationApi from "hooks/useNotificationApi";
 import useNotificationPagination from "hooks/useNotificationPagination";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
@@ -58,6 +56,7 @@ function NotificationList({ className, setIsOpen, setNotificationNumber }) {
     dispatch(readAllNotification());
     notificationApi.readAll();
   }
+
   return (
     <>
       <div

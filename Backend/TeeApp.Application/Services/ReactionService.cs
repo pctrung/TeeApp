@@ -92,12 +92,15 @@ namespace TeeApp.Application.Services
             {
                 return ApiResult<ReactionResponse>.ServerError(null, "Cannot react. Something went wrong!");
             }
+
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new ReactionResponse()
             {
                 Reaction = _mapper.Map<ReactionViewModel>(reaction),
                 PostId = post.Id,
                 PostCreatorUserName = post.Creator.UserName,
-                RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<ReactionResponse>.Created(result);
@@ -138,12 +141,14 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new ReactionResponse()
             {
                 Reaction = _mapper.Map<ReactionViewModel>(reaction),
                 PostId = post.Id,
                 PostCreatorUserName = post.Creator.UserName,
-                RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<ReactionResponse>.Ok(result);
@@ -184,12 +189,14 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new ReactionResponse()
             {
                 Reaction = new ReactionViewModel() { Id = reactionId },
                 PostId = post.Id,
                 PostCreatorUserName = post.Creator.UserName,
-                RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<ReactionResponse>.Ok(result);

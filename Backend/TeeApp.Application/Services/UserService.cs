@@ -141,9 +141,9 @@ namespace TeeApp.Application.Services
                     return ApiResult<UserViewModel>.BadRequest(null, e.Message);
                 }
             }
-            user.FirstName = request.FirstName.Trim();
-            user.LastName = request.LastName.Trim();
-            user.AboutMe = request.AboutMe.Trim();
+            user.FirstName = request.FirstName?.Trim() ?? user.FirstName;
+            user.LastName = request.LastName?.Trim() ?? user.LastName;
+            user.AboutMe = request.AboutMe?.Trim() ?? user.AboutMe;
             user.Gender = request.Gender;
             user.DateOfBirth = request.DateOfBirth;
 
@@ -172,7 +172,7 @@ namespace TeeApp.Application.Services
                 LastName = request.LastName.Trim(),
                 UserName = request.Username.Trim(),
                 DateCreated = DateTime.Now,
-                Email = request.Email, 
+                Email = request.Email,
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,
             };

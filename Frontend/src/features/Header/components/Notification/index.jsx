@@ -1,9 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 import ImageCircle from "components/ImageCircle";
 import moment from "moment";
-
-Notification.propTypes = {};
 
 function Notification({ notification, onClick }) {
   return (
@@ -13,7 +10,7 @@ function Notification({ notification, onClick }) {
         onClick={() => onClick(notification)}
       >
         {!notification?.isRead && (
-          <span className="w-3 h-3 absolute right-0 top-1/2 transform -translate-y-1/2 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle"></span>
+          <span className="w-3 h-3 absolute right-2 top-1/2 transform -translate-y-1/2 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle"></span>
         )}
         <ImageCircle src={notification?.creator?.avatarUrl} />
         <div className="font-primary flex flex-col pl-3 justify-between w-full max-w-500">

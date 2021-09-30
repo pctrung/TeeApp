@@ -15,6 +15,7 @@ import Header from "features/Header";
 import Chat from "features/Chat";
 import { AppClient } from "utils/Constants";
 import { HubConnectionBuilder } from "@microsoft/signalr";
+import { addComment, updateComment, deleteComment } from "app/postSlice";
 
 function App() {
   const isLoading = useSelector((state) => state.app.isLoading);
@@ -44,6 +45,15 @@ function App() {
       connection.start().then((result) => {
         connection.on(AppClient.RECEIVE_NOTIFICATION, (response) => {
           dispatch(addNotification(response));
+        });
+        connection.on(AppClient.RECEIVE_COMMENT, (response) => {
+          dispatch(addComment(response));
+        });
+        connection.on(AppClient.RECEIVE_UPDATED_COMMENT, (response) => {
+          dispatch(updateComment(response));
+        });
+        connection.on(AppClient.DELETE_COMMENT, (postId, commentId) => {
+          dispatch(deleteComment({ postId, commentId }));
         });
       });
     }

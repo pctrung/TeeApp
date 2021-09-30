@@ -9,13 +9,15 @@ const posts = createSlice({
       return state;
     },
     addPost: (state, action) => {
-      var isExists = state.items.some((post) => post.id === action.payload.id);
+      const isExists = state.items.some(
+        (post) => post.id === action.payload.id,
+      );
       if (!isExists) {
         state?.item?.push(action.payload);
       }
     },
     updatePost: (state, action) => {
-      var updatedPost = action.payload;
+      const updatedPost = action.payload;
 
       const index = state?.items?.findIndex((post) => {
         return post.id === updatedPost.id;
@@ -46,8 +48,8 @@ const posts = createSlice({
       }
     },
     addComment: (state, action) => {
-      var postId = action.payload.postId;
-      var comment = action.payload.comment;
+      const postId = action.payload.postId;
+      const comment = action.payload.comment;
       if (postId && comment) {
         const index = state?.items?.findIndex((post) => {
           return post.id === postId;
@@ -58,28 +60,30 @@ const posts = createSlice({
       }
     },
     updateComment: (state, action) => {
-      var postId = action.payload.postId;
-      var comment = action.payload.comment;
-      if (postId && comment) {
+      const postId = action.payload.postId;
+      const updatedComment = action.payload.comment;
+
+      if (postId && updatedComment) {
         const postIndex = state?.items?.findIndex((post) => {
           return post.id === postId;
         });
         if (postIndex >= 0) {
           const commentIndex = state?.items[postIndex].comments?.findIndex(
             (comment) => {
-              return comment.id === comment.Id;
+              return comment.id === updatedComment.id;
             },
           );
-          if (commentIndex) {
+          if (commentIndex >= 0) {
             state.items[postIndex].comments[commentIndex].content =
-              comment.content;
+              updatedComment.content;
           }
         }
       }
     },
-    deletePost: (state, action) => {
-      var postId = action.payload.postId;
-      var commentId = action.payload.commentId;
+    deleteComment: (state, action) => {
+      const postId = action.payload.postId;
+      const commentId = action.payload.commentId;
+
       if (postId && commentId) {
         const postIndex = state?.items?.findIndex((post) => {
           return post.id === postId;
@@ -91,10 +95,8 @@ const posts = createSlice({
             },
           );
           if (commentIndex) {
-            state.items[postIndex].comments[commentIndex].splice(
-              commentIndex,
-              1,
-            );
+            state.items[postIndex].comments.splice(commentIndex, 1);
+            return state;
           }
         }
       }
@@ -106,6 +108,14 @@ const reducer = combineReducers({
   posts: posts.reducer,
 });
 
-export const { refreshPost, addPost, updatePost, deletePost, loadPost } =
-  posts.actions;
+export const {
+  refreshPost,
+  addPost,
+  updatePost,
+  deletePost,
+  addComment,
+  updateComment,
+  deleteComment,
+  loadPost,
+} = posts.actions;
 export default reducer;

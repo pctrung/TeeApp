@@ -83,12 +83,15 @@ namespace TeeApp.Application.Services
             {
                 return ApiResult<CommentResponse>.ServerError(null, "Cannot comment. Something went wrong!");
             }
+
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new CommentResponse()
             {
                 Comment = _mapper.Map<CommentViewModel>(comment),
                 PostId = post.Id,
                 PostCreatorUserName = post.Creator.UserName,
-                RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<CommentResponse>.Created(result);
@@ -129,12 +132,14 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new CommentResponse()
             {
                 Comment = _mapper.Map<CommentViewModel>(comment),
                 PostId = post.Id,
                 PostCreatorUserName = post.Creator.UserName,
-                RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<CommentResponse>.Ok(result);
@@ -174,12 +179,14 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new CommentResponse()
             {
                 Comment = new CommentViewModel() { Id = commentId },
                 PostId = post.Id,
                 PostCreatorUserName = post.Creator.UserName,
-                RecipientUserNames = post.Creator.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<CommentResponse>.Ok(result);

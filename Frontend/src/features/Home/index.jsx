@@ -18,9 +18,11 @@ function Home() {
       <div className="container grid md:grid-cols-12 xl:gap-16 lg:gap-10 md:gap-6 animate-fadeIn">
         <SideBar className="hidden md:block md:col-span-3 sticky top-20" />
         <div className="md:col-span-9 lg:col-span-6 w-full mx-auto space-y-4">
-          {posts?.items?.map((post, index) => (
-            <Post key={Math.random() + index} post={post} />
-          ))}
+          {[...posts?.items]
+            ?.sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1))
+            ?.map((post, index) => (
+              <Post key={Math.random() + index} post={post} />
+            ))}
           <Pagination
             loadMoreClassName="bg-gray-200 hover:bg-gray-300"
             onClick={loadMore}
