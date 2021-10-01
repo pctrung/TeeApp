@@ -23,11 +23,13 @@ namespace TeeApp.Application.Services
         private readonly TeeAppDbContext _context;
         private readonly IMapper _mapper;
         private readonly User _currentUser;
+        private readonly IStorageService _storageService;
 
-        public PostService(IMapper mapper, TeeAppDbContext context, ICurrentUser currentUser)
+        public PostService(IMapper mapper, TeeAppDbContext context, ICurrentUser currentUser, IStorageService storageService)
         {
             _context = context;
             _mapper = mapper;
+            _storageService = storageService;
 
             _currentUser = _context.Users
                 .Include(x => x.Following)
@@ -200,6 +202,7 @@ namespace TeeApp.Application.Services
             }
 
             post.DateDeleted = DateTime.Now;
+            post.Photos.ForEach(x => _storageService.DeleteFileAsync(x.ImageFileName));
             await _context.SaveChangesAsync();
 
             var result = new PostResponse()

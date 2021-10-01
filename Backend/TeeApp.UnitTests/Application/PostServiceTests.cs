@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using System.Threading.Tasks;
 using TeeApp.Application.Identity;
+using TeeApp.Application.Interfaces;
 using TeeApp.Application.Services;
 using TeeApp.Data.EF;
 using TeeApp.Models.RequestModels.Common;
@@ -15,6 +17,15 @@ namespace TeeApp.UnitTests.Application
     // Most of arrange in FakeData class
     public class PostServiceTests
     {
+        private static IStorageService GetStorageServiceMock()
+        {
+            var storageServiceMock = new Mock<IStorageService>();
+            storageServiceMock.Setup(x => x.SaveImageAsync(It.IsAny<IFormFile>())).Returns(Task.FromResult("fakeimagename.jpg"));
+            storageServiceMock.Setup(x => x.DeleteFileAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
+
+            return storageServiceMock.Object;
+        }
+
         [Fact]
         public async Task GetAll_WithNotEmptyPostInDb_ReturnsList()
         {
@@ -23,7 +34,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = new PaginationRequestBase() { Keyword = "", Limit = 50, Page = 1 };
 
             // Act
@@ -49,7 +60,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = new PaginationRequestBase() { Keyword = "", Limit = 50, Page = 1 };
 
             // Act
@@ -74,7 +85,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
 
             // Act
             var result = await postService.GetByIdAsync(postId);
@@ -91,7 +102,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var notExistsPostId = 10;
 
             // Act
@@ -109,7 +120,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = new CreatePostRequest()
             {
                 Content = "New post",
@@ -134,7 +145,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = new UpdatePostRequest()
             {
                 Content = "New post",
@@ -159,7 +170,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = new UpdatePostRequest()
             {
                 Content = "New post",
@@ -181,7 +192,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = new UpdatePostRequest()
             {
                 Content = "New post",
@@ -207,7 +218,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
 
             // Act
             var result = await postService.DeleteAsync(postId);
@@ -227,7 +238,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
 
             // Act
             var result = await postService.DeleteAsync(postId);
@@ -244,7 +255,7 @@ namespace TeeApp.UnitTests.Application
             IMapper mapper = FakeData.GetIMapperTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
 
-            var postService = new PostService(mapper, context, currentUserMock.Object);
+            var postService = new PostService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var postId = 8;
 
             // Act
