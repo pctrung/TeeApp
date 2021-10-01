@@ -9,5 +9,6 @@ namespace TeeApp.Models.ViewModels
         public int PostId { get; set; }
         public bool IsRead { get; set; }
         public string Content { get; set; }
+        public ReactionType ReactionType { get; set; }
     }
 }

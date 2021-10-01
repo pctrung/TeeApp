@@ -15,7 +15,17 @@ import Header from "features/Header";
 import Chat from "features/Chat";
 import { AppClient } from "utils/Constants";
 import { HubConnectionBuilder } from "@microsoft/signalr";
-import { addComment, updateComment, deleteComment } from "app/postSlice";
+import {
+  addComment,
+  updateComment,
+  deleteComment,
+  deleteReaction,
+  updateReaction,
+  addReaction,
+  addPost,
+  updatePost,
+  deletePost,
+} from "app/postSlice";
 
 function App() {
   const isLoading = useSelector((state) => state.app.isLoading);
@@ -45,6 +55,24 @@ function App() {
       connection.start().then((result) => {
         connection.on(AppClient.RECEIVE_NOTIFICATION, (response) => {
           dispatch(addNotification(response));
+        });
+        connection.on(AppClient.RECEIVE_POST, (response) => {
+          dispatch(addPost(response));
+        });
+        connection.on(AppClient.RECEIVE_UPDATED_POST, (response) => {
+          dispatch(updatePost(response));
+        });
+        connection.on(AppClient.DELETE_POST, (postId) => {
+          dispatch(deletePost({ postId }));
+        });
+        connection.on(AppClient.RECEIVE_REACTION, (response) => {
+          dispatch(addReaction(response));
+        });
+        connection.on(AppClient.RECEIVE_UPDATED_REACTION, (response) => {
+          dispatch(updateReaction(response));
+        });
+        connection.on(AppClient.DELETE_REACTION, (postId, reactionId) => {
+          dispatch(deleteReaction({ postId, reactionId }));
         });
         connection.on(AppClient.RECEIVE_COMMENT, (response) => {
           dispatch(addComment(response));

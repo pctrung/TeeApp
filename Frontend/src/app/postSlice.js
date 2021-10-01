@@ -47,6 +47,60 @@ const posts = createSlice({
         state.items = state.items.concat(posts.items);
       }
     },
+    addReaction: (state, action) => {
+      const postId = action.payload.postId;
+      const reaction = action.payload.reaction;
+      if (postId && reaction) {
+        const index = state?.items?.findIndex((post) => {
+          return post.id === postId;
+        });
+        if (index >= 0) {
+          state.items[index].reactions.push(reaction);
+        }
+      }
+    },
+    updateReaction: (state, action) => {
+      const postId = action.payload.postId;
+      const updatedReaction = action.payload.reaction;
+
+      if (postId && updatedReaction) {
+        const postIndex = state?.items?.findIndex((post) => {
+          return post.id === postId;
+        });
+        if (postIndex >= 0) {
+          const reactionIndex = state?.items[postIndex].reactions?.findIndex(
+            (reaction) => {
+              return reaction.id === updatedReaction.id;
+            },
+          );
+          if (reactionIndex >= 0) {
+            state.items[postIndex].reactions[reactionIndex].type =
+              updatedReaction.type;
+          }
+        }
+      }
+    },
+    deleteReaction: (state, action) => {
+      const postId = action.payload.postId;
+      const reactionId = action.payload.reactionId;
+
+      if (postId && reactionId) {
+        const postIndex = state?.items?.findIndex((post) => {
+          return post.id === postId;
+        });
+        if (postIndex >= 0) {
+          const reactionIndex = state?.items[postIndex].reactions?.findIndex(
+            (reaction) => {
+              return reaction.id === reactionId;
+            },
+          );
+          if (reactionIndex >= 0) {
+            state.items[postIndex].reactions.splice(reactionIndex, 1);
+            return state;
+          }
+        }
+      }
+    },
     addComment: (state, action) => {
       const postId = action.payload.postId;
       const comment = action.payload.comment;
@@ -94,7 +148,7 @@ const posts = createSlice({
               return comment.id === commentId;
             },
           );
-          if (commentIndex) {
+          if (commentIndex >= 0) {
             state.items[postIndex].comments.splice(commentIndex, 1);
             return state;
           }
@@ -113,6 +167,9 @@ export const {
   addPost,
   updatePost,
   deletePost,
+  addReaction,
+  updateReaction,
+  deleteReaction,
   addComment,
   updateComment,
   deleteComment,

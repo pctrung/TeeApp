@@ -33,7 +33,7 @@ export default function CommentList({
   );
 }
 
-const Comment = ({ comment, postId, isMyComment }) => {
+const Comment = React.memo(({ comment, postId, isMyComment }) => {
   const postApi = usePostApi();
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
@@ -149,7 +149,7 @@ const Comment = ({ comment, postId, isMyComment }) => {
               </div>
             )}
           </div>
-          <span className="ml-2 mt-1 text-xs text-gray-500 dark:text-dark-txt">
+          <span className="ml-2 text-xs text-gray-500 dark:text-dark-txt">
             {moment(new Date(comment?.dateCreated), "YYYYMMDD")
               .fromNow()
               ?.replace("ago", "")
@@ -194,4 +194,4 @@ const Comment = ({ comment, postId, isMyComment }) => {
       </div>
     </>
   );
-};
+});

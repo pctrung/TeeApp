@@ -1,6 +1,7 @@
 import React from "react";
 import ImageCircle from "components/ImageCircle";
 import moment from "moment";
+import { NotificationType, ReactionIcon, ReactionName } from "utils/Enums";
 
 function Notification({ notification, onClick }) {
   return (
@@ -12,7 +13,18 @@ function Notification({ notification, onClick }) {
         {!notification?.isRead && (
           <span className="w-3 h-3 absolute right-2 top-1/2 transform -translate-y-1/2 text-xs font-bold p-1 bg-green-500 dark:bg-green-600 text-white rounded-full text-center align-middle"></span>
         )}
-        <ImageCircle src={notification?.creator?.avatarUrl} />
+        <div className="relative flex-shrink-0">
+          <ImageCircle src={notification?.creator?.avatarUrl} />
+          {notification?.type === NotificationType.REACTION && (
+            <div className="h-5 w-5 absolute -right-1 top-full transform -translate-y-4 ">
+              <img
+                src={ReactionIcon[notification.reactionType]}
+                alt={ReactionName[notification.reactionType]}
+                className="w-full h-full"
+              />
+            </div>
+          )}
+        </div>
         <div className="font-primary flex flex-col pl-3 justify-between w-full max-w-500">
           <div className="flex flex-col justify-between items-start w-full min-w-0">
             <span

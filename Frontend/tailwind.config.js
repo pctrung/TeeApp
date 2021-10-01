@@ -107,6 +107,7 @@ module.exports = {
         1000: "1000px",
       },
       animation: {
+        swipeUp: "swipeUp 0.3s ease-in-out",
         fadeIn: "fadeIn 0.3s ease-in-out",
         fadeOut: "fadeOut 0.3s ease-in-out forwards",
         bounce200: "bounce 1s infinite 200ms",
@@ -122,6 +123,10 @@ module.exports = {
           "99%": { opacity: 0 },
           "100%": { display: "none", visibility: "hidden" },
         },
+        swipeUp: {
+          "0%": { opacity: 0, transform: "translateY(60%)" },
+          "100%": { opacity: 1, transform: "translateY(0%)" },
+        },
       }),
     },
     fontFamily: {
@@ -136,6 +141,7 @@ module.exports = {
     extend: {
       backgroundColor: ["active", "disabled"],
       opacity: ["disabled"],
+      display: ["group-hover"],
     },
   },
   plugins: [],

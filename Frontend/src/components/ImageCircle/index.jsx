@@ -104,4 +104,4 @@ function ImageCircle({
   );
 }
 
-export default ImageCircle;
+export default React.memo(ImageCircle);
