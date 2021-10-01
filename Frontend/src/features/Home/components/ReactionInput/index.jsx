@@ -18,7 +18,7 @@ function ReactionInput({ className = "", reacted, postId }) {
         className={
           className +
           " " +
-          "animate-swipeUp space-x-2 rounded-3xl bg-white shadow border-2 border-gray-100 dark:border-dark-hover p-1 transition-base z-50"
+          "animate-swipeUp space-x-2 rounded-3xl bg-white dark:bg-dark-secondary shadow border-2 border-gray-100 dark:border-dark-third p-1 transition-base z-50"
         }
       >
         <Reaction

@@ -6,7 +6,7 @@ SideBar.propTypes = {};
 function SideBar({ className }) {
   return (
     <>
-      <div className={"  " + " " + className}>Side bar</div>
+      <div className={className}>Side bar</div>
     </>
   );
 }

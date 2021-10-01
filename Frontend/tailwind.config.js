@@ -108,6 +108,7 @@ module.exports = {
       },
       animation: {
         swipeUp: "swipeUp 0.3s ease-in-out",
+        popup: "popup 0.3s ease-in-out",
         fadeIn: "fadeIn 0.3s ease-in-out",
         fadeOut: "fadeOut 0.3s ease-in-out forwards",
         bounce200: "bounce 1s infinite 200ms",
@@ -126,6 +127,15 @@ module.exports = {
         swipeUp: {
           "0%": { opacity: 0, transform: "translateY(60%)" },
           "100%": { opacity: 1, transform: "translateY(0%)" },
+        },
+        popup: {
+          "0%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.4)" },
+          "60%": { transform: "scale(1.1)" },
+          "70%": { transform: "scale(1.2)" },
+          "80%": { transform: "scale(1)" },
+          "90%": { transform: "scale(1.1)" },
+          "100%": { transform: "scale(1)" },
         },
       }),
     },

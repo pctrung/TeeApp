@@ -53,7 +53,7 @@ const ReactionIcon = {
   [ReactionType.ANGRY]: AngryIcon,
 };
 const ReactionColor = {
-  [ReactionType.LIKE]: "text-blue-600",
+  [ReactionType.LIKE]: "text-blue-600 dark:text-blue-400 ",
   [ReactionType.LOVE]: "text-pink-600",
   [ReactionType.HAHA]: "text-yellow-500",
   [ReactionType.CARE]: "text-yellow-500",

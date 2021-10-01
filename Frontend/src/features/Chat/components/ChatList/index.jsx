@@ -87,7 +87,7 @@ function ChatList({ className, setChatNotificationNumber }) {
               }
               return (
                 <div
-                  key={Date.now() + index}
+                  key={chat.id}
                   className="relative select-none w-full h-16 flex flex-start items-center cursor-pointer hover:bg-gray-100 p-2 rounded-lg transition-base dark:hover:bg-dark-third dark:text-dark-txt"
                   onClick={() => handleClick(chat.id)}
                 >

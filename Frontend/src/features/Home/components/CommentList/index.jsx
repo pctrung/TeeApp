@@ -23,11 +23,16 @@ export default function CommentList({
   return (
     <>
       {myCommentList.map((comment, index) => (
-        <Comment comment={comment} postId={postId} isMyComment />
+        <Comment
+          key={comment.id}
+          comment={comment}
+          postId={postId}
+          isMyComment
+        />
       ))}
       {isOpen &&
         otherCommentList.map((comment, index) => (
-          <Comment comment={comment} postId={postId} />
+          <Comment key={comment.id} comment={comment} postId={postId} />
         ))}
     </>
   );
@@ -98,11 +103,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
         confirmButtonTitle="Yes"
         confirmButtonAction={() => deleteComment()}
       />
-      <div
-        className={
-          "flex space-x-2 max-w-full" + " " + (isEditMode ? "w-full" : "")
-        }
-      >
+      <div className={"flex space-x-2 max-w-full " + (isEditMode && "w-full")}>
         <Link
           className="font-semibold text-sm cursor-pointer flex-shrink-0 mt-2"
           to={`/profile/${comment?.creator?.userName}`}

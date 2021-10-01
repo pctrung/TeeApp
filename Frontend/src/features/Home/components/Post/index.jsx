@@ -75,7 +75,7 @@ function Post({ post }) {
                 {post.creator.fullName}
               </Link>
               <Link
-                className="text-xs text-gray-500 dark:text-dark-txt"
+                className="text-xs text-gray-500 dark:text-dark-txt hover:underline"
                 to={`/post/${post.id}`}
               >
                 {moment(new Date(post?.dateCreated), "YYYYMMDD")
@@ -85,10 +85,12 @@ function Post({ post }) {
               </Link>
             </div>
           </div>
-          <ClickableIcon
-            iconClass="bx bx-dots-horizontal-rounded"
-            colorClass="bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover"
-          />
+          {post?.creator?.userName === currentUser?.userName && (
+            <ClickableIcon
+              iconClass="bx bx-dots-horizontal-rounded"
+              colorClass="bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover"
+            />
+          )}
         </div>
         <span className="text-sm break-words overflow-ellipsis max-w-full">
           {post.content}
@@ -98,12 +100,15 @@ function Post({ post }) {
             <div className="flex">
               {topThreeType &&
                 topThreeType.map((type, index) => (
-                  <div className={"w-5 h-5 " + (index > 0 ? "z-10" : "z-20")}>
+                  <div
+                    key={type}
+                    className={"w-5 h-5 " + (index > 0 ? "z-0" : "z-10")}
+                  >
                     <img
                       src={ReactionIcon[type]}
                       alt={ReactionName[type]}
                       className={
-                        "w-full h-full border-2 border-white rounded-full" +
+                        "w-full h-full border-2 border-white dark:border-dark-secondary rounded-full" +
                         " " +
                         (index > 0 ? "transform -translate-x-1" : "")
                       }
@@ -111,12 +116,12 @@ function Post({ post }) {
                   </div>
                 ))}
             </div>
-            <span>
+            <span className="cursor-pointer text-gray-500 dark:text-dark-txt">
               {post?.reactions?.length > 0 && post?.reactions?.length}
             </span>
           </div>
           <span
-            className="cursor-pointer"
+            className="cursor-pointer text-gray-500 dark:text-dark-txt"
             onClick={() => setIsOpenCommentList((preState) => !preState)}
           >
             {post?.comments?.length > 0 &&
@@ -143,7 +148,7 @@ function Post({ post }) {
                       <img
                         src={ReactionIcon[reacted.type]}
                         alt={ReactionName[reacted.type]}
-                        className="w-full h-full"
+                        className="animate-popup w-full h-full"
                       />
                     </div>
 

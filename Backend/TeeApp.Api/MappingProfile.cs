@@ -36,7 +36,10 @@ namespace TeeApp.Api
                         act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.ImageFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.ImageFileName}")));
 
                 CreateMap<Post, PostViewModel>();
-                CreateMap<Photo, PhotoViewModel>();
+                CreateMap<Photo, PhotoViewModel>()
+                    .ForMember(
+                        des => des.ImageUrl,
+                        act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.ImageFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.ImageFileName}")));
                 CreateMap<Comment, CommentViewModel>();
                 CreateMap<Reaction, ReactionViewModel>();
                 CreateMap<Notification, NotificationViewModel>()

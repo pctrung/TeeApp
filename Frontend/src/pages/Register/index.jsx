@@ -321,7 +321,7 @@ function Register() {
               <input
                 {...register("dateOfBirth")}
                 type="date"
-                className={INPUT_CLASS + " " + "w-full"}
+                className={INPUT_CLASS + " w-full"}
               />
               <div className="text-red-500 text-sm">
                 {errors.dateOfBirth?.message}

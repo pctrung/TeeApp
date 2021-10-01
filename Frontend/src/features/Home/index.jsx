@@ -20,8 +20,8 @@ function Home() {
         <div className="md:col-span-9 lg:col-span-6 w-full mx-auto space-y-4">
           {[...posts?.items]
             ?.sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1))
-            ?.map((post, index) => (
-              <Post key={Math.random() + index} post={post} />
+            ?.map((post) => (
+              <Post key={post.id} post={post} />
             ))}
           <Pagination
             loadMoreClassName="bg-gray-200 hover:bg-gray-300"

@@ -83,26 +83,22 @@ function NotificationList({ className, setIsOpen, setNotificationNumber }) {
               .filter((x) => !x.isRead)
               .sort((a, b) => (a?.dateCreated < b?.dateCreated ? 1 : -1))
               ?.map((notification, index) => (
-                <>
-                  <Notification
-                    onClick={handleClick}
-                    key={Date.now() + index}
-                    notification={notification}
-                  />
-                </>
+                <Notification
+                  onClick={handleClick}
+                  key={notification.id}
+                  notification={notification}
+                />
               ))}
           {notifications &&
             [...notifications?.items]
               .filter((x) => x.isRead)
               .sort((a, b) => (a?.dateCreated < b?.dateCreated ? 1 : -1))
               ?.map((notification, index) => (
-                <>
-                  <Notification
-                    onClick={handleClick}
-                    key={Date.now() + index}
-                    notification={notification}
-                  />
-                </>
+                <Notification
+                  onClick={handleClick}
+                  key={notification.id}
+                  notification={notification}
+                />
               ))}
           <Pagination
             className="mt-2"
