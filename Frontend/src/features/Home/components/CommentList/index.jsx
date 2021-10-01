@@ -23,16 +23,17 @@ export default function CommentList({
   return (
     <>
       {myCommentList.map((comment, index) => (
-        <Comment comment={comment} index={index} postId={postId} isMyComment />
+        <Comment comment={comment} postId={postId} isMyComment />
       ))}
       {isOpen &&
         otherCommentList.map((comment, index) => (
-          <Comment comment={comment} index={index} postId={postId} />
+          <Comment comment={comment} postId={postId} />
         ))}
     </>
   );
 }
-const Comment = ({ comment, index, postId, isMyComment }) => {
+
+const Comment = ({ comment, postId, isMyComment }) => {
   const postApi = usePostApi();
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
@@ -63,19 +64,16 @@ const Comment = ({ comment, index, postId, isMyComment }) => {
   };
   const onUpdateComment = (e) => {
     e.preventDefault();
-    postApi
-      .updateComment(postId, comment.id, { content: editContent })
-      .then((response) => {
-        setIsEditMode(false);
-      });
+    if (editContent !== comment.content) {
+      postApi.updateComment(postId, comment.id, { content: editContent });
+    }
+    setIsEditMode(false);
   };
 
   // Esc to cancel edit
   function escFunction(e) {
     if (e.keyCode === 27) {
       setIsEditMode(false);
-    } else if (isEditMode) {
-      editInputRef?.current?.focus();
     }
   }
   useEffect(() => {
@@ -101,7 +99,6 @@ const Comment = ({ comment, index, postId, isMyComment }) => {
         confirmButtonAction={() => deleteComment()}
       />
       <div
-        key={Math.random() + index}
         className={
           "flex space-x-2 max-w-full" + " " + (isEditMode ? "w-full" : "")
         }
@@ -110,13 +107,17 @@ const Comment = ({ comment, index, postId, isMyComment }) => {
           className="font-semibold text-sm cursor-pointer flex-shrink-0 mt-2"
           to={`/profile/${comment?.creator?.userName}`}
         >
-          <ImageCircle size="sm" src={comment?.creator?.avatarUrl} />
+          <ImageCircle
+            size="sm"
+            src={comment?.creator?.avatarUrl}
+            userName={comment?.creator?.userName}
+          />
         </Link>
         <div className="flex flex-col w-full">
           <div className="flex flex-col space-y-1 justify-evenly w-full bg-gray-100 dark:bg-dark-third rounded-2xl px-3 py-3">
             <div className="w-full flex justify-between items-center mr-9">
               <Link
-                className="font-semibold text-sm cursor-pointer"
+                className="font-semibold text-sm cursor-pointer hover:underline"
                 to={`/profile/${comment?.creator?.userName}`}
               >
                 {comment?.creator?.fullName}

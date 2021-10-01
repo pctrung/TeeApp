@@ -20,11 +20,14 @@ function Post({ post }) {
               className="font-semibold text-sm cursor-pointer"
               to={`/profile/${post.creator.userName}`}
             >
-              <ImageCircle src={post.creator.avatarUrl} />
+              <ImageCircle
+                src={post.creator.avatarUrl}
+                userName={post?.creator?.userName}
+              />
             </Link>
             <div className="flex flex-col justify-evenly">
               <Link
-                className="font-semibold text-sm cursor-pointer"
+                className="font-semibold text-sm cursor-pointer hover:underline"
                 to={`/profile/${post.creator.userName}`}
               >
                 {post.creator.fullName}
@@ -48,6 +51,20 @@ function Post({ post }) {
         <span className="text-sm break-words overflow-ellipsis max-w-full">
           {post.content}
         </span>
+        <div className="flex justify-between w-full text-xs text-gray-500 hover:underline">
+          <span className="cursor-pointer">
+            {post?.reactions?.length > 0 && post?.reactions?.length}
+          </span>
+          <span
+            className="cursor-pointer"
+            onClick={() => setIsOpenCommentList((preState) => !preState)}
+          >
+            {post?.comments?.length > 0 &&
+              post?.comments?.length +
+                " comment" +
+                (post?.comments?.length > 1 ? "s" : "")}
+          </span>
+        </div>
         <div className="w-full text-center flex justify-between select-none cursor-pointer py-1 border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt">
           <span className="flex-1 p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base">
             <i className="bx bx-like mr-2 text-lg align-middle mb-1"></i>

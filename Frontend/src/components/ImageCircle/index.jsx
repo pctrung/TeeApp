@@ -43,7 +43,7 @@ function ImageCircle({
       onlineSize = "w-2 h-2";
       break;
     case "sm":
-      onlineSize = "w-2 h-2";
+      onlineSize = "md:w-3 md:h-3 w-2 h-2 md:border-2 border";
       break;
     case "lg":
       onlineSize = "border-2 w-4 h-4";
@@ -55,7 +55,7 @@ function ImageCircle({
       onlineSize = "border-2 w-4 h-4";
       break;
     default:
-      onlineSize = "border-2 w-4 h-4";
+      onlineSize = "border-2 md:w-4 md:h-4 h-3 w-3";
   }
 
   var avatarSize;
@@ -70,7 +70,7 @@ function ImageCircle({
       avatarSize = "h-14 w-14 md:h-16 md:w-16";
       break;
     case "xl":
-      avatarSize = "h-22 w-22 md:h-24 md:w-24";
+      avatarSize = "h-20 w-20 md:h-24 md:w-24";
       break;
     case "full":
       avatarSize = "h-full w-full";
