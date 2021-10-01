@@ -15,6 +15,7 @@ import {
 } from "utils/Enums";
 import usePostApi from "hooks/usePostApi";
 import { groupBy } from "utils/ExtensionMethod";
+import PhotoList from "../PhotoList";
 
 function Post({ post }) {
   const currentUser = useSelector((state) => state.users.currentUser);
@@ -95,6 +96,13 @@ function Post({ post }) {
         <span className="text-sm break-words overflow-ellipsis max-w-full">
           {post.content}
         </span>
+
+        {post?.photos?.length > 0 && (
+          <div className="w-full max-h-500 cursor-pointer">
+            <PhotoList photos={post.photos} />{" "}
+          </div>
+        )}
+
         <div className="flex justify-between w-full text-xs text-gray-500 hover:underline">
           <div className="cursor-pointer flex space-x-1">
             <div className="flex">
@@ -143,7 +151,7 @@ function Post({ post }) {
                   className="w-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
                   onClick={deleteReaction}
                 >
-                  <div className="flex justify-center items-center space-x-2">
+                  <div className="flex-center space-x-2">
                     <div className="w-5">
                       <img
                         src={ReactionIcon[reacted.type]}

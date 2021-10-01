@@ -7,7 +7,7 @@ function ServerError({ message }) {
   return (
     <div className="z-10 fixed inset-0 h-screen animate-fadeIn w-screen flex flex-col justify-center items-center space-y-8 px-2">
       <img
-        className="md:max-w-500 max-w-300 object-cover"
+        className="md:max-w-xl max-w-xs object-cover"
         src={ErrorImg}
         alt="Error"
       />

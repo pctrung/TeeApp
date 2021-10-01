@@ -15,13 +15,13 @@ const Loader = ({ className, isOpen = true }) => {
       <>
         <div
           className={
-            "z-50  animate-fadeIn flex flex-col h-screen w-screen justify-center items-center fixed transition-base bg-white dark:bg-dark-secondary" +
+            "z-50 animate-fadeIn flex flex-col h-screen w-screen justify-center items-center fixed transition-base bg-white dark:bg-dark-secondary" +
             (isEnding ? " hidden" : "") +
             (" " + className ?? "")
           }
         >
           <img src={Logo} className="w-20 h-20 mb-10" alt="logo" />
-          <div className="flex justify-center items-center transition-base">
+          <div className="flex-center transition-base">
             <div className={`${circleCommonClasses} mr-3 animate-bounce`}></div>
             <div
               className={`${circleCommonClasses} mr-3 animate-bounce200`}

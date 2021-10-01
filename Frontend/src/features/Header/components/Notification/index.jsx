@@ -25,7 +25,7 @@ function Notification({ notification, onClick }) {
             </div>
           )}
         </div>
-        <div className="font-primary flex flex-col pl-3 justify-between w-full max-w-500">
+        <div className="font-primary flex flex-col pl-3 justify-between w-full max-w-lg">
           <div className="flex flex-col justify-between items-start w-full min-w-0">
             <span
               className={

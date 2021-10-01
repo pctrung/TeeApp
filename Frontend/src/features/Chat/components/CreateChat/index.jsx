@@ -112,7 +112,7 @@ function CreateChat({ isOpen, setIsOpen }) {
   }
 
   return isOpen ? (
-    <div className="animate-fadeIn fixed inset-0 grid place-items-center h-screen w-screen px-4 py-10  z-30 bg-gray-500 bg-opacity-30 dark:bg-dark-primary dark:bg-opacity-50">
+    <div className="overlay grid place-items-center px-4 py-10 z-30">
       <div
         ref={ref}
         className={

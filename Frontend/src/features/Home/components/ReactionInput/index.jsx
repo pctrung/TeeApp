@@ -1,9 +1,10 @@
 import usePostApi from "hooks/usePostApi";
-import React from "react";
+import React, { useRef } from "react";
 import { ReactionType, ReactionIcon, ReactionName } from "utils/Enums";
 
 function ReactionInput({ className = "", reacted, postId }) {
   const postApi = usePostApi();
+  const ref = useRef();
 
   const addReaction = (type) => {
     if (!reacted) {
@@ -71,7 +72,7 @@ function ReactionInput({ className = "", reacted, postId }) {
 const Reaction = ({ type, src, alt, addReaction }) => (
   <div
     onClick={() => addReaction(type)}
-    className="w-10 hover:scale-125 hover:transform origin-bottom transition-all duration-200 ease-in-out"
+    className="w-10 hover:scale-125 hover:-translate-y-2 hover:transform origin-bottom transition-all duration-300 ease-in-out"
   >
     <img src={src} alt={alt} className="w-full h-full" />
   </div>
