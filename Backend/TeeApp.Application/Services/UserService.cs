@@ -151,7 +151,7 @@ namespace TeeApp.Application.Services
 
             var responseUser = _mapper.Map<UserViewModel>(user);
 
-            return ApiResult<UserViewModel>.Ok(responseUser, "Update user successfully");
+            return ApiResult<UserViewModel>.Ok(responseUser, "Update info successfully!");
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)
@@ -195,7 +195,7 @@ namespace TeeApp.Application.Services
             var user = await _context.Users.FindAsync(_currentUser.UserId);
             if (user == null)
             {
-                return ApiResult<UserViewModel>.BadRequest(null, "Unable to identify user. Please login and try again");
+                return ApiResult<UserViewModel>.BadRequest(null, "Unable to identify user. Please login and try again!");
             }
 
             var responseUser = _mapper.Map<UserViewModel>(user);

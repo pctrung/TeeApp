@@ -116,7 +116,7 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<PostViewModel>.NotFound(null);
+                return ApiResult<PostViewModel>.NotFound(null, "Not found this post.");
             }
 
             var result = _mapper.Map<PostViewModel>(post);
@@ -147,10 +147,12 @@ namespace TeeApp.Application.Services
 
             var postViewModel = _mapper.Map<PostViewModel>(post);
 
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new PostResponse()
             {
                 Post = postViewModel,
-                RecipientUserNames = _currentUser.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<PostResponse>.Created(result, "Create post successfully!");
@@ -162,12 +164,12 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<PostResponse>.NotFound(null);
+                return ApiResult<PostResponse>.NotFound(null, "Not found this post.");
             }
 
             if (!IsHavePermissionToAccessPostAsync(post))
             {
-                return ApiResult<PostResponse>.ForBid(null);
+                return ApiResult<PostResponse>.Forbid(null);
             }
 
             post.Content = request.Content;
@@ -178,10 +180,12 @@ namespace TeeApp.Application.Services
 
             var postViewModel = _mapper.Map<PostViewModel>(post);
 
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new PostResponse()
             {
                 Post = postViewModel,
-                RecipientUserNames = _currentUser.Followers.Select(x => x.UserName).ToList()
+                RecipientUserNames = recipients
             };
 
             return ApiResult<PostResponse>.Ok(result, "Update post successfully!");
@@ -193,22 +197,27 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<PostResponse>.NotFound(null);
+                return ApiResult<PostResponse>.NotFound(null, "Not found this post.");
             }
 
             if (!IsHavePermissionToAccessPostAsync(post))
             {
-                return ApiResult<PostResponse>.ForBid(null);
+                return ApiResult<PostResponse>.Forbid(null);
             }
 
             post.DateDeleted = DateTime.Now;
-            post.Photos.ForEach(x => _storageService.DeleteFileAsync(x.ImageFileName));
+            if (post.Photos != null)
+            {
+                post.Photos.ForEach(x => _storageService.DeleteFileAsync(x.ImageFileName));
+            }
             await _context.SaveChangesAsync();
 
+            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+            recipients.Add(post.Creator.UserName);
             var result = new PostResponse()
             {
-                Post = new PostViewModel() { Id = post.Id },
-                RecipientUserNames = _currentUser.Followers.Select(x => x.UserName).ToList()
+                Post = new() { Id = post.Id },
+                RecipientUserNames = recipients
             };
 
             return ApiResult<PostResponse>.Ok(result, "Delete post successfully!");

@@ -1,5 +1,17 @@
 import { combineReducers, createSlice } from "@reduxjs/toolkit";
 
+const newPostTotal = createSlice({
+  name: "newPostTotal",
+  initialState: 0,
+  reducers: {
+    addNewPost: (state) => {
+      return state + 1;
+    },
+    resetNewPost: () => {
+      return 0;
+    },
+  },
+});
 const posts = createSlice({
   name: "posts",
   initialState: { items: [] },
@@ -9,11 +21,10 @@ const posts = createSlice({
       return state;
     },
     addPost: (state, action) => {
-      const isExists = state.items.some(
-        (post) => post.id === action.payload.id,
-      );
+      const newPost = action.payload;
+      const isExists = state.items.some((post) => post.id === newPost.id);
       if (!isExists) {
-        state?.item?.push(action.payload);
+        state?.items?.push(newPost);
       }
     },
     updatePost: (state, action) => {
@@ -160,6 +171,7 @@ const posts = createSlice({
 
 const reducer = combineReducers({
   posts: posts.reducer,
+  newPostTotal: newPostTotal.reducer,
 });
 
 export const {
@@ -175,4 +187,6 @@ export const {
   deleteComment,
   loadPost,
 } = posts.actions;
+export const { addNewPost, resetNewPost } = newPostTotal.actions;
+
 export default reducer;

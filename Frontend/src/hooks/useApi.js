@@ -46,15 +46,19 @@ export default function useApi() {
           : "Oops, something went wrong! Please contact administrator.";
 
       if (error.response) {
+        var popupTitle = "Notification";
         switch (error.response.status) {
           case 401:
+            popupTitle = "Login required";
             window.localStorage.removeItem("token");
             history?.push("/login");
             break;
           case 403:
+            popupTitle = "Forbidden";
             history?.push("/ForBid");
             break;
           case 500:
+            popupTitle = "Server error";
             history?.push("/ServerError");
             break;
           default:
@@ -64,13 +68,13 @@ export default function useApi() {
               : message;
 
             if (!message.toLowerCase().includes("username or password")) {
-              openPopup("Notification", message);
+              openPopup(popupTitle, message);
             }
             return Promise.reject(error.response?.data);
         }
       }
       if (!message.toLowerCase().includes("username or password")) {
-        openPopup("Notification", message);
+        openPopup(popupTitle, message);
       }
       return Promise.reject(error?.response?.data);
     },

@@ -61,12 +61,12 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<ReactionResponse>.NotFound(null);
+                return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
             }
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post.");
             }
 
             // check exists reaction
@@ -74,7 +74,7 @@ namespace TeeApp.Application.Services
 
             if (reaction != null)
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Already reacted this post");
+                return ApiResult<ReactionResponse>.BadRequest(null, "Already reacted this post.");
             }
 
             reaction = new Reaction()
@@ -118,12 +118,12 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<ReactionResponse>.NotFound(null, "Not found this post");
+                return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
             }
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post.");
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));
@@ -133,7 +133,7 @@ namespace TeeApp.Application.Services
             }
             if (!IsHavePermissionToAccessReactionAsync(reaction))
             {
-                return ApiResult<ReactionResponse>.ForBid(null);
+                return ApiResult<ReactionResponse>.Forbid(null);
             }
 
             reaction.Type = request.Type;
@@ -166,22 +166,22 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<ReactionResponse>.NotFound(null, "Not found this post");
+                return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
             }
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post");
+                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post.");
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));
             if (reaction == null)
             {
-                return ApiResult<ReactionResponse>.NotFound(null, "Not found this reaction");
+                return ApiResult<ReactionResponse>.NotFound(null, "Not found this reaction.");
             }
             if (!IsHavePermissionToAccessReactionAsync(reaction))
             {
-                return ApiResult<ReactionResponse>.ForBid(null);
+                return ApiResult<ReactionResponse>.Forbid(null);
             }
 
             var reactionId = reaction.Id;

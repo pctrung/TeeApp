@@ -228,7 +228,7 @@ namespace TeeApp.Application.Services
                 await _context.Friendships.AddAsync(friendship);
                 await _context.SaveChangesAsync();
 
-                return ApiResult.Ok("Friend request has been sent");
+                return ApiResult.Ok("Friend request has been sent!");
             }
             if (friendship.Type == FriendshipType.Accepted)
             {
@@ -251,7 +251,7 @@ namespace TeeApp.Application.Services
                     StatusCode = 2001
                 };
             }
-            return ApiResult.BadRequest("Friend request has already been sent");
+            return ApiResult.BadRequest("Friend request has already been sent!");
         }
 
         public async Task<ApiResult> AcceptFriendRequestAsync(string userName)
@@ -315,7 +315,7 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
-            return ApiResult.Ok("Delete friendship successfully");
+            return ApiResult.Ok("Delete friendship successfully!");
         }
 
         public async Task<ApiResult> BlockFriendAsync(string userName)
@@ -354,7 +354,7 @@ namespace TeeApp.Application.Services
 
             if (!_currentUser.BlockedUsers.Contains(friend))
             {
-                return ApiResult.BadRequest(friend.FullName + " has not been blocked");
+                return ApiResult.BadRequest(friend.FullName + " has not been blocked.");
             }
 
             _currentUser.BlockedUsers.Remove(friend);
@@ -397,7 +397,7 @@ namespace TeeApp.Application.Services
 
             if (!_currentUser.Following.Contains(friend))
             {
-                return ApiResult.BadRequest(friend.FullName + " has not been followed");
+                return ApiResult.BadRequest(friend.FullName + " has not been followed.");
             }
 
             _currentUser.Following.Remove(friend);

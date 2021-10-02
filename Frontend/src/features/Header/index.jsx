@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import Logo from "logo-circle.png";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import useDarkMode from "hooks/useDarkMode";
 import ConfirmModal from "components/ConfirmModal";
 import { setCurrentUser } from "app/userSlice";
@@ -10,13 +10,20 @@ import { useDispatch, useSelector } from "react-redux";
 import ChatList from "features/Chat/components/ChatList";
 import NotificationList from "features/Header/components/NotificationList";
 import useUserApi from "hooks/useUserApi";
+import { NavList } from "utils/config";
+import { refreshPost, resetNewPost } from "app/postSlice";
+import usePostApi from "hooks/usePostApi";
 
-function Header() {
+function Header({ refreshPosts }) {
   const history = useHistory();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.users.currentUser);
+  const newPostTotal = useSelector((state) => state.posts.newPostTotal);
   const userApi = useUserApi();
+  const postApi = usePostApi();
+
+  const location = useLocation();
 
   const [chatNotificationNumber, setChatNotificationNumber] = useState(0);
   const [notificationNumber, setNotificationNumber] = useState(0);
@@ -97,6 +104,22 @@ function Header() {
     setConfirmModal(confirmModal);
   }
 
+  function goTo(route, isCurrentRoute) {
+    if (isCurrentRoute) {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "smooth",
+      });
+      dispatch(resetNewPost());
+      postApi.getAll().then((response) => {
+        dispatch(refreshPost(response));
+      });
+    } else {
+      history.push(route);
+    }
+  }
+
   return (
     <>
       {confirmModal.isOpen && (
@@ -129,6 +152,34 @@ function Header() {
               />
               <i className="bx bx-search absolute text-xl top-1/2 left-3 transform text-gray-400 -translate-y-1/2 cursor-pointer"></i>
             </form>
+          </div>
+          <div className="flex text-3xl text-green-500">
+            {NavList.map((nav) => {
+              const currentRoute = location.pathname;
+              const isCurrentRoute = nav.route === currentRoute;
+              const icon = isCurrentRoute ? nav.icon : nav.inactiveIcon;
+              return (
+                <div
+                  key={nav.route}
+                  className={
+                    "relative group" +
+                    " " +
+                    (isCurrentRoute ? " border-b-4 border-green-500" : "")
+                  }
+                  onClick={() => goTo(nav.route, isCurrentRoute)}
+                >
+                  <i
+                    className={`select-none py-2 px-6 rounded-lg hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-third dark:active:bg-dark-hover transition-base cursor-pointer  ${icon}`}
+                  ></i>
+                  <div className="select-none animate-fadeIn group-hover:block absolute top-full left-1/2 hidden bg-black dark:bg-white dark:bg-opacity-80 bg-opacity-60 px-1 rounded transform -translate-x-1/2 translate-y-2 text-white dark:text-black text-sm font-title p-1">
+                    {nav.name}
+                  </div>
+                  {nav.name.toLowerCase() === "home" && newPostTotal > 0 && (
+                    <span className="animate-fadeIn absolute top-1 right-1 bg-green-500 dark:bg-green-600 text-white rounded-full select-none text-xs font-bold w-3 h-3"></span>
+                  )}
+                </div>
+              );
+            })}
           </div>
           <ul className="flex items-center space-x-2" ref={ref}>
             <li
@@ -216,29 +267,25 @@ function Header() {
                 {isOpenMenu && (
                   <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
                     <button
-                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                       onClick={() => setDarkMode(!darkMode)}
                     >
-                      <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                        <i
-                          className={
-                            "text-center-middle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx " +
-                            " " +
-                            (darkMode ? " bx-sun" : " bx-moon")
-                          }
-                        ></i>
-                      </span>
+                      <i
+                        className={
+                          "text-center-middle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx " +
+                          " " +
+                          (darkMode ? " bx-sun" : " bx-moon")
+                        }
+                      ></i>
                       <span>{darkMode ? "Light Mode" : "Dark Mode"}</span>
                     </button>
                     <button
-                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-200 active:bg-gray-300 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                       onClick={() => {
                         openConfirmModal("Do you want to log out?", logout);
                       }}
                     >
-                      <span className="p-1 bg-gray-100 dark:bg-dark-hover rounded-full select-none">
-                        <i className="text-center-middle bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
-                      </span>
+                      <i className="text-center-middle bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                       <span>Log Out</span>
                     </button>
                   </div>

@@ -81,7 +81,7 @@ function ChatInput({ chatId }) {
             placeholder="Aa"
             className="bg-gray-200 dark:bg-dark-secondary rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-base relative"
           />
-          <div ref={ref} position="relative">
+          <div ref={ref} className="relative">
             <ClickableIcon
               className="absolute h-10 w-10 p-2 right-1 top-0"
               icon={EmojiIcon}

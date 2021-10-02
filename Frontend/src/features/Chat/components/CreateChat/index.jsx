@@ -77,7 +77,18 @@ function CreateChat({ isOpen, setIsOpen }) {
       setIsValidButton(selectedFriendList?.length !== 0 ? true : false);
     }
   }, [selectedFriendList, groupName, selectedMode]);
-
+  // Esc to cancel view
+  function escFunction(e) {
+    if (e.keyCode === 27) {
+      setIsOpen(false);
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("keydown", escFunction, false);
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
+  }, []);
   async function handleCreateGroup() {
     if (isValidButton) {
       if (selectedMode === ChatType.GROUP) {
@@ -112,11 +123,14 @@ function CreateChat({ isOpen, setIsOpen }) {
   }
 
   return isOpen ? (
-    <div className="overlay grid place-items-center px-4 py-10 z-30">
+    <div
+      className="overlay grid place-items-center px-4 py-10 z-30"
+      style={{ margin: 0 }}
+    >
       <div
         ref={ref}
         className={
-          "px-6 md:px-14 md:py-6 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full overflow-y-auto md:overflow-visible" +
+          "animate-swipeDown px-6 md:px-14 md:py-6 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full overflow-y-auto md:overflow-visible" +
           " " +
           (isOpenFriendList ? "mb-16" : "")
         }

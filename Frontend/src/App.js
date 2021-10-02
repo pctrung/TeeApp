@@ -22,12 +22,12 @@ import {
   deleteReaction,
   updateReaction,
   addReaction,
-  addPost,
   updatePost,
   deletePost,
+  addNewPost,
 } from "app/postSlice";
 
-function App() {
+function App(props) {
   const isLoading = useSelector((state) => state.app.isLoading);
   const popup = useSelector((state) => state.app.popup);
   const dispatch = useDispatch();
@@ -57,13 +57,13 @@ function App() {
           dispatch(addNotification(response));
         });
         connection.on(AppClient.RECEIVE_POST, (response) => {
-          dispatch(addPost(response));
+          dispatch(addNewPost());
         });
         connection.on(AppClient.RECEIVE_UPDATED_POST, (response) => {
           dispatch(updatePost(response));
         });
         connection.on(AppClient.DELETE_POST, (postId) => {
-          dispatch(deletePost({ postId }));
+          dispatch(deletePost(postId));
         });
         connection.on(AppClient.RECEIVE_REACTION, (response) => {
           dispatch(addReaction(response));
@@ -103,7 +103,7 @@ function App() {
           onClick={closePopup}
         />
         <Chat />
-        <Header />
+        <Header {...props} />
         <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-20">
           <div className="container mx-auto">
             <Switch>

@@ -54,7 +54,7 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult.NotFound("Not found this post");
+                return ApiResult.NotFound("Not found this post.");
             }
             if (!IsHavePermissionToAccessPostAsync(post))
             {
@@ -99,7 +99,7 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult.NotFound("Not found this post");
+                return ApiResult.NotFound("Not found this post.");
             }
             if (!IsHavePermissionToAccessPostAsync(post))
             {
@@ -109,7 +109,7 @@ namespace TeeApp.Application.Services
             var photo = post.Photos.FirstOrDefault(x => x.Id == postPhotoId);
             if (photo == null)
             {
-                return ApiResult.NotFound("Not found this photo");
+                return ApiResult.NotFound("Not found this photo.");
             }
             try
             {

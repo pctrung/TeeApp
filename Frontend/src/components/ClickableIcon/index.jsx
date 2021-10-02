@@ -15,11 +15,12 @@ function ClickableIcon({
   alt,
   onClick,
   onBlur,
+  secondMode,
 }) {
-  colorClass =
-    !colorClass || colorClass === ""
-      ? "bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:border-dark-third dark:active:bg-dark-third"
-      : colorClass;
+  const color = secondMode
+    ? "hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-third dark:border-dark-third"
+    : "bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:border-dark-third dark:active:bg-dark-third";
+  colorClass = !colorClass || colorClass === "" ? color : colorClass;
 
   colorIconClass =
     !colorIconClass || colorIconClass === ""
@@ -31,7 +32,7 @@ function ClickableIcon({
         onBlur={onBlur}
         onClick={onClick}
         className={
-          "p-1 flex items-center justify-center rounded-full transition-base cursor-pointer ease-in active:scale-90 active:transform select-none flex-shrink-0 " +
+          "p-1 flex items-center justify-center rounded-full transition-base cursor-pointer active:scale-90 active:transform select-none flex-shrink-0 " +
           " " +
           colorClass +
           " " +

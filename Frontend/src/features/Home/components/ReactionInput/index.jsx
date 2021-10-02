@@ -1,10 +1,9 @@
 import usePostApi from "hooks/usePostApi";
-import React, { useRef } from "react";
-import { ReactionType, ReactionIcon, ReactionName } from "utils/Enums";
+import React from "react";
+import { ReactionIcon, ReactionName, ReactionType } from "utils/Enums";
 
-function ReactionInput({ className = "", reacted, postId }) {
+function ReactionInput({ className = "", reacted, postId, setIsOpen }) {
   const postApi = usePostApi();
-  const ref = useRef();
 
   const addReaction = (type) => {
     if (!reacted) {
@@ -12,6 +11,7 @@ function ReactionInput({ className = "", reacted, postId }) {
     } else if (reacted && reacted.type !== type) {
       postApi.updateReaction(postId, { type });
     }
+    setIsOpen(false);
   };
   return (
     <>
@@ -19,51 +19,18 @@ function ReactionInput({ className = "", reacted, postId }) {
         className={
           className +
           " " +
-          "animate-swipeUp space-x-2 rounded-3xl bg-white dark:bg-dark-secondary shadow border-2 border-gray-100 dark:border-dark-third p-1 transition-base z-50"
+          "flex animate-swipeUp space-x-2 rounded-3xl bg-white dark:bg-dark-secondary shadow border-2 border-gray-100 dark:border-dark-third p-1 transition-base z-50"
         }
       >
-        <Reaction
-          addReaction={addReaction}
-          type={ReactionType.LIKE}
-          src={ReactionIcon[ReactionType.LIKE]}
-          alt={ReactionName[ReactionType.LIKE]}
-        />
-        <Reaction
-          addReaction={addReaction}
-          type={ReactionType.LOVE}
-          src={ReactionIcon[ReactionType.LOVE]}
-          alt={ReactionName[ReactionType.LOVE]}
-        />
-        <Reaction
-          addReaction={addReaction}
-          type={ReactionType.CARE}
-          src={ReactionIcon[ReactionType.CARE]}
-          alt={ReactionName[ReactionType.CARE]}
-        />
-        <Reaction
-          addReaction={addReaction}
-          type={ReactionType.HAHA}
-          src={ReactionIcon[ReactionType.HAHA]}
-          alt={ReactionName[ReactionType.HAHA]}
-        />
-        <Reaction
-          addReaction={addReaction}
-          type={ReactionType.WOW}
-          src={ReactionIcon[ReactionType.WOW]}
-          alt={ReactionName[ReactionType.WOW]}
-        />
-        <Reaction
-          addReaction={addReaction}
-          type={ReactionType.SAD}
-          src={ReactionIcon[ReactionType.SAD]}
-          alt={ReactionName[ReactionType.SAD]}
-        />
-        <Reaction
-          addReaction={addReaction}
-          type={ReactionType.ANGRY}
-          src={ReactionIcon[ReactionType.ANGRY]}
-          alt={ReactionName[ReactionType.ANGRY]}
-        />
+        {Object.values(ReactionType).map((type) => (
+          <Reaction
+            key={"Reaction " + type}
+            addReaction={addReaction}
+            type={type}
+            src={ReactionIcon[type]}
+            alt={ReactionName[type]}
+          />
+        ))}
       </div>
     </>
   );
@@ -72,8 +39,11 @@ function ReactionInput({ className = "", reacted, postId }) {
 const Reaction = ({ type, src, alt, addReaction }) => (
   <div
     onClick={() => addReaction(type)}
-    className="w-10 hover:scale-125 hover:-translate-y-2 hover:transform origin-bottom transition-all duration-300 ease-in-out"
+    className="group relative w-10 hover:scale-125 hover:-translate-y-2 hover:transform origin-bottom transition-all duration-300 ease-in-out"
   >
+    <div className="animate-fadeIn group-hover:block absolute bottom-full left-1/2 hidden bg-black dark:bg-white dark:bg-opacity-80 bg-opacity-60 px-1 rounded-xl transform -translate-y-1 -translate-x-1/2 text-white dark:text-black text-tiny">
+      {alt}
+    </div>
     <img src={src} alt={alt} className="w-full h-full" />
   </div>
 );

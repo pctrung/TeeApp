@@ -63,7 +63,7 @@ function CommentInput({ postId, currentUser = {} }) {
             placeholder="Write a comment"
             className="bg-gray-100 dark:bg-dark-third rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative"
           />
-          <div ref={ref} position="relative">
+          <div ref={ref} className="relative">
             <ClickableIcon
               className="absolute h-10 w-10 right-1"
               iconClass="bx bxs-smile text-green-500"

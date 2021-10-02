@@ -10,6 +10,7 @@ import Login from "pages/Login";
 import Register from "pages/Register";
 import "./index.css";
 import "boxicons/css/boxicons.min.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
 
 ReactDOM.render(
   <React.StrictMode>

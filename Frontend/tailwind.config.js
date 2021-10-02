@@ -171,7 +171,7 @@ module.exports = {
       animation: {
         zoomIn: "zoomIn 0.3s ease-in-out",
         swipeDown: "swipeDown 0.4s ease-in-out",
-        swipeUp: "swipeUp 0.4s ease-in-out",
+        swipeUp: "swipeUp 0.3s ease-out",
         popup: "popup 0.3s ease-in-out",
         fadeIn: "fadeIn 0.3s ease-in-out",
         fadeOut: "fadeOut 0.3s ease-in-out forwards",
@@ -223,7 +223,7 @@ module.exports = {
     extend: {
       backgroundColor: ["active", "disabled"],
       opacity: ["disabled"],
-      display: ["group-hover"],
+      display: ["group-hover", "group-focus"],
     },
   },
   plugins: [],

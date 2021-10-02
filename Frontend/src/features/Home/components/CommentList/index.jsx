@@ -95,14 +95,16 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
 
   return (
     <>
-      <ConfirmModal
-        isOpen={isOpenConfirm}
-        closeAction={() => setIsOpenConfirm(false)}
-        title="Are you sure?"
-        content="Do you want to delete this comment?"
-        confirmButtonTitle="Yes"
-        confirmButtonAction={() => deleteComment()}
-      />
+      {isOpenConfirm && (
+        <ConfirmModal
+          isOpen={isOpenConfirm}
+          closeAction={() => setIsOpenConfirm(false)}
+          title="Are you sure?"
+          content="Do you want to delete this comment?"
+          confirmButtonTitle="Yes"
+          confirmButtonAction={() => deleteComment()}
+        />
+      )}
       <div className={"flex space-x-2 max-w-full " + (isEditMode && "w-full")}>
         <Link
           className="font-semibold text-sm cursor-pointer flex-shrink-0 mt-2"
@@ -162,7 +164,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
             <>
               <ClickableIcon
                 iconClass="bx bx-dots-horizontal-rounded"
-                colorClass="bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover"
+                secondMode
                 onClick={() => {
                   setIsOpenMenu(!isOpenMenu);
                 }}
@@ -176,6 +178,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
                       setIsOpenMenu(false);
                     }}
                   >
+                    <i className="text-center-middle bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
                     Edit comment
                   </button>
                   <button
@@ -185,6 +188,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
                       setIsOpenMenu(false);
                     }}
                   >
+                    <i className="text-center-middle bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
                     Delete comment
                   </button>
                 </div>

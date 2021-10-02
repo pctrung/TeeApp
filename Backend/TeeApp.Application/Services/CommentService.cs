@@ -61,12 +61,12 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<CommentResponse>.NotFound(null);
+                return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
             }
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post");
+                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post.");
             }
             var comment = new Comment()
             {
@@ -109,12 +109,12 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<CommentResponse>.NotFound(null, "Not found this post");
+                return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
             }
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post");
+                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post.");
             }
 
             var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);
@@ -124,7 +124,7 @@ namespace TeeApp.Application.Services
             }
             if (!IsHavePermissionToAccessCommentAsync(comment))
             {
-                return ApiResult<CommentResponse>.ForBid(null);
+                return ApiResult<CommentResponse>.Forbid(null);
             }
 
             comment.Content = request.Content;
@@ -157,22 +157,22 @@ namespace TeeApp.Application.Services
 
             if (post == null)
             {
-                return ApiResult<CommentResponse>.NotFound(null, "Not found this post");
+                return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
             }
 
             if (IsBlocked(post.Creator))
             {
-                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post");
+                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post.");
             }
 
             var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);
             if (comment == null)
             {
-                return ApiResult<CommentResponse>.NotFound(null, "Not found this comment");
+                return ApiResult<CommentResponse>.NotFound(null, "Not found this comment.");
             }
             if (!IsHavePermissionToAccessCommentAsync(comment))
             {
-                return ApiResult<CommentResponse>.ForBid(null);
+                return ApiResult<CommentResponse>.Forbid(null);
             }
 
             _context.Comments.Remove(comment);

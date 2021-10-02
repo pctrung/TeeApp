@@ -1,14 +1,14 @@
-const DefaultLimit = {
+export const DefaultLimit = {
   NOTIFICATION: 50,
   POST: 50,
 };
 
-const DefaultName = {
+export const DefaultName = {
   NO_NAME_GROUP: "No name",
   NO_NAME_USER: "Unknown",
 };
 
-const ChatClient = {
+export const ChatClient = {
   RECEIVE_MESSAGE: "ReceiveMessage",
   RECEIVE_CHAT: "ReceiveChat",
   RECEIVE_UPDATED_CHAT: "ReceiveUpdatedChat",
@@ -17,7 +17,7 @@ const ChatClient = {
   RECEIVE_UPDATED_ONLINE_USERNAME_LIST: "ReceiveUpdatedOnlineUserNameList",
 };
 
-const AppClient = {
+export const AppClient = {
   RECEIVE_POST: "ReceivePost",
   RECEIVE_UPDATED_POST: "ReceiveUpdatedPost",
   DELETE_POST: "DeletePost",
@@ -29,4 +29,3 @@ const AppClient = {
   DELETE_REACTION: "DeleteReaction",
   RECEIVE_NOTIFICATION: "ReceiveNotification",
 };
-export { DefaultName, ChatClient, AppClient, DefaultLimit };

@@ -2,6 +2,7 @@ import Pagination from "components/Pagination";
 import SideBar from "features/Home/components/SideBar";
 import usePostPagination from "hooks/usePostPagination";
 import React, { useState } from "react";
+import CreatePost from "./components/CreatePost";
 import Post from "./components/Post";
 
 function Home() {
@@ -18,6 +19,7 @@ function Home() {
       <div className="container grid md:grid-cols-12 xl:gap-16 lg:gap-10 md:gap-6 animate-fadeIn">
         <SideBar className="hidden md:block md:col-span-3 sticky top-20" />
         <div className="md:col-span-9 lg:col-span-6 w-full mx-auto space-y-4">
+          <CreatePost />
           {[...posts?.items]
             ?.sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1))
             ?.map((post) => (

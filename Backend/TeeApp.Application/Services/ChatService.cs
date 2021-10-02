@@ -90,7 +90,7 @@ namespace TeeApp.Application.Services
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return ApiResult<ChatViewModel>.ForBid(null, "You do not have permission to access this chat");
+                return ApiResult<ChatViewModel>.Forbid(null, "You do not have permission to access this chat");
             }
 
             chat.Messages = chat.Messages.AsQueryable().Where(x => string.IsNullOrEmpty(x.Content) || x.Content.Contains(request.Keyword ?? "")).ToList();
@@ -149,12 +149,12 @@ namespace TeeApp.Application.Services
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return ApiResult<SendMessageResponse>.ForBid(null, "You do not have permission to access this chat");
+                return ApiResult<SendMessageResponse>.Forbid(null, "You do not have permission to access this chat.");
             }
 
             if (string.IsNullOrWhiteSpace(request.Content))
             {
-                return ApiResult<SendMessageResponse>.BadRequest(null, "Content cannot be null or empty");
+                return ApiResult<SendMessageResponse>.BadRequest(null, "Content cannot be null or empty.");
             }
 
             var sender = _currentUser;
@@ -178,18 +178,18 @@ namespace TeeApp.Application.Services
                 RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
             };
 
-            return ApiResult<SendMessageResponse>.Created(result, "Send message successfully");
+            return ApiResult<SendMessageResponse>.Created(result, "Send message successfully!");
         }
 
         public async Task<ApiResult<CreateChatResponse>> CreateGroupChatAsync(CreateGroupChatRequest request)
         {
             if (request.ParticipantUserNames.Count < 2)
             {
-                return ApiResult<CreateChatResponse>.BadRequest(null, "Group chat participant require at least 3 people");
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Please select at least 3 people.");
             }
             if (string.IsNullOrWhiteSpace(request.Name))
             {
-                return ApiResult<CreateChatResponse>.BadRequest(null, "Please enter group name");
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Please enter group name.");
             }
 
             // add participants
@@ -199,11 +199,11 @@ namespace TeeApp.Application.Services
 
             if (participants == null)
             {
-                return ApiResult<CreateChatResponse>.BadRequest(null, "Not found any participants");
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Not found any participants.");
             }
             else if (participants.Count < 2)
             {
-                return ApiResult<CreateChatResponse>.BadRequest(null, "Group chat participant require at least 3 people");
+                return ApiResult<CreateChatResponse>.BadRequest(null, "Group chat participant require at least 3 people.");
             }
 
             var chat = new Chat
@@ -228,7 +228,7 @@ namespace TeeApp.Application.Services
                     RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                 };
 
-                return ApiResult<CreateChatResponse>.Created(result, "Create chat successfully");
+                return ApiResult<CreateChatResponse>.Created(result, "Create chat successfully!");
             }
             else
             {
@@ -294,13 +294,13 @@ namespace TeeApp.Application.Services
             }
             if (chat.Type == ChatType.Private)
             {
-                return ApiResult<CreateChatResponse>.BadRequest(null, "You can only update group chat");
+                return ApiResult<CreateChatResponse>.BadRequest(null, "You can only update group chat.");
             }
 
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return ApiResult<CreateChatResponse>.ForBid(null, "You do not have permission to access this chat");
+                return ApiResult<CreateChatResponse>.Forbid(null, "You do not have permission to access this chat.");
             }
 
             if (!string.IsNullOrWhiteSpace(request.NewGroupName))
@@ -349,7 +349,7 @@ namespace TeeApp.Application.Services
                 RecipientUserNames = participantUserNamesToNotify
             };
 
-            return ApiResult<CreateChatResponse>.Ok(result, "Update chat successfully");
+            return ApiResult<CreateChatResponse>.Ok(result, "Update chat successfully.");
         }
 
         private bool IsHavePermissionToAccessChatAsync(Chat chat)
@@ -370,13 +370,13 @@ namespace TeeApp.Application.Services
             }
             if (chat.Type == ChatType.Private)
             {
-                return ApiResult<UpdateGroupAvatarResponse>.BadRequest(null, "You can only update group chat");
+                return ApiResult<UpdateGroupAvatarResponse>.BadRequest(null, "You can only update group chat.");
             }
 
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return ApiResult<UpdateGroupAvatarResponse>.ForBid(null, "You do not have permission to access this chat");
+                return ApiResult<UpdateGroupAvatarResponse>.Forbid(null, "You do not have permission to access this chat.");
             }
             if (request.Avatar != null)
             {
@@ -429,12 +429,12 @@ namespace TeeApp.Application.Services
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return ApiResult<SendMessageResponse>.ForBid(null, "You do not have permission to access this chat");
+                return ApiResult<SendMessageResponse>.Forbid(null, "You do not have permission to access this chat.");
             }
 
             if (request.Image == null)
             {
-                return ApiResult<SendMessageResponse>.BadRequest(null, "Image cannot be null");
+                return ApiResult<SendMessageResponse>.BadRequest(null, "Please select an image.");
             }
 
             var sender = _currentUser;
@@ -466,7 +466,7 @@ namespace TeeApp.Application.Services
                             RecipientUserNames = chat.Participants.Select(x => x.UserName).ToList()
                         };
 
-                        return ApiResult<SendMessageResponse>.Created(result, "Send image successfully");
+                        return ApiResult<SendMessageResponse>.Created(result, "Send image successfully!");
                     }
                 }
                 catch (Exception e)
@@ -495,7 +495,7 @@ namespace TeeApp.Application.Services
             var isHaveAccess = IsHavePermissionToAccessChatAsync(chat);
             if (!isHaveAccess)
             {
-                return ApiResult<ReadChatResponse>.ForBid(null, "You do not have permission to access this chat");
+                return ApiResult<ReadChatResponse>.Forbid(null, "You do not have permission to access this chat.");
             }
 
             chat.Messages.ForEach(x => x.ReadByUsers.Add(_currentUser));
