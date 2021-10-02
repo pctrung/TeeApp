@@ -27,18 +27,18 @@ export const NotificationType = {
 
 export const PrivacyType = {
   PUBLIC: 0,
-  PRIVATE: 1,
   FRIEND: 2,
+  PRIVATE: 1,
 };
 export const PrivacyName = {
   [PrivacyType.PUBLIC]: "Public",
-  [PrivacyType.PRIVATE]: "Private",
   [PrivacyType.FRIEND]: "Friend",
+  [PrivacyType.PRIVATE]: "Private",
 };
 export const PrivacyIcon = {
   [PrivacyType.PUBLIC]: "fas fa-globe-asia",
-  [PrivacyType.PRIVATE]: "bx bxs-lock-alt",
   [PrivacyType.FRIEND]: "fas fa-user-friends",
+  [PrivacyType.PRIVATE]: "bx bxs-lock-alt",
 };
 export const ReactionType = {
   LIKE: 0,

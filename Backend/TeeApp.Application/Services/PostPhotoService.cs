@@ -17,7 +17,7 @@ namespace TeeApp.Application.Services
         private readonly TeeAppDbContext _context;
         private readonly User _currentUser;
         private readonly IStorageService _storageService;
-
+        private const int MAX_IMAGES_PER_POST = 10;
         public PostPhotoService(TeeAppDbContext context, ICurrentUser currentUser, IStorageService storageService)
         {
             _context = context;
@@ -64,6 +64,10 @@ namespace TeeApp.Application.Services
             {
                 try
                 {
+                    if(post.Photos.Count >= MAX_IMAGES_PER_POST)
+                    {
+                        return ApiResult.BadRequest($"Please select maximum {MAX_IMAGES_PER_POST} images");
+                    }
                     var fileName = await _storageService.SaveImageAsync(request.Image);
 
                     if (!string.IsNullOrWhiteSpace(fileName))

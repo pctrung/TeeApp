@@ -95,13 +95,15 @@ function App(props) {
   return (
     <>
       <BrowserRouter basename={process.env.PUBLIC_URL}>
-        <Loader isOpen={isLoading} className="z-50" />
-        <Popup
-          title={popup.title}
-          isOpen={popup.isOpen}
-          content={popup.content}
-          onClick={closePopup}
-        />
+        {isLoading && <Loader isOpen={isLoading} className="z-50" />}
+        {popup.isOpen && (
+          <Popup
+            title={popup.title}
+            isOpen={popup.isOpen}
+            content={popup.content}
+            onClick={closePopup}
+          />
+        )}
         <Chat />
         <Header {...props} />
         <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-20">

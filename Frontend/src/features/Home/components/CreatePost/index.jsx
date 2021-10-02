@@ -1,19 +1,24 @@
 import ImageCircle from "components/ImageCircle";
 import ImageIcon from "assets/icons/image-icon.svg";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import ClickableIcon from "components/ClickableIcon";
 import EmojiPicker from "emoji-picker-react";
 import Button from "components/Button";
 import usePostApi from "hooks/usePostApi";
 import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
-import { addPost, resetNewPost } from "app/postSlice";
+import Popup from "components/Popup";
+import { MAX_IMAGE_SIZE } from "utils/Constants";
 
 function CreatePost() {
   const currentUser = useSelector((state) => state.users.currentUser);
+
   const [content, setContent] = useState("");
   const [privacy, setPrivacy] = useState(PrivacyType.PUBLIC);
+  const [imageFiles, setImageFiles] = useState([]);
+
+  const [popup, setPopup] = useState({});
   const [isOpenPrivacyList, setIsOpenPrivacyList] = useState(false);
   const [isValidButton, setIsValidButton] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -22,7 +27,6 @@ function CreatePost() {
   const emojiRef = useRef();
   const privacyRef = useRef();
   const postApi = usePostApi();
-  const dispatch = useDispatch();
 
   // Check click outside emoji
   useEffect(() => {
@@ -87,22 +91,59 @@ function CreatePost() {
     };
   }, []);
 
+  function addFiles(files) {
+    var isValid = true;
+    const newImageFiles = [...imageFiles, ...files];
+    if (newImageFiles.length > 10) {
+      setPopup({
+        content: "Please select maximum 10 images!",
+        isOpen: true,
+      });
+      isValid = false;
+    }
+    newImageFiles.forEach((file) => {
+      if (file.size > MAX_IMAGE_SIZE) {
+        setPopup({
+          content: "Please upload file less than 1MB!",
+          isOpen: true,
+        });
+        isValid = false;
+      }
+    });
+    if (isValid) {
+      setImageFiles(newImageFiles);
+    }
+  }
+  function removeImage(index) {
+    if (index >= 0 && index < imageFiles.length) {
+      const newImageFiles = [...imageFiles];
+      newImageFiles.splice(index, 1);
+      setImageFiles(newImageFiles);
+    }
+  }
   useEffect(() => {
-    if (content.trim()) {
+    if (content.trim() || imageFiles.length > 0) {
       setIsValidButton(true);
     } else {
       setIsValidButton(false);
     }
-  }, [content]);
+  }, [content, imageFiles]);
 
   function onSubmit(e) {
     e.preventDefault();
     postApi.addPost({ content, privacy }).then((response) => {
-      dispatch(addPost(response));
-      dispatch(resetNewPost());
+      if (response.id) {
+        imageFiles.forEach((image) => {
+          const request = new FormData();
+          request.append("Image", image);
+          request.append("Caption", "Post photo");
+          postApi.addPhoto(response.id, request);
+        });
+      }
     });
     setIsOpen(false);
     setContent("");
+    setImageFiles([]);
   }
   return (
     <>
@@ -118,7 +159,9 @@ function CreatePost() {
             <input
               disabled
               type="text"
-              placeholder={`What's on your mind, ${currentUser?.firstName}?`}
+              placeholder={`What's on your mind${
+                currentUser.firstName ? ", " + currentUser.firstName : ""
+              }?`}
               className="bg-gray-100 dark:bg-dark-third rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative placeholder-gray-500 dark:placeholder-dark-txt hover:bg-gray-200 dark:hover:bg-dark-hover cursor-pointer "
             />
           </div>
@@ -146,9 +189,17 @@ function CreatePost() {
           style={{ margin: 0 }}
         >
           <div
-            className="flex-center flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full animate-swipeDown"
+            className="flex-center flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full animate-swipeDown overflow-x-auto"
             ref={ref}
           >
+            {popup.isOpen && (
+              <Popup
+                title="Notification"
+                isOpen={popup.isOpen}
+                content={popup.content}
+                onClick={() => setPopup({ isOpen: false })}
+              />
+            )}
             <div className="relative font-bold text-center text-lg md:text-xl py-4 border-b dark:border-gray-600 w-full">
               Create post
               <ClickableIcon
@@ -159,7 +210,7 @@ function CreatePost() {
             </div>
             <form
               onSubmit={onSubmit}
-              className="flex flex-col items-start w-full px-6 space-y-3 py-4"
+              className="flex flex-col items-start w-full px-6 space-y-4 py-4"
             >
               <div className="flex space-x-2">
                 <Link
@@ -213,7 +264,9 @@ function CreatePost() {
                 onChange={(e) => setContent(e.target.value)}
                 rows="3"
                 className="w-full text-lg md:text-2xl placeholder-gray-500 dark:placeholder-dark-txt focus:placeholder-gray-300 dark:focus:placeholder-dark-hover outline-none transition-base bg-white dark:bg-dark-secondary resize-none"
-                placeholder={`What's on your mind, ${currentUser?.firstName}?`}
+                placeholder={`What's on your mind${
+                  currentUser.firstName ? ", " + currentUser.firstName : ""
+                }?`}
               ></textarea>
               <div ref={emojiRef} className="relative w-full flex justify-end">
                 <ClickableIcon
@@ -227,9 +280,38 @@ function CreatePost() {
                   </div>
                 )}
               </div>
+              <div className="w-full overflow-x-auto flex space-x-2 select-none pb-2">
+                <input
+                  hidden
+                  id="imageFiles"
+                  type="file"
+                  multiple
+                  onChange={(e) => addFiles(e.target.files)}
+                />
+                <label
+                  htmlFor="imageFiles"
+                  className="cursor-pointer h-28 w-28 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:active:bg-gray-700 rounded-xl flex-center transition-base flex-shrink-0"
+                >
+                  <i className="bx bxs-image-add text-4xl"></i>
+                </label>
+                {imageFiles.length > 0 &&
+                  imageFiles.map((imageFile, index) => (
+                    <div
+                      key={"imageFiles" + index}
+                      className="relative cursor-pointer h-28 w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
+                    >
+                      <img src={URL.createObjectURL(imageFile)} alt="Preview" />
+                      <ClickableIcon
+                        onClick={() => removeImage(index)}
+                        iconClass="bx bx-x text-black"
+                        className="absolute right-1 top-1 animate-swipeUp w-6 h-6 object-cover"
+                      />
+                    </div>
+                  ))}
+              </div>
               <Button
                 disabled={!isValidButton}
-                className="w-full font-semibold md:text-lg"
+                className="w-full font-semibold"
               >
                 Post
               </Button>

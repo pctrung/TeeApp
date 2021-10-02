@@ -1,3 +1,5 @@
+export const MAX_IMAGE_SIZE = 1 * 1024 * 1024;
+
 export const DefaultLimit = {
   NOTIFICATION: 50,
   POST: 50,

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TeeApp.Application.Identity;
@@ -11,6 +12,7 @@ using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.Reactions;
 using TeeApp.Models.ResponseModels.Reactions;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Application.Services
 {
@@ -47,6 +49,42 @@ namespace TeeApp.Application.Services
         {
             var result = reaction.Creator.Id.Equals(_currentUser.Id);
             return result;
+        }
+
+        private Friendship GetFriendship(User user)
+        {
+            return _context.Friendships
+                .FirstOrDefault(
+                x =>
+                    x.RequestedUserId.Equals(user.Id) && x.RecievedUserId.Equals(_currentUser.Id) ||
+                    x.RequestedUserId.Equals(_currentUser.Id) && x.RecievedUserId.Equals(user.Id));
+        }
+
+        private bool IsMyFriend(User user)
+        {
+            var friendship = GetFriendship(user);
+            if (friendship == null || !(friendship.Type == FriendshipType.Accepted))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private List<string> GetRecipientList(Post post)
+        {
+            var recipients = new List<string>();
+            switch (post.Privacy)
+            {
+                case PrivacyType.Public:
+                    recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+                    break;
+
+                case PrivacyType.Friend:
+                    recipients = post.Creator.Followers.Where(x => IsMyFriend(x)).Select(x => x.UserName).ToList();
+                    break;
+            }
+            recipients.Add(_currentUser.UserName);
+            return recipients;
         }
 
         public async Task<ApiResult<ReactionResponse>> CreateAsync(int postId, ReactionRequest request)
@@ -93,8 +131,7 @@ namespace TeeApp.Application.Services
                 return ApiResult<ReactionResponse>.ServerError(null, "Cannot react. Something went wrong!");
             }
 
-            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
-            recipients.Add(post.Creator.UserName);
+            var recipients = GetRecipientList(post);
             var result = new ReactionResponse()
             {
                 Reaction = _mapper.Map<ReactionViewModel>(reaction),
@@ -141,8 +178,7 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
-            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
-            recipients.Add(post.Creator.UserName);
+            var recipients = GetRecipientList(post);
             var result = new ReactionResponse()
             {
                 Reaction = _mapper.Map<ReactionViewModel>(reaction),
@@ -189,8 +225,7 @@ namespace TeeApp.Application.Services
 
             await _context.SaveChangesAsync();
 
-            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
-            recipients.Add(post.Creator.UserName);
+            var recipients = GetRecipientList(post);
             var result = new ReactionResponse()
             {
                 Reaction = new ReactionViewModel() { Id = reactionId },

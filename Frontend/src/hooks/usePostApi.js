@@ -1,3 +1,5 @@
+import { setIsLoading } from "app/appSlice.js";
+import { useDispatch } from "react-redux";
 import { DefaultLimit } from "utils/Constants.js";
 import useApi from "./useApi.js";
 
@@ -5,9 +7,11 @@ const baseApiUrl = "/posts";
 
 export default function usePostApi() {
   const Api = useApi();
+  const dispatch = useDispatch();
 
   const postApi = {
     getAll: (params) => {
+      dispatch(setIsLoading(true));
       if (!params?.limit) {
         params = { ...params, limit: DefaultLimit.POST };
       }
@@ -15,19 +19,47 @@ export default function usePostApi() {
       return Api.get(url, { params });
     },
     getById: (id) => {
+      dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${id}`;
       return Api.get(url);
     },
     addPost: (request) => {
+      dispatch(setIsLoading(true));
       const url = `${baseApiUrl}`;
       return Api.post(url, request);
     },
     updatePost: (postId, request) => {
+      dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${postId}`;
       return Api.put(url, request);
     },
     deletePost: (postId) => {
+      dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${postId}`;
+      return Api.delete(url);
+    },
+    addPhoto: (postId, request) => {
+      dispatch(setIsLoading(true));
+      const url = `${baseApiUrl}/${postId}/photos`;
+      Api.interceptors.request.use(async (config) => {
+        var token = window.localStorage.getItem("token");
+        var newConfig = {};
+        if (token) {
+          newConfig = {
+            ...config,
+            headers: {
+              "content-type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          };
+        }
+        return newConfig;
+      });
+      return Api.post(url, request);
+    },
+    deletePhoto: (postId, photoId) => {
+      dispatch(setIsLoading(true));
+      const url = `${baseApiUrl}/${postId}/photos/${photoId}`;
       return Api.delete(url);
     },
     addReaction: (postId, request) => {

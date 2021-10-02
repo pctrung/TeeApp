@@ -14,6 +14,7 @@ using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.RequestModels.Posts;
 using TeeApp.Models.ResponseModels.Posts;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Enums.Types;
 using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
@@ -46,6 +47,42 @@ namespace TeeApp.Application.Services
             }
         }
 
+        private Friendship GetFriendship(User user)
+        {
+            return _context.Friendships
+                .FirstOrDefault(
+                x =>
+                    x.RequestedUserId.Equals(user.Id) && x.RecievedUserId.Equals(_currentUser.Id) ||
+                    x.RequestedUserId.Equals(_currentUser.Id) && x.RecievedUserId.Equals(user.Id));
+        }
+
+        private bool IsMyFriend(User user)
+        {
+            var friendship = GetFriendship(user);
+            if (friendship == null || !(friendship.Type == FriendshipType.Accepted))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private List<string> GetRecipientList(Post post)
+        {
+            var recipients = new List<string>();
+            switch (post.Privacy)
+            {
+                case PrivacyType.Public:
+                    recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
+                    break;
+
+                case PrivacyType.Friend:
+                    recipients = post.Creator.Followers.Where(x => IsMyFriend(x)).Select(x => x.UserName).ToList();
+                    break;
+            }
+            recipients.Add(_currentUser.UserName);
+            return recipients;
+        }
+
         private bool IsHavePermissionToAccessPostAsync(Post post)
         {
             var result = post.Creator.Id.Equals(_currentUser.Id);
@@ -63,6 +100,27 @@ namespace TeeApp.Application.Services
                 .OrderByDescending(x => x.DateCreated)
                 .AsSplitQuery()
                 .ToListAsync();
+
+            posts.ToList().ForEach(post =>
+            {
+                if (!post.Creator.Id.Equals(_currentUser.Id))
+                {
+                    switch (post.Privacy)
+                    {
+                        case PrivacyType.Private:
+                            posts.Remove(post);
+                            return;
+
+                        case PrivacyType.Friend:
+                            if (!IsMyFriend(post.Creator))
+                            {
+                                posts.Remove(post);
+                                return;
+                            }
+                            break;
+                    }
+                }
+            });
 
             var totalRecords = posts.Count;
             var pagedPosts = posts.Paged(request.Page, request.Limit);
@@ -119,6 +177,22 @@ namespace TeeApp.Application.Services
                 return ApiResult<PostViewModel>.NotFound(null, "Not found this post.");
             }
 
+            if (!post.Creator.Id.Equals(_currentUser.Id))
+            {
+                switch (post.Privacy)
+                {
+                    case PrivacyType.Private:
+                        return ApiResult<PostViewModel>.Forbid(null);
+
+                    case PrivacyType.Friend:
+                        if (!IsMyFriend(post.Creator))
+                        {
+                            return ApiResult<PostViewModel>.Forbid(null);
+                        }
+                        break;
+                }
+            }
+
             var result = _mapper.Map<PostViewModel>(post);
 
             return ApiResult<PostViewModel>.Ok(result, $"Get post {postId} successfully!");
@@ -147,8 +221,7 @@ namespace TeeApp.Application.Services
 
             var postViewModel = _mapper.Map<PostViewModel>(post);
 
-            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
-            recipients.Add(post.Creator.UserName);
+            var recipients = GetRecipientList(post);
             var result = new PostResponse()
             {
                 Post = postViewModel,
@@ -180,8 +253,7 @@ namespace TeeApp.Application.Services
 
             var postViewModel = _mapper.Map<PostViewModel>(post);
 
-            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
-            recipients.Add(post.Creator.UserName);
+            var recipients = GetRecipientList(post);
             var result = new PostResponse()
             {
                 Post = postViewModel,
@@ -193,7 +265,10 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult<PostResponse>> DeleteAsync(int postId)
         {
-            var post = await _context.Posts.Where(x => x.Id == postId && x.DateDeleted == null).FirstOrDefaultAsync();
+            var post = await _context.Posts
+                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Include(x => x.Photos)
+                .FirstOrDefaultAsync();
 
             if (post == null)
             {
@@ -212,8 +287,7 @@ namespace TeeApp.Application.Services
             }
             await _context.SaveChangesAsync();
 
-            var recipients = post.Creator.Followers.Select(x => x.UserName).ToList();
-            recipients.Add(post.Creator.UserName);
+            var recipients = GetRecipientList(post);
             var result = new PostResponse()
             {
                 Post = new() { Id = post.Id },

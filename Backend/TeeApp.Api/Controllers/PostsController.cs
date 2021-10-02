@@ -180,7 +180,7 @@ namespace TeeApp.Api.Controllers
                         await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
                         await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveComment(result.Data);
 
-                        return Created("", result.Data.Comment);
+                        return Created("", result.Data);
                     }
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);
@@ -200,7 +200,7 @@ namespace TeeApp.Api.Controllers
                 case 200:
                     {
                         await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedComment(result.Data);
-                        return Ok(result.Data.Comment);
+                        return Ok(result.Data);
                     }
                 case 403: return Forbid();
                 default: return NotFound(result.Message);
@@ -244,7 +244,7 @@ namespace TeeApp.Api.Controllers
                         await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
                         await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveReaction(result.Data);
 
-                        return Created("", result.Data.Reaction);
+                        return Created("", result.Data);
                     }
                 case 404: return NotFound(result.Message);
                 default: return BadRequest(result.Message);
@@ -265,7 +265,7 @@ namespace TeeApp.Api.Controllers
                     {
                         await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedReaction(result.Data);
 
-                        return Ok(result.Data.Reaction);
+                        return Ok(result.Data);
                     }
                 case 403: return Forbid();
                 default: return NotFound(result.Message);
