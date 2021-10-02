@@ -104,7 +104,7 @@ function CreatePost() {
     newImageFiles.forEach((file) => {
       if (file.size > MAX_IMAGE_SIZE) {
         setPopup({
-          content: "Please upload file less than 1MB!",
+          content: "Please upload less than 1MB per file!",
           isOpen: true,
         });
         isValid = false;
@@ -271,7 +271,8 @@ function CreatePost() {
               <div ref={emojiRef} className="relative w-full flex justify-end">
                 <ClickableIcon
                   secondMode
-                  iconClass="bx bxs-smile text-green-500 "
+                  iconClass="bx bxs-smile"
+                  colorIconClass="text-green-500"
                   onClick={() => setIsOpenEmoji(!isOpenEmoji)}
                 />
                 {isOpenEmoji && (
@@ -303,7 +304,8 @@ function CreatePost() {
                       <img src={URL.createObjectURL(imageFile)} alt="Preview" />
                       <ClickableIcon
                         onClick={() => removeImage(index)}
-                        iconClass="bx bx-x text-black"
+                        iconClass="bx bx-x"
+                        reverse
                         className="absolute right-1 top-1 animate-swipeUp w-6 h-6 object-cover"
                       />
                     </div>

@@ -66,7 +66,8 @@ function CommentInput({ postId, currentUser = {} }) {
           <div ref={ref} className="relative">
             <ClickableIcon
               className="absolute h-10 w-10 right-1"
-              iconClass="bx bxs-smile text-green-500"
+              iconClass="bx bxs-smile"
+              colorIconClass="text-green-500"
               onClick={() => setIsOpenEmoji(!isOpenEmoji)}
             />
             {isOpenEmoji && (

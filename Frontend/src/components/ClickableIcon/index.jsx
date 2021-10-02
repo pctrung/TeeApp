@@ -16,16 +16,23 @@ function ClickableIcon({
   onClick,
   onBlur,
   secondMode,
+  reverse,
 }) {
-  const color = secondMode
+  var color = secondMode
     ? "hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-third dark:border-dark-third"
     : "bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:border-dark-third dark:active:bg-dark-third";
+  color = reverse
+    ? "dark:bg-gray-100 dark:hover:bg-gray-200 dark:active:bg-gray-300 bg-dark-third hover:bg-dark-hover border-dark-third active:bg-dark-third"
+    : color;
+
   colorClass = !colorClass || colorClass === "" ? color : colorClass;
 
   colorIconClass =
     !colorIconClass || colorIconClass === ""
       ? "text-black dark:text-dark-txt"
       : colorIconClass;
+
+  colorIconClass = reverse ? "dark:text-black text-white" : colorIconClass;
   return (
     <>
       <div

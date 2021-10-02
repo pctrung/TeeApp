@@ -33,12 +33,14 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen }) {
         style={{ margin: 0 }}
       >
         <ClickableIcon
+          reverse
           onClick={() => setIsOpen(false)}
           iconClass="bx bx-x"
           className="absolute bg-white md:right-10 right-8 top-8 animate-swipeUp"
         />
         {index > 0 && (
           <ClickableIcon
+            reverse
             onClick={previousImage}
             iconClass="bx bxs-chevron-left"
             className="absolute md:left-10 left-5 animate-swipeUp"
@@ -46,6 +48,7 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen }) {
         )}
         {index < photos.length - 1 && (
           <ClickableIcon
+            reverse
             onClick={nextImage}
             iconClass="bx bxs-chevron-right"
             className="absolute md:right-10 right-5 animate-swipeUp"
