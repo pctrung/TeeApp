@@ -13,17 +13,17 @@ import useUserApi from "hooks/useUserApi";
 import { NavList } from "utils/config";
 import { refreshPost, resetNewPost } from "app/postSlice";
 import usePostApi from "hooks/usePostApi";
+import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
 
 function Header({ refreshPosts }) {
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const user = useSelector((state) => state.users.currentUser);
   const newPostTotal = useSelector((state) => state.posts.newPostTotal);
   const userApi = useUserApi();
   const postApi = usePostApi();
-
-  const location = useLocation();
 
   const [chatNotificationNumber, setChatNotificationNumber] = useState(0);
   const [notificationNumber, setNotificationNumber] = useState(0);
@@ -50,30 +50,13 @@ function Header({ refreshPosts }) {
     });
   }, []);
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      // If the menu is open and the clicked target is not within the menu,
-      // then close the menu
-      if (isOpenMenu && ref.current && !ref.current.contains(e.target)) {
-        setIsOpenMenu(false);
-      }
-      if (isOpenChatList && ref.current && !ref.current.contains(e.target)) {
-        setIsOpenChatList(false);
-      }
-      if (
-        isOpenNotificationList &&
-        ref.current &&
-        !ref.current.contains(e.target)
-      ) {
-        setIsOpenNotificationList(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenMenu, isOpenNotificationList, isOpenChatList]);
+  useCloseOnClickOutside(isOpenMenu, setIsOpenMenu, ref);
+  useCloseOnClickOutside(isOpenChatList, setIsOpenChatList, ref);
+  useCloseOnClickOutside(
+    isOpenNotificationList,
+    setIsOpenNotificationList,
+    ref,
+  );
 
   const search = (e) => {
     e.preventDefault();
@@ -85,7 +68,7 @@ function Header({ refreshPosts }) {
   };
   function logout() {
     window.localStorage.removeItem("token");
-    window.location.href = process.env.PUBLIC_URL + "/login";
+    window.location.href = process.env.PUBLIC_URL + "/";
   }
 
   function openConfirmModal(
@@ -134,15 +117,11 @@ function Header({ refreshPosts }) {
       )}
       <div className="fixed top-0 bg-white dark:bg-dark-secondary dark:text-white w-screen p-2 shadow z-20">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="flex space-x-4 flex-shrink-0">
+          <div className="md:flex hidden space-x-4 flex-shrink-0">
             <Link to="/">
               <img src={Logo} alt="Logo" className="h-10 w-10 cursor-pointer" />
             </Link>
-            <ClickableIcon iconClass="bx bx-search" className="md:hidden" />
-            <form
-              onSubmit={(e) => search(e)}
-              className="relative  md:block hidden"
-            >
+            <form onSubmit={(e) => search(e)} className="relative">
               <input
                 type="search"
                 className="bg-gray-100 dark:bg-dark-third dark:text-white rounded-full outline-none pl-10 pr-3 py-2 focus:ring-2 ring-green-400 ring-opacity-50 transition-base select-none"

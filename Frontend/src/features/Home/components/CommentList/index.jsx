@@ -1,6 +1,8 @@
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
+import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
+import { useEscToClose } from "hooks/useEscToClose";
 import usePostApi from "hooks/usePostApi";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
@@ -49,18 +51,8 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
   const ref = useRef();
   const editInputRef = useRef();
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      if (isOpenMenu && ref.current && !ref.current.contains(e.target)) {
-        setIsOpenMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenMenu]);
+  useCloseOnClickOutside(isOpenMenu, setIsOpenMenu, ref);
+  useEscToClose(setIsEditMode);
 
   const deleteComment = () => {
     if (postId && comment?.id) {
@@ -75,18 +67,6 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
     setIsEditMode(false);
   };
 
-  // Esc to cancel edit
-  function escFunction(e) {
-    if (e.keyCode === 27) {
-      setIsEditMode(false);
-    }
-  }
-  useEffect(() => {
-    document.addEventListener("keydown", escFunction, false);
-    return () => {
-      document.removeEventListener("keydown", escFunction, false);
-    };
-  }, []);
   useEffect(() => {
     if (isEditMode) {
       editInputRef?.current?.focus();

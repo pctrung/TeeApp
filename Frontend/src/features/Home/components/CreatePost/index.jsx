@@ -1,15 +1,18 @@
-import ImageCircle from "components/ImageCircle";
 import ImageIcon from "assets/icons/image-icon.svg";
+import Button from "components/Button";
+import ClickableIcon from "components/ClickableIcon";
+import ImageCircle from "components/ImageCircle";
+import Popup from "components/Popup";
+import EmojiPicker from "emoji-picker-react";
+import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
+import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
+import { useEscToClose } from "hooks/useEscToClose";
+import usePostApi from "hooks/usePostApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import ClickableIcon from "components/ClickableIcon";
-import EmojiPicker from "emoji-picker-react";
-import Button from "components/Button";
-import usePostApi from "hooks/usePostApi";
-import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
-import Popup from "components/Popup";
 import { MAX_IMAGE_SIZE } from "utils/Constants";
+import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
 
 function CreatePost() {
   const currentUser = useSelector((state) => state.users.currentUser);
@@ -23,73 +26,29 @@ function CreatePost() {
   const [isValidButton, setIsValidButton] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
+
   const ref = useRef();
   const emojiRef = useRef();
   const privacyRef = useRef();
   const postApi = usePostApi();
 
+  useDisableBodyScroll(isOpen);
+
   // Check click outside emoji
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      if (
-        isOpenEmoji &&
-        emojiRef.current &&
-        !emojiRef.current.contains(e.target)
-      ) {
-        setIsOpenEmoji(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenEmoji]);
+  useCloseOnClickOutside(isOpenEmoji, setIsOpenEmoji, emojiRef);
+  // Check click outside create post
+  useCloseOnClickOutside(isOpen, setIsOpen, ref);
+  // Check click outside privacy
+  useCloseOnClickOutside(isOpenPrivacyList, setIsOpenPrivacyList, privacyRef);
+
+  // Check click esc to close
+  useEscToClose(setIsOpen);
+
   const onEmojiClick = (event, emojiObject) => {
     if (emojiObject?.emoji) {
       setContent(content + emojiObject?.emoji);
     }
   };
-  // Check click outside create post
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      if (isOpen && ref.current && !ref.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpen]);
-  // Check click outside privacy
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      if (
-        isOpenPrivacyList &&
-        privacyRef.current &&
-        !privacyRef.current.contains(e.target)
-      ) {
-        setIsOpenPrivacyList(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenPrivacyList]);
-
-  // Esc to cancel view
-  function escFunction(e) {
-    if (e.keyCode === 27) {
-      setIsOpen(false);
-    }
-  }
-  useEffect(() => {
-    document.addEventListener("keydown", escFunction, false);
-    return () => {
-      document.removeEventListener("keydown", escFunction, false);
-    };
-  }, []);
 
   function addFiles(files) {
     var isValid = true;
@@ -104,7 +63,7 @@ function CreatePost() {
     newImageFiles.forEach((file) => {
       if (file.size > MAX_IMAGE_SIZE) {
         setPopup({
-          content: "Please upload less than 1MB per file!",
+          content: "Please upload less than 1MB for each file!",
           isOpen: true,
         });
         isValid = false;
@@ -205,7 +164,7 @@ function CreatePost() {
               <ClickableIcon
                 onClick={() => setIsOpen(false)}
                 iconClass="bx bx-x"
-                className="absolute bg-white md:right-10 right-8 top-3 animate-swipeUp"
+                className="absolute bg-white right-3 top-3 animate-swipeUp"
               />
             </div>
             <form
@@ -291,7 +250,7 @@ function CreatePost() {
                 />
                 <label
                   htmlFor="imageFiles"
-                  className="cursor-pointer h-28 w-28 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:active:bg-gray-700 rounded-xl flex-center transition-base flex-shrink-0"
+                  className="cursor-pointer h-24 w-20 md:h-28 md:w-28 bg-gray-100 hover:bg-gray-200 active:bg-gray-300 dark:bg-dark-third dark:hover:bg-dark-hover dark:active:bg-gray-700 rounded-xl flex-center transition-base flex-shrink-0"
                 >
                   <i className="bx bxs-image-add text-4xl"></i>
                 </label>
@@ -299,7 +258,7 @@ function CreatePost() {
                   imageFiles.map((imageFile, index) => (
                     <div
                       key={"imageFiles" + index}
-                      className="relative cursor-pointer h-28 w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
+                      className="relative cursor-pointer h-24 w-20 md:h-28 md:w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
                     >
                       <img src={URL.createObjectURL(imageFile)} alt="Preview" />
                       <ClickableIcon

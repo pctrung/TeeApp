@@ -11,11 +11,12 @@ import CreateChat from "../CreateChat";
 function ChatList({ className, setChatNotificationNumber }) {
   const selectedIds = useSelector((state) => state.chats.selectedIds);
   const currentUser = useSelector((state) => state.users.currentUser);
-  const dispatch = useDispatch();
-  const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
   const chats = useSelector((state) => state.chats.chats);
 
   const [keyword, setKeyword] = useState("");
+  const [isOpenCreateChat, setIsOpenCreateChat] = useState(false);
+
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (chats) {
@@ -40,7 +41,7 @@ function ChatList({ className, setChatNotificationNumber }) {
         className={
           className +
           " " +
-          "bg-white dark:bg-dark-secondary shadow-lg rounded-xl px-4 pt-4 pb-2 border dark:border-dark-hover"
+          "bg-white dark:bg-dark-secondary shadow-lg rounded-xl px-2 md:px-4 pt-3 md:pt-4 pb-2 border dark:border-dark-hover"
         }
       >
         <div className="relative ">
@@ -60,7 +61,7 @@ function ChatList({ className, setChatNotificationNumber }) {
           <i className="bx bx-search absolute text-xl top-1/4 left-3 transform text-gray-400 cursor-pointer"></i>
         </div>
 
-        <div className="max-h-500 overflow-y-auto pr-2 pb-48 md:pb-0">
+        <div className="max-h-500 overflow-y-auto pr-2 md:pb-0">
           {chats &&
             getCurrentChats(chats, keyword).map((chat, index) => {
               const currentUserName = currentUser.userName;
@@ -153,6 +154,11 @@ function ChatList({ className, setChatNotificationNumber }) {
                 </div>
               );
             })}
+          {chats.length < 1 && (
+            <div className="py-2 w-full text-center font-semibold">
+              Not found any chats. Start a chat now!
+            </div>
+          )}
         </div>
         <a
           href={process.env.REACT_APP_CHAT_APP_URL}

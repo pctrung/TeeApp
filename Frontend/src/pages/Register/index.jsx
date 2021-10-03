@@ -1,6 +1,7 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import LoginPageImage from "assets/img/login-page.svg";
 import Button from "components/Button";
+import Loader from "components/Loader";
 import Popup from "components/Popup";
 import useUserApi from "hooks/useUserApi";
 import React, { useEffect, useState } from "react";
@@ -11,6 +12,7 @@ import * as yup from "yup";
 
 function Register() {
   const [isChanged, setIsChanged] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isExistsUserName, setIsExistsUserName] = useState(true);
   const [popup, setPopup] = useState({
     isOpen: false,
@@ -147,8 +149,9 @@ function Register() {
   }, [watch]);
 
   // handle submit
-  const onSubmit = (content) => {
-    userApi.register(content).then((response) => {
+  const onSubmit = async (content) => {
+    setIsLoading(true);
+    await userApi.register(content).then((response) => {
       openPopup(
         "Success",
         <span>
@@ -161,6 +164,7 @@ function Register() {
       );
       reset({});
     });
+    setIsLoading(false);
   };
 
   function openPopup(title, content) {
@@ -174,6 +178,7 @@ function Register() {
 
   return (
     <>
+      {isLoading && <Loader />}
       {popup.isOpen && (
         <Popup
           title={popup.title}

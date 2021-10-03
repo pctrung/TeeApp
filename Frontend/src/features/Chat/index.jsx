@@ -17,13 +17,12 @@ import { ChatClient } from "utils/Constants";
 
 function Chat() {
   const dispatch = useDispatch();
+  const chatApi = useChatApi();
 
   const [connection, setConnection] = useState(null);
 
   const currentUser = useSelector((state) => state.users.currentUser);
   const selectedId = useSelector((state) => state.chats.selectedId);
-
-  const chatApi = useChatApi();
 
   useEffect(() => {
     async function fetchData() {

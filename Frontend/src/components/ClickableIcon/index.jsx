@@ -17,6 +17,7 @@ function ClickableIcon({
   onBlur,
   secondMode,
   reverse,
+  innerRef,
 }) {
   var color = secondMode
     ? "hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-third dark:border-dark-third"
@@ -36,6 +37,7 @@ function ClickableIcon({
   return (
     <>
       <div
+        ref={innerRef}
         onBlur={onBlur}
         onClick={onClick}
         className={

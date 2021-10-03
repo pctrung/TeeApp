@@ -2,6 +2,9 @@ import { addSelectedId } from "app/chatSlice";
 import Button from "components/Button";
 import ImageCircle from "components/ImageCircle";
 import useChatApi from "hooks/useChatApi";
+import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
+import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
+import { useEscToClose } from "hooks/useEscToClose";
 import useUserApi from "hooks/useUserApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -19,43 +22,20 @@ function CreateChat({ isOpen, setIsOpen }) {
 
   const ref = useRef();
   const friendListRef = useRef();
+
   const dispatch = useDispatch();
 
   const chatApi = useChatApi();
   const userApi = useUserApi();
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      // If the menu is open and the clicked target is not within the menu,
-      // then close the menu
-      if (isOpen && ref.current && !ref.current.contains(e.target)) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpen]);
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      // If the menu is open and the clicked target is not within the menu,
-      // then close the menu
-      if (
-        isOpenFriendList &&
-        friendListRef.current &&
-        !friendListRef.current.contains(e.target)
-      ) {
-        setIsOpenFriendList(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenFriendList]);
+  useDisableBodyScroll(isOpen);
+  useEscToClose(setIsOpen);
+  useCloseOnClickOutside(isOpen, setIsOpen, ref);
+  useCloseOnClickOutside(
+    isOpenFriendList,
+    setIsOpenFriendList,
+    isOpenFriendList,
+  );
 
   useEffect(() => {
     userApi.getFriendList().then((response) => {
@@ -77,18 +57,7 @@ function CreateChat({ isOpen, setIsOpen }) {
       setIsValidButton(selectedFriendList?.length !== 0 ? true : false);
     }
   }, [selectedFriendList, groupName, selectedMode]);
-  // Esc to cancel view
-  function escFunction(e) {
-    if (e.keyCode === 27) {
-      setIsOpen(false);
-    }
-  }
-  useEffect(() => {
-    document.addEventListener("keydown", escFunction, false);
-    return () => {
-      document.removeEventListener("keydown", escFunction, false);
-    };
-  }, []);
+
   async function handleCreateGroup() {
     if (isValidButton) {
       if (selectedMode === ChatType.GROUP) {

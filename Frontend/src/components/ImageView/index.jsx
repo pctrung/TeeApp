@@ -1,8 +1,17 @@
 import ClickableIcon from "components/ClickableIcon";
-import React, { useEffect, useState } from "react";
+import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
+import { useEscToClose } from "hooks/useEscToClose";
+import React, { useEffect, useRef, useState } from "react";
 
-function ImageView({ photos = [], startIndex = 0, setIsOpen }) {
+function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
   const [index, setIndex] = useState(startIndex);
+  const imageRef = useRef();
+  const closeRef = useRef();
+  const leftRef = useRef();
+  const rightRef = useRef();
+
+  useDisableBodyScroll(isOpen);
+  useEscToClose(setIsOpen);
 
   function nextImage() {
     if (index < photos.length - 1) {
@@ -14,18 +23,28 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen }) {
       setIndex(index - 1);
     }
   }
-  // Esc to cancel view
-  function escFunction(e) {
-    if (e.keyCode === 27) {
-      setIsOpen(false);
-    }
-  }
+
   useEffect(() => {
-    document.addEventListener("keydown", escFunction, false);
-    return () => {
-      document.removeEventListener("keydown", escFunction, false);
+    const checkIfClickedOutside = (e) => {
+      if (
+        isOpen &&
+        imageRef.current &&
+        !imageRef.current.contains(e.target) &&
+        closeRef.current &&
+        !closeRef.current.contains(e.target) &&
+        rightRef.current &&
+        !rightRef.current.contains(e.target) &&
+        leftRef.current &&
+        !leftRef.current.contains(e.target)
+      ) {
+        setIsOpen(false);
+      }
     };
-  }, []);
+    document.addEventListener("mousedown", checkIfClickedOutside);
+    return () => {
+      document.removeEventListener("mousedown", checkIfClickedOutside);
+    };
+  }, [isOpen]);
   return (
     <>
       <div
@@ -33,28 +52,31 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen }) {
         style={{ margin: 0 }}
       >
         <ClickableIcon
+          innerRef={closeRef}
           reverse
           onClick={() => setIsOpen(false)}
           iconClass="bx bx-x"
           className="absolute bg-white md:right-10 right-8 top-8 animate-swipeUp"
         />
-        {index > 0 && (
-          <ClickableIcon
-            reverse
-            onClick={previousImage}
-            iconClass="bx bxs-chevron-left"
-            className="absolute md:left-10 left-5 animate-swipeUp"
-          />
-        )}
-        {index < photos.length - 1 && (
-          <ClickableIcon
-            reverse
-            onClick={nextImage}
-            iconClass="bx bxs-chevron-right"
-            className="absolute md:right-10 right-5 animate-swipeUp"
-          />
-        )}
+
+        <ClickableIcon
+          innerRef={leftRef}
+          reverse
+          onClick={previousImage}
+          iconClass="bx bxs-chevron-left"
+          className="absolute md:left-10 left-5 animate-swipeUp"
+        />
+
+        <ClickableIcon
+          innerRef={rightRef}
+          reverse
+          onClick={nextImage}
+          iconClass="bx bxs-chevron-right"
+          className="absolute md:right-10 right-5 animate-swipeUp"
+        />
+
         <img
+          ref={imageRef}
           src={photos[index]?.imageUrl}
           alt={photos[index]?.caption ?? `Post photo ${index}`}
           className="animate-swipeDown max-h-11/12 max-w-full md:max-w-3/4 min-w-2/12 object-contain rounded"

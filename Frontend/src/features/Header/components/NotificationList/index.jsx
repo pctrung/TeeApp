@@ -9,12 +9,12 @@ import { NotificationType } from "utils/Enums";
 import Notification from "../Notification";
 
 function NotificationList({ className, setIsOpen, setNotificationNumber }) {
-  const notificationApi = useNotificationApi();
+  const [page, setPage] = useState(1);
   const dispatch = useDispatch();
   const history = useHistory();
-  const [page, setPage] = useState(1);
   const { notifications, isHasMore, isLoading, error } =
     useNotificationPagination(page);
+  const notificationApi = useNotificationApi();
 
   function handleClick(notification = {}) {
     if (!notification.isRead) {
@@ -66,7 +66,7 @@ function NotificationList({ className, setIsOpen, setNotificationNumber }) {
           "flex flex-col bg-white dark:bg-dark-secondary shadow-lg rounded-xl px-5 py-4 pb-3 border dark:border-dark-hover "
         }
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center border-b dark:border-dark-hover pb-1">
           <span className="text-lg md:text-2xl font-bold mb-2">
             Notifications
           </span>
@@ -110,7 +110,9 @@ function NotificationList({ className, setIsOpen, setNotificationNumber }) {
           />
         </div>
         {notifications?.items?.length < 1 && (
-          <span className="mt-2">Do not have any notifications</span>
+          <span className="my-2 text-center w-full font-semibold">
+            Do not have any notifications
+          </span>
         )}
       </div>
     </>

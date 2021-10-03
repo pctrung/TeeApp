@@ -1,6 +1,7 @@
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
+import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
 import usePostApi from "hooks/usePostApi";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
@@ -62,17 +63,7 @@ function Post({ post }) {
     setTopThreeType(topThreeReaction(post));
   }, [post]);
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      if (isOpenMenu && ref.current && !ref.current.contains(e.target)) {
-        setIsOpenMenu(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenMenu]);
+  useCloseOnClickOutside(isOpenMenu, setIsOpenMenu, ref);
 
   const deletePost = () => {
     if (post.id) {

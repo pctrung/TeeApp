@@ -5,7 +5,7 @@ import ClickableIcon from "components/ClickableIcon";
 import Picker from "emoji-picker-react";
 import useChatApi from "hooks/useChatApi";
 import PropTypes from "prop-types";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 
 ChatInput.propTypes = {
   chatId: PropTypes.number,
@@ -17,6 +17,7 @@ function ChatInput({ chatId }) {
   const ref = useRef();
 
   const chatApi = useChatApi();
+  useCloseOnClickOutside(isOpenEmoji, setIsOpenEmoji, ref);
 
   async function onSendMessage(e) {
     e.preventDefault();
@@ -34,21 +35,6 @@ function ChatInput({ chatId }) {
       setContent(content + emojiObject?.emoji);
     }
   };
-
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      // If the menu is open and the clicked target is not within the menu,
-      // then close the menu
-      if (isOpenEmoji && ref.current && !ref.current.contains(e.target)) {
-        setIsOpenEmoji(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenEmoji]);
 
   async function sendImage(e) {
     var file = e.target.files[0];

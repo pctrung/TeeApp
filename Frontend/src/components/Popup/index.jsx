@@ -1,6 +1,7 @@
 import Button from "components/Button";
-import React from "react";
+import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
 import PropTypes from "prop-types";
+import React from "react";
 
 Popup.propTypes = {
   title: PropTypes.string,
@@ -14,6 +15,7 @@ function Popup({
   content = "Oops! Something went wrong!",
   onClick,
 }) {
+  useDisableBodyScroll(isOpen);
   return (
     isOpen && (
       <div className="px-4 flex-center overlay" style={{ margin: 0 }}>

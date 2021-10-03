@@ -30,13 +30,14 @@ import {
 function App(props) {
   const isLoading = useSelector((state) => state.app.isLoading);
   const popup = useSelector((state) => state.app.popup);
+
   const dispatch = useDispatch();
+
+  const [connection, setConnection] = useState(null);
 
   function closePopup() {
     dispatch(setPopup({ isOpen: false }));
   }
-
-  const [connection, setConnection] = useState(null);
 
   // for realtime
   useEffect(() => {

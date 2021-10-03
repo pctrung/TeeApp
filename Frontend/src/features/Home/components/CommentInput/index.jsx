@@ -2,17 +2,20 @@ import SendIconNormal from "assets/icons/send-icon.svg";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
 import EmojiPicker from "emoji-picker-react";
+import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
 import usePostApi from "hooks/usePostApi";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 function CommentInput({ postId, currentUser = {} }) {
   const [content, setContent] = useState("");
-
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
+
   const ref = useRef();
 
   const postApi = usePostApi();
+
+  useCloseOnClickOutside(isOpenEmoji, setIsOpenEmoji, ref);
 
   async function onSendMessage(e) {
     e.preventDefault();
@@ -24,20 +27,6 @@ function CommentInput({ postId, currentUser = {} }) {
     await postApi.addComment(postId, request);
   }
 
-  useEffect(() => {
-    const checkIfClickedOutside = (e) => {
-      // If the menu is open and the clicked target is not within the menu,
-      // then close the menu
-      if (isOpenEmoji && ref.current && !ref.current.contains(e.target)) {
-        setIsOpenEmoji(false);
-      }
-    };
-    document.addEventListener("mousedown", checkIfClickedOutside);
-    return () => {
-      // Cleanup the event listener
-      document.removeEventListener("mousedown", checkIfClickedOutside);
-    };
-  }, [isOpenEmoji]);
   const onEmojiClick = (event, emojiObject) => {
     if (emojiObject?.emoji) {
       setContent(content + emojiObject?.emoji);

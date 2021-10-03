@@ -58,6 +58,7 @@ export default function PhotoList({ photos = [] }) {
     <>
       {isOpen && (
         <ImageView
+          isOpen={isOpen}
           photos={photos}
           startIndex={startIndex}
           setIsOpen={setIsOpen}

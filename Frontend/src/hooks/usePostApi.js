@@ -11,7 +11,6 @@ export default function usePostApi() {
 
   const postApi = {
     getAll: (params) => {
-      dispatch(setIsLoading(true));
       if (!params?.limit) {
         params = { ...params, limit: DefaultLimit.POST };
       }
@@ -19,7 +18,6 @@ export default function usePostApi() {
       return Api.get(url, { params });
     },
     getById: (id) => {
-      dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${id}`;
       return Api.get(url);
     },

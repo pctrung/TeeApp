@@ -1,6 +1,7 @@
 import Button from "components/Button";
-import React from "react";
+import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
 import PropTypes from "prop-types";
+import React from "react";
 
 ConfirmModal.propTypes = {
   title: PropTypes.string,
@@ -17,6 +18,7 @@ function ConfirmModal({
   confirmButtonTitle,
   confirmButtonAction,
 }) {
+  useDisableBodyScroll(isOpen);
   return (
     isOpen && (
       <div className="px-4 overlay flex-center " style={{ margin: 0 }}>
