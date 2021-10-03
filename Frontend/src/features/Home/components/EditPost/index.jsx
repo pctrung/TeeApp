@@ -1,4 +1,4 @@
-import ImageIcon from "assets/icons/image-icon.svg";
+import { updatePost } from "app/postSlice";
 import Button from "components/Button";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
@@ -9,28 +9,29 @@ import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 import { useEscToClose } from "hooks/utils/useEscToClose";
 import usePostApi from "hooks/api/usePostApi";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { MAX_IMAGE_SIZE } from "utils/Constants";
 import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
 
-function CreatePost() {
+function EditPost({ post, isOpen, setIsOpen }) {
   const currentUser = useSelector((state) => state.users.currentUser);
 
-  const [content, setContent] = useState("");
-  const [privacy, setPrivacy] = useState(PrivacyType.PUBLIC);
+  const [content, setContent] = useState(post.content);
+  const [privacy, setPrivacy] = useState(post.privacy);
   const [imageFiles, setImageFiles] = useState([]);
+  const [oldPhotoIds, setOldPhotoIds] = useState([]);
 
   const [popup, setPopup] = useState({});
   const [isOpenPrivacyList, setIsOpenPrivacyList] = useState(false);
   const [isValidButton, setIsValidButton] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
   const [isOpenEmoji, setIsOpenEmoji] = useState(false);
 
   const ref = useRef();
   const emojiRef = useRef();
   const privacyRef = useRef();
   const postApi = usePostApi();
+  const dispatch = useDispatch();
 
   useDisableBodyScroll(isOpen);
 
@@ -73,6 +74,11 @@ function CreatePost() {
       setImageFiles(newImageFiles);
     }
   }
+  function removeOldPhoto(photoId) {
+    const result = [...oldPhotoIds];
+    result.push(photoId);
+    setOldPhotoIds(result);
+  }
   function removeImage(index) {
     if (index >= 0 && index < imageFiles.length) {
       const newImageFiles = [...imageFiles];
@@ -86,62 +92,34 @@ function CreatePost() {
     } else {
       setIsValidButton(false);
     }
+    return () => {
+      postApi.getById(post.id).then((response) => {
+        dispatch(updatePost(response));
+      });
+    };
   }, [content, imageFiles]);
 
-  function onSubmit(e) {
+  async function onSubmit(e) {
     e.preventDefault();
-    postApi.addPost({ content, privacy }).then((response) => {
-      if (response.id) {
-        imageFiles.forEach((image) => {
-          const request = new FormData();
-          request.append("Image", image);
-          request.append("Caption", "Post photo");
-          postApi.addPhoto(response.id, request);
-        });
-      }
-    });
+    await postApi.updatePost(post.id, { content, privacy });
+    if (post.id) {
+      imageFiles.forEach(async (image) => {
+        const request = new FormData();
+        request.append("Image", image);
+        request.append("Caption", "Post photo");
+        await postApi.addPhoto(post.id, request);
+      });
+      oldPhotoIds.forEach(async (photoId) => {
+        await postApi.deletePhoto(post.id, photoId);
+      });
+    }
     setIsOpen(false);
     setContent("");
     setImageFiles([]);
+    setOldPhotoIds([]);
   }
   return (
     <>
-      <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover w-full rounded-xl shadow px-4 pt-3 pb-1 space-y-3 divide-y">
-        <div className="flex space-x-2 w-full items-center">
-          <Link
-            className="font-semibold text-sm cursor-pointer flex-shrink-0"
-            to={`/profile/${currentUser?.userName}`}
-          >
-            <ImageCircle src={currentUser?.avatarUrl} />
-          </Link>
-          <div onClick={() => setIsOpen(true)} className="w-full">
-            <input
-              disabled
-              type="text"
-              placeholder={`What's on your mind${
-                currentUser.firstName ? ", " + currentUser.firstName : ""
-              }?`}
-              className="bg-gray-100 dark:bg-dark-third rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative placeholder-gray-500 dark:placeholder-dark-txt hover:bg-gray-200 dark:hover:bg-dark-hover cursor-pointer "
-            />
-          </div>
-        </div>
-        <div className="w-full text-center flex justify-between select-none cursor-pointer py-1 border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt font-semibold">
-          <span
-            className="flex-1 p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base flex items-center justify-center space-x-2"
-            onClick={() => setIsOpen(true)}
-          >
-            <img src={ImageIcon} alt="Image icon" className="w-6 h-6" />
-            <span>Your Photos</span>
-          </span>
-          <span
-            className="flex-1 p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base "
-            onClick={() => setIsOpen(true)}
-          >
-            <i className="far fa-smile-beam mr-2 text-xl align-middle text-green-500 dark:text-green-400"></i>
-            Your Feeling
-          </span>
-        </div>
-      </div>
       {isOpen && (
         <div
           className="overlay px-4 py-10 z-30 grid place-items-center"
@@ -160,7 +138,7 @@ function CreatePost() {
               />
             )}
             <div className="relative font-bold text-center text-lg md:text-xl py-4 border-b dark:border-gray-600 w-full">
-              Create post
+              Edit post
               <ClickableIcon
                 onClick={() => setIsOpen(false)}
                 iconClass="bx bx-x"
@@ -254,13 +232,33 @@ function CreatePost() {
                 >
                   <i className="bx bxs-image-add text-4xl"></i>
                 </label>
+                {post?.photos?.length > 0 &&
+                  post?.photos
+                    ?.filter((x) => !oldPhotoIds.includes(x.id))
+                    ?.map((photo, index) => (
+                      <div
+                        key={"oldPhotos" + index}
+                        className="relative cursor-pointer h-24 w-20 md:h-28 md:w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
+                      >
+                        <img src={photo.imageUrl} alt="Preview" />
+                        <ClickableIcon
+                          onClick={() => removeOldPhoto(photo.id)}
+                          iconClass="bx bx-x"
+                          reverse
+                          className="absolute right-1 top-1 animate-swipeUp w-6 h-6 object-cover"
+                        />
+                      </div>
+                    ))}
                 {imageFiles.length > 0 &&
                   imageFiles.map((imageFile, index) => (
                     <div
                       key={"imageFiles" + index}
                       className="relative cursor-pointer h-24 w-20 md:h-28 md:w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
                     >
-                      <img src={URL.createObjectURL(imageFile)} alt="Preview" />
+                      <img
+                        src={imageFile ? URL.createObjectURL(imageFile) : ""}
+                        alt="Preview"
+                      />
                       <ClickableIcon
                         onClick={() => removeImage(index)}
                         iconClass="bx bx-x"
@@ -284,4 +282,4 @@ function CreatePost() {
   );
 }
 
-export default CreatePost;
+export default EditPost;

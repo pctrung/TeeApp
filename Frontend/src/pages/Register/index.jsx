@@ -3,7 +3,7 @@ import LoginPageImage from "assets/img/login-page.svg";
 import Button from "components/Button";
 import Loader from "components/Loader";
 import Popup from "components/Popup";
-import useUserApi from "hooks/useUserApi";
+import useAccountApi from "hooks/api/useAccountApi";
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link, useHistory } from "react-router-dom";
@@ -21,7 +21,7 @@ function Register() {
   });
 
   const history = useHistory();
-  const userApi = useUserApi();
+  const accountApi = useAccountApi();
 
   const INPUT_CLASS =
     "bg-gray-100 dark:bg-dark-hover dark:text-white rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 dark:focus:ring-green-400 focus:ring-opacity-80 dark:focus:ring-opacity-80 outline-none transition-base";
@@ -109,7 +109,7 @@ function Register() {
   });
 
   useEffect(() => {
-    userApi.checkUserNameExists(watch.userName).then((response) => {
+    accountApi.checkUserNameExists(watch.userName).then((response) => {
       if (response.isExists) {
         setError(
           "userName",
@@ -151,7 +151,7 @@ function Register() {
   // handle submit
   const onSubmit = async (content) => {
     setIsLoading(true);
-    await userApi.register(content).then((response) => {
+    await accountApi.register(content).then((response) => {
       openPopup(
         "Success",
         <span>

@@ -23,7 +23,8 @@ namespace TeeApp.Models.RequestModels.Common
         [Range(0, int.MaxValue, ErrorMessage = "Only positive number allowed")]
         public virtual int Limit
         {
-            get => (_limit == 0) ? SystemConstants.DEFAULT_LIMIT : _limit;
+            get => (_limit <= 0) ? int.MaxValue : _limit;
+            //get => (_limit == 0) ? SystemConstants.DEFAULT_LIMIT : _limit;
             set => _limit = (value == 0) ? int.MaxValue : value;
         }
 

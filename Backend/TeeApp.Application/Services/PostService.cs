@@ -79,7 +79,7 @@ namespace TeeApp.Application.Services
                     recipients = post.Creator.Followers.Where(x => IsMyFriend(x)).Select(x => x.UserName).ToList();
                     break;
             }
-            recipients.Add(_currentUser.UserName);
+            recipients.Add(post.Creator.UserName);
             return recipients;
         }
 
@@ -233,7 +233,11 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult<PostResponse>> UpdateAsync(int postId, UpdatePostRequest request)
         {
-            var post = await _context.Posts.Where(x => x.Id == postId && x.DateDeleted == null).FirstOrDefaultAsync();
+            var post = await _context.Posts
+                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Include(x => x.Photos)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync();
 
             if (post == null)
             {
@@ -268,6 +272,7 @@ namespace TeeApp.Application.Services
             var post = await _context.Posts
                 .Where(x => x.Id == postId && x.DateDeleted == null)
                 .Include(x => x.Photos)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
             if (post == null)

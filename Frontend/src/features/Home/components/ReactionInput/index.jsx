@@ -1,4 +1,4 @@
-import usePostApi from "hooks/usePostApi";
+import usePostApi from "hooks/api/usePostApi";
 import React from "react";
 import { ReactionIcon, ReactionName, ReactionType } from "utils/Enums";
 

@@ -3,19 +3,20 @@ import Logo from "logo-circle.png";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
 import { Link, useHistory, useLocation } from "react-router-dom";
-import useDarkMode from "hooks/useDarkMode";
+import useDarkMode from "hooks/utils/useDarkMode";
 import ConfirmModal from "components/ConfirmModal";
 import { setCurrentUser } from "app/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import ChatList from "features/Chat/components/ChatList";
 import NotificationList from "features/Header/components/NotificationList";
-import useUserApi from "hooks/useUserApi";
+import useUserApi from "hooks/api/useUserApi";
 import { NavList } from "utils/config";
 import { refreshPost, resetNewPost } from "app/postSlice";
-import usePostApi from "hooks/usePostApi";
-import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
+import usePostApi from "hooks/api/usePostApi";
+import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
+import useAccountApi from "hooks/api/useAccountApi";
 
-function Header({ refreshPosts }) {
+function Header() {
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -23,6 +24,7 @@ function Header({ refreshPosts }) {
   const user = useSelector((state) => state.users.currentUser);
   const newPostTotal = useSelector((state) => state.posts.newPostTotal);
   const userApi = useUserApi();
+  const accountApi = useAccountApi();
   const postApi = usePostApi();
 
   const [chatNotificationNumber, setChatNotificationNumber] = useState(0);
@@ -66,7 +68,8 @@ function Header({ refreshPosts }) {
   const goToProfile = (userName) => {
     history.push("/profile/" + userName);
   };
-  function logout() {
+  async function logout() {
+    await accountApi.logout();
     window.localStorage.removeItem("token");
     window.location.href = process.env.PUBLIC_URL + "/";
   }
@@ -141,14 +144,15 @@ function Header({ refreshPosts }) {
                 <div
                   key={nav.route}
                   className={
-                    "relative group" +
+                    "relative group " +
+                    (nav.isMobile ? "block md:hidden" : "") +
                     " " +
                     (isCurrentRoute ? " border-b-4 border-green-500" : "")
                   }
                   onClick={() => goTo(nav.route, isCurrentRoute)}
                 >
                   <i
-                    className={`select-none py-2 px-6 rounded-lg hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-third dark:active:bg-dark-hover transition-base cursor-pointer  ${icon}`}
+                    className={`select-none py-1 px-4 md:py-2 md:px-6 rounded-lg hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-third dark:active:bg-dark-hover transition-base cursor-pointer  ${icon}`}
                   ></i>
                   <div className="select-none animate-fadeIn group-hover:block absolute top-full left-1/2 hidden bg-black dark:bg-white dark:bg-opacity-80 bg-opacity-60 px-1 rounded transform -translate-x-1/2 translate-y-2 text-white dark:text-black text-sm font-title p-1">
                     {nav.name}

@@ -34,6 +34,7 @@ const posts = createSlice({
         return post.id === updatedPost.id;
       });
       if (index >= 0) {
+        state.items[index].photos = updatedPost.photos;
         state.items[index].content = updatedPost.content;
         state.items[index].privacy = updatedPost.privacy;
       } else {

@@ -11,6 +11,7 @@ import ServerError from "pages/ServerError";
 
 import Home from "features/Home";
 import Header from "features/Header";
+import Profile from "features/Profile";
 
 import Chat from "features/Chat";
 import { AppClient } from "utils/Constants";
@@ -106,12 +107,13 @@ function App(props) {
           />
         )}
         <Chat />
-        <Header {...props} />
+        <Header />
         <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-20">
           <div className="container mx-auto">
             <Switch>
               <Route exact path="/Forbid" component={Forbid} />
               <Route exact path="/ServerError" component={ServerError} />
+              <Route exact path="/profile/:userName" component={Profile} />
               <Route exact path="/" component={Home} />
               <Route path="*" component={NotFound} />
             </Switch>

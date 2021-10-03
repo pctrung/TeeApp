@@ -63,6 +63,29 @@ namespace TeeApp.Application.Common
             return query.ToList();
         }
 
+        public static IQueryable<User> FilterBlockedAndRequestWithoutPagination(this IQueryable<User> source, User currentUser, PaginationRequestBase request)
+        {
+            var query = source
+                .Where(
+                    x =>
+                    !currentUser.BlockedByUsers.Contains(x) &&
+                    !currentUser.BlockedUsers.Contains(x) &&
+                   (x.FirstName.ToLower().Contains(request.Keyword) ||
+                        x.LastName.ToLower().Contains(request.Keyword) ||
+                        x.UserName.ToLower().Contains(request.Keyword)));
+
+            if (request.SortType == SortType.Ascending)
+            {
+                query = query.OrderBy(x => x.FirstName);
+            }
+            else
+            {
+                query = query.OrderByDescending(x => x.FirstName);
+            }
+
+            return query;
+        }
+
         // Filter blocked users for post
         public static IQueryable<Post> FilterBlockedAndRequestWithoutPagination(this IQueryable<Post> source, User currentUser, PaginationRequestBase request)
         {

@@ -7,5 +7,8 @@ export const useDisableBodyScroll = (isOpen) => {
     } else {
       document.body.style.overflowY = "unset";
     }
+    return () => {
+      document.body.style.overflowY = "unset";
+    };
   }, [isOpen]);
 };

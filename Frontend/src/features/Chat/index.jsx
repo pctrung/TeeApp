@@ -10,7 +10,7 @@ import {
   refreshChats,
 } from "app/chatSlice";
 import { updateOnlineUserNameList } from "app/userSlice";
-import useChatApi from "hooks/useChatApi";
+import useChatApi from "hooks/api/useChatApi";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatClient } from "utils/Constants";

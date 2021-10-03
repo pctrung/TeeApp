@@ -1,7 +1,7 @@
 import { appendMessageToChat } from "app/chatSlice";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import useChatApi from "./useChatApi";
+import useChatApi from "../api/useChatApi";
 
 export default function useMessagePagination(currentChat, page) {
   const [isLoading, setIsLoading] = useState(false);

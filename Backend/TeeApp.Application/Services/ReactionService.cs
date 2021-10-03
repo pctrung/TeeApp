@@ -83,7 +83,7 @@ namespace TeeApp.Application.Services
                     recipients = post.Creator.Followers.Where(x => IsMyFriend(x)).Select(x => x.UserName).ToList();
                     break;
             }
-            recipients.Add(_currentUser.UserName);
+            recipients.Add(post.Creator.UserName);
             return recipients;
         }
 

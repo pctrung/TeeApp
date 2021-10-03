@@ -11,4 +11,11 @@ export const NavList = [
     inactiveIcon: "bx bx-group",
     route: "/friends",
   },
+  {
+    name: "Search",
+    icon: "bx bxs-search",
+    inactiveIcon: "bx bx-search",
+    route: "/search",
+    isMobile: true,
+  },
 ];

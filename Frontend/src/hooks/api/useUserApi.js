@@ -9,32 +9,16 @@ export default function useUserApi() {
   const dispatch = useDispatch();
 
   const userApi = {
-    login: (content) => {
-      dispatch(setIsLoading(true));
-      const url = `${baseApiUrl}/login`;
-      return Api.post(url, content);
-    },
-    register: (content) => {
-      content.firstName = content?.firstName?.substring(0, 49);
-      content.lastName = content?.lastName?.substring(0, 49);
-
-      dispatch(setIsLoading(true));
-      const url = `${baseApiUrl}/register`;
-      return Api.post(url, content);
-    },
-    checkUserNameExists: (userName) => {
-      if (userName) {
-        const url = `${baseApiUrl}/${userName}/isExists`;
-        return Api.get(url);
-      }
-      return Promise.reject();
-    },
-    getFriendList: () => {
+    getUserList: () => {
       const url = `${baseApiUrl}`;
       return Api.get(url);
     },
     getCurrentUser: () => {
       const url = `${baseApiUrl}/current`;
+      return Api.get(url);
+    },
+    getByUserName: (userName) => {
+      const url = `${baseApiUrl}/${userName}`;
       return Api.get(url);
     },
     updateUser: (content) => {

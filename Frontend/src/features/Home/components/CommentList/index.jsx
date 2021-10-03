@@ -1,9 +1,9 @@
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
-import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
-import { useEscToClose } from "hooks/useEscToClose";
-import usePostApi from "hooks/usePostApi";
+import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
+import { useEscToClose } from "hooks/utils/useEscToClose";
+import usePostApi from "hooks/api/usePostApi";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";

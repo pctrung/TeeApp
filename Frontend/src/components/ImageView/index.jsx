@@ -1,6 +1,6 @@
 import ClickableIcon from "components/ClickableIcon";
-import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
-import { useEscToClose } from "hooks/useEscToClose";
+import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
+import { useEscToClose } from "hooks/utils/useEscToClose";
 import React, { useEffect, useRef, useState } from "react";
 
 function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
@@ -64,7 +64,10 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
           reverse
           onClick={previousImage}
           iconClass="bx bxs-chevron-left"
-          className="absolute md:left-10 left-5 animate-swipeUp"
+          className={
+            "absolute md:right-10 right-5 animate-swipeUp " +
+            (index > 0 ? "" : "hidden")
+          }
         />
 
         <ClickableIcon
@@ -72,7 +75,10 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
           reverse
           onClick={nextImage}
           iconClass="bx bxs-chevron-right"
-          className="absolute md:right-10 right-5 animate-swipeUp"
+          className={
+            "absolute md:right-10 right-5 animate-swipeUp " +
+            (index < photos.length - 1 ? "" : "hidden")
+          }
         />
 
         <img

@@ -1,11 +1,11 @@
 import { addSelectedId } from "app/chatSlice";
 import Button from "components/Button";
 import ImageCircle from "components/ImageCircle";
-import useChatApi from "hooks/useChatApi";
-import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
-import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
-import { useEscToClose } from "hooks/useEscToClose";
-import useUserApi from "hooks/useUserApi";
+import useChatApi from "hooks/api/useChatApi";
+import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
+import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
+import { useEscToClose } from "hooks/utils/useEscToClose";
+import useUserApi from "hooks/api/useUserApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { DefaultName } from "utils/Constants";
@@ -13,12 +13,12 @@ import { ChatType } from "utils/Enums";
 
 function CreateChat({ isOpen, setIsOpen }) {
   const [selectedMode, setSelectedMode] = useState(ChatType.PRIVATE);
-  const [isOpenFriendList, setIsOpenFriendList] = useState(false);
+  const [isOpenUserList, setIsOpenUserList] = useState(false);
   const [isValidButton, setIsValidButton] = useState(false);
   const [groupName, setGroupName] = useState("");
   const [keyword, setKeyword] = useState("");
-  const [friendList, setFriendList] = useState([]);
-  const [selectedFriendList, setSelectedFriendList] = useState([]);
+  const [userList, setUserList] = useState([]);
+  const [selectedUsers, setSelectedUsers] = useState([]);
 
   const ref = useRef();
   const friendListRef = useRef();
@@ -31,59 +31,53 @@ function CreateChat({ isOpen, setIsOpen }) {
   useDisableBodyScroll(isOpen);
   useEscToClose(setIsOpen);
   useCloseOnClickOutside(isOpen, setIsOpen, ref);
-  useCloseOnClickOutside(
-    isOpenFriendList,
-    setIsOpenFriendList,
-    isOpenFriendList,
-  );
+  useCloseOnClickOutside(isOpenUserList, setIsOpenUserList, isOpenUserList);
 
   useEffect(() => {
-    userApi.getFriendList().then((response) => {
+    userApi.getUserList().then((response) => {
       if (response) {
-        setFriendList(response);
+        setUserList(response.items);
       }
     });
     return () => {
-      setSelectedFriendList([]);
+      setSelectedUsers([]);
       setGroupName("");
     };
   }, []);
 
   useEffect(() => {
     if (selectedMode === ChatType.GROUP) {
-      var result = selectedFriendList?.length >= 2 && groupName?.trim();
+      var result = selectedUsers?.length >= 2 && groupName?.trim();
       setIsValidButton(result);
     } else if (selectedMode === ChatType.PRIVATE) {
-      setIsValidButton(selectedFriendList?.length !== 0 ? true : false);
+      setIsValidButton(selectedUsers?.length !== 0 ? true : false);
     }
-  }, [selectedFriendList, groupName, selectedMode]);
+  }, [selectedUsers, groupName, selectedMode]);
 
   async function handleCreateGroup() {
     if (isValidButton) {
       if (selectedMode === ChatType.GROUP) {
         const request = {
-          participantUserNames: selectedFriendList.map((x) => x.userName),
+          participantUserNames: selectedUsers.map((x) => x.userName),
           name: groupName,
         };
         chatApi.createGroupChat(request).then((response) => {
           if (response.id) {
             dispatch(addSelectedId(response.id));
           }
-          setSelectedFriendList([]);
+          setSelectedUsers([]);
           setGroupName("");
           setIsOpen(false);
         });
       } else if (selectedMode === ChatType.PRIVATE) {
         const request = {
-          participantUserName: selectedFriendList
-            .map((x) => x.userName)
-            .shift(),
+          participantUserName: selectedUsers.map((x) => x.userName).shift(),
         };
         chatApi.createPrivateChat(request).then((response) => {
           if (response.id) {
             dispatch(addSelectedId(response.id));
           }
-          setSelectedFriendList([]);
+          setSelectedUsers([]);
           setGroupName("");
           setIsOpen(false);
         });
@@ -101,7 +95,7 @@ function CreateChat({ isOpen, setIsOpen }) {
         className={
           "animate-swipeDown px-6 md:px-14 md:py-6 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full overflow-y-auto md:overflow-visible" +
           " " +
-          (isOpenFriendList ? "mb-16" : "")
+          (isOpenUserList ? "mb-16" : "")
         }
       >
         <div className="flex pt-6 pb-5 justify-between h-full items-center">
@@ -174,19 +168,19 @@ function CreateChat({ isOpen, setIsOpen }) {
                   <input
                     id="search"
                     type="search"
-                    onFocus={() => setIsOpenFriendList(true)}
+                    onFocus={() => setIsOpenUserList(true)}
                     value={keyword}
                     autoComplete="off"
                     onChange={(e) => setKeyword(e.target.value)}
                     className="dark:bg-dark-third bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-base mb-2 "
                   />
-                  {isOpenFriendList && (
+                  {isOpenUserList && (
                     <>
                       <div className="animate-fadeIn absolute top-full bg-white dark:bg-dark-secondary dark:border-dark-hover border border-gray-300 border-opacity-50 rounded-lg w-full py-2 md:py-4 md:px-8 px-6 space-y-1 max-h-36 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl">
                         <h4 className="font-semibold mb-2 dark:text-gray-200">
                           Friend list
                         </h4>
-                        {friendList
+                        {userList
                           .filter(
                             (x) =>
                               (x.fullName
@@ -195,7 +189,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                                 x.userName
                                   ?.toLowerCase()
                                   .includes(keyword?.toLowerCase())) &&
-                              !selectedFriendList.some(
+                              !selectedUsers.some(
                                 (selected) => selected.userName === x.userName,
                               ),
                           )
@@ -203,14 +197,14 @@ function CreateChat({ isOpen, setIsOpen }) {
                           .map((friend, index) => (
                             <div
                               onClick={() => {
-                                var result = [...selectedFriendList];
+                                var result = [...selectedUsers];
                                 if (
                                   !result.some(
                                     (x) => x.userName === friend.userName,
                                   )
                                 ) {
                                   result.push(friend);
-                                  setSelectedFriendList(result);
+                                  setSelectedUsers(result);
                                 }
                               }}
                               key={index + friend?.userName}
@@ -242,18 +236,18 @@ function CreateChat({ isOpen, setIsOpen }) {
                   </span>
                 </label>
                 <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none">
-                  {selectedFriendList
+                  {selectedUsers
                     .sort((a, b) => a.fullName.localeCompare(b.fullName))
                     .map((friend, index) => (
                       <div
                         onClick={() => {
-                          var result = [...selectedFriendList];
+                          var result = [...selectedUsers];
                           var i = result.findIndex(
                             (x) => x.userName === friend.userName,
                           );
                           if (i >= 0) {
                             result.splice(i, 1);
-                            setSelectedFriendList(result);
+                            setSelectedUsers(result);
                           }
                         }}
                         key={index + friend?.userName}
@@ -284,21 +278,21 @@ function CreateChat({ isOpen, setIsOpen }) {
                 <input
                   id="selectFriend"
                   type="search"
-                  onFocus={() => setIsOpenFriendList(true)}
+                  onFocus={() => setIsOpenUserList(true)}
                   value={keyword}
                   autoComplete="off"
                   onChange={(e) => setKeyword(e.target.value)}
                   className="dark:bg-dark-third bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-base mb-2 "
                 />
-                {isOpenFriendList && (
+                {isOpenUserList && (
                   <>
                     <div className="animate-fadeIn absolute top-full bg-white dark:bg-dark-secondary border border-gray-400 border-opacity-50 rounded-lg w-full space-y-1 max-h-36 md:max-h-72 overflow-y-auto select-none z-10 shadow-2xl py-2 md:py-4 md:px-8 px-6">
                       <h4 className="font-semibold mb-2 text-start dark:text-gray-200">
                         Friend list
                       </h4>
-                      {friendList
-                        .sort((a, b) => a.fullName.localeCompare(b.fullName))
-                        .filter(
+                      {userList
+                        ?.sort((a, b) => a.fullName.localeCompare(b.fullName))
+                        ?.filter(
                           (x) =>
                             (x.fullName
                               ?.toLowerCase()
@@ -306,7 +300,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                               x.userName
                                 ?.toLowerCase()
                                 .includes(keyword?.toLowerCase())) &&
-                            !selectedFriendList.some(
+                            !selectedUsers.some(
                               (selected) => selected.userName === x.userName,
                             ),
                         )
@@ -315,8 +309,8 @@ function CreateChat({ isOpen, setIsOpen }) {
                             onClick={() => {
                               var result = [];
                               result.push(friend);
-                              setIsOpenFriendList(false);
-                              setSelectedFriendList(result);
+                              setIsOpenUserList(false);
+                              setSelectedUsers(result);
                             }}
                             key={index + friend?.userName}
                             className="h-full w-full rounded-lg px-3 py-2 flex items-center space-x-2  dark:bg-dark-third bg-gray-100 hover:bg-green-200 dark:hover:bg-green-600 cursor-pointer transform active:scale-100 hover:scale-105 hover:shadow-xl transition-all duration-300 ease-in-out"
@@ -346,18 +340,18 @@ function CreateChat({ isOpen, setIsOpen }) {
                   </span>
                 </label>
                 <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover border-gray-400 border-opacity-50 rounded-lg w-full py-4 md:px-8 px-6 space-y-1 max-h-48 md:max-h-72 overflow-y-auto select-none ">
-                  {[...selectedFriendList].map((friend, index) => {
+                  {[...selectedUsers].map((friend, index) => {
                     if (index === 0) {
                       return (
                         <div
                           onClick={() => {
-                            var result = [...selectedFriendList];
+                            var result = [...selectedUsers];
                             var i = result.findIndex(
                               (x) => x.userName === friend.userName,
                             );
                             if (i >= 0) {
                               result.splice(i, 1);
-                              setSelectedFriendList(result);
+                              setSelectedUsers(result);
                             }
                           }}
                           key={index + friend?.userName}

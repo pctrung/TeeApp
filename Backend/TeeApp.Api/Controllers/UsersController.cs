@@ -2,12 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TeeApp.Application.Interfaces;
+using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.RequestModels.Users;
+using TeeApp.Models.ViewModels;
 
 namespace TeeApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -17,73 +20,33 @@ namespace TeeApp.Api.Controllers
             _userService = userService;
         }
 
-        [HttpGet("{userName}/isExists")]
-        public async Task<IActionResult> CheckUserExistsAsync(string userName)
-        {
-            var result = await _userService.CheckUserNameExistsAsync(userName);
-
-            return Ok(new { isExists = result });
-        }
-
-        [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
-        {
-            var result = await _userService.RegisterAsync(request);
-            if (result.Succeeded)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                var message = "";
-                foreach (var error in result.Errors)
-                {
-                    message = error.Description;
-                    break;
-                }
-                return BadRequest(message);
-            }
-        }
-
-        [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest request)
-        {
-            var result = await _userService.LoginAsync(request);
-            if (result != null)
-            {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest("Username or password is incorrect");
-            }
-        }
-
         [HttpGet]
         [Authorize]
-        public async Task<IActionResult> GetFriendListAsync()
+        public async Task<IActionResult> GetUserList([FromQuery] PaginationRequestBase request)
         {
-            var result = await _userService.GetFriendListAsync();
+            var result = await _userService.GetUserListPaginationAsync(request);
+            return Ok(result);
+        }
 
+        [HttpGet("{userName}")]
+        [Authorize]
+        public async Task<ActionResult<UserViewModel>> GetByUserName(string userName)
+        {
+            var result = await _userService.GetByUserName(userName);
             return Ok(result);
         }
 
         [HttpGet("current")]
         [Authorize]
-        public async Task<IActionResult> GetCurrentUserAsync()
+        public ActionResult<UserViewModel> GetCurrentUser()
         {
-            var result = await _userService.GetCurrentUserAsync();
-
-            return result.StatusCode switch
-            {
-                200 => Ok(result.Data),
-                _ => BadRequest(result.Message),
-            };
+            var result = _userService.GetCurrentUser();
+            return Ok(result);
         }
 
         [HttpPut]
         [Authorize]
-        public async Task<IActionResult> UpdateUserAsync([FromForm] UpdateUserRequest request)
+        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserRequest request)
         {
             var result = await _userService.UpdateUserAsync(request);
 

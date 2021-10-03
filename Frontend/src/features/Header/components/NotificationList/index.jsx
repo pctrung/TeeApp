@@ -1,7 +1,7 @@
 import { readAllNotification, readNotificationById } from "app/appSlice";
 import Pagination from "components/Pagination";
-import useNotificationApi from "hooks/useNotificationApi";
-import useNotificationPagination from "hooks/useNotificationPagination";
+import useNotificationApi from "hooks/api/useNotificationApi";
+import useNotificationPagination from "hooks/pagination/useNotificationPagination";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";

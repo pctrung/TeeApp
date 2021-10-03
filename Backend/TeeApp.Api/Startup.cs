@@ -74,6 +74,7 @@ namespace TeeApp.Api
             services.AddTransient<UserManager<User>, UserManager<User>>();
             services.AddTransient<SignInManager<User>, SignInManager<User>>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IChatService, ChatService>();
             services.AddTransient<ICurrentUser, CurrentUser>();
             services.AddTransient<IStorageService, StorageService>();

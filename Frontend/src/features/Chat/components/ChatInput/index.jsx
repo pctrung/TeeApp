@@ -3,7 +3,7 @@ import ImageIcon from "assets/icons/image-icon.svg";
 import SendIconNormal from "assets/icons/send-icon.svg";
 import ClickableIcon from "components/ClickableIcon";
 import Picker from "emoji-picker-react";
-import useChatApi from "hooks/useChatApi";
+import useChatApi from "hooks/api/useChatApi";
 import PropTypes from "prop-types";
 import React, { useRef, useState } from "react";
 

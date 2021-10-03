@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import usePostApi from "hooks/usePostApi";
+import usePostApi from "hooks/api/usePostApi";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPost, refreshPost } from "app/postSlice";
 

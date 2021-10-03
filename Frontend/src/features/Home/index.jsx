@@ -1,6 +1,6 @@
 import Pagination from "components/Pagination";
 import SideBar from "features/Home/components/SideBar";
-import usePostPagination from "hooks/usePostPagination";
+import usePostPagination from "hooks/pagination/usePostPagination";
 import React, { useState } from "react";
 import CreatePost from "./components/CreatePost";
 import Post from "./components/Post";

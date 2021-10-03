@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useNotificationApi from "hooks/useNotificationApi";
+import useNotificationApi from "hooks/api/useNotificationApi";
 import { loadNotification, refreshNotification } from "app/appSlice";
 import { useDispatch, useSelector } from "react-redux";
 

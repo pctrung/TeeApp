@@ -1,5 +1,5 @@
 import Button from "components/Button";
-import { useDisableBodyScroll } from "hooks/useDisableBodyScroll";
+import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 import PropTypes from "prop-types";
 import React from "react";
 

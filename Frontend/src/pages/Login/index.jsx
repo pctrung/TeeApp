@@ -2,7 +2,7 @@ import LoginPageImage from "assets/img/login-page.svg";
 import Button from "components/Button";
 import Input from "components/Input";
 import Loader from "components/Loader";
-import useUserApi from "hooks/useUserApi";
+import useAccountApi from "hooks/api/useAccountApi";
 import Logo from "logo-shadow.png";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -14,7 +14,7 @@ function Login() {
   const [isDirty, setIsDirty] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const userApi = useUserApi();
+  const accountApi = useAccountApi();
 
   useEffect(() => {
     if (username && password) {
@@ -29,7 +29,7 @@ function Login() {
     const request = { username, password };
     setError("");
 
-    await userApi
+    await accountApi
       .login(request)
       .then((response) => {
         window.localStorage.setItem("token", response);

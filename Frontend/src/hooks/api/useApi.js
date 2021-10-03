@@ -76,6 +76,7 @@ export default function useApi() {
       if (!message.toLowerCase().includes("username or password")) {
         openPopup(popupTitle, message);
       }
+      history?.push("/ServerError");
       return Promise.reject(error?.response?.data);
     },
   );

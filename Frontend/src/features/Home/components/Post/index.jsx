@@ -1,8 +1,8 @@
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
-import { useCloseOnClickOutside } from "hooks/useCloseOnClickOutside";
-import usePostApi from "hooks/usePostApi";
+import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
+import usePostApi from "hooks/api/usePostApi";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -17,11 +17,13 @@ import {
 import { groupBy } from "utils/ExtensionMethod";
 import CommentInput from "../CommentInput";
 import CommentList from "../CommentList";
+import EditPost from "../EditPost";
 import PhotoList from "../PhotoList";
 import ReactionInput from "../ReactionInput";
 
 function Post({ post }) {
   const currentUser = useSelector((state) => state.users.currentUser);
+  const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenReaction, setIsOpenReaction] = useState(false);
   const [isOpenCommentList, setIsOpenCommentList] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -41,11 +43,13 @@ function Post({ post }) {
     } else if (reacted && reacted.type !== ReactionType.LIKE) {
       postApi.updateReaction(post.id, { type: ReactionType.LIKE });
     }
+    setIsOpenReaction(false);
   };
   const deleteReaction = () => {
     if (reacted) {
       postApi.deleteReaction(post.id);
     }
+    setIsOpenReaction(false);
   };
   const topThreeReaction = (post) => {
     const group = groupBy(post.reactions, ["type"]);
@@ -82,7 +86,10 @@ function Post({ post }) {
           confirmButtonAction={() => deletePost()}
         />
       )}
-      <div className="py-4 px-5 bg-white dark:bg-dark-secondary border dark:border-dark-hover w-full flex flex-col justify-start items-start space-y-4 rounded-xl shadow">
+      {isOpenEdit && (
+        <EditPost post={post} isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} />
+      )}
+      <div className="py-4 px-5 bg-white dark:bg-dark-secondary border dark:border-dark-hover w-full flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
         <div className="flex justify-between items-center w-full">
           <div className="flex space-x-2">
             <Link
@@ -124,7 +131,10 @@ function Post({ post }) {
               />
               {isOpenMenu && (
                 <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-48 rounded-lg shadow-lg overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
-                  <button className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third">
+                  <button
+                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                    onClick={() => setIsOpenEdit(true)}
+                  >
                     <i className="text-center-middle bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                     <span>Edit post</span>
                   </button>
@@ -150,7 +160,7 @@ function Post({ post }) {
           </div>
         )}
 
-        <div className="flex justify-between w-full text-xs text-gray-500 hover:underline">
+        <div className="flex justify-between w-full text-xs text-gray-500 hover:underline pt-2">
           <div className="cursor-pointer flex space-x-1">
             <div className="flex">
               {topThreeType &&
@@ -204,18 +214,15 @@ function Post({ post }) {
             {reacted ? (
               <>
                 <div
-                  className="w-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                  className="w-full p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
                   onClick={deleteReaction}
                 >
                   <div className="flex-center space-x-2">
-                    <div className="w-5">
-                      <img
-                        src={ReactionIcon[reacted.type]}
-                        alt={ReactionName[reacted.type]}
-                        className="animate-popup w-full h-full"
-                      />
-                    </div>
-
+                    <img
+                      src={ReactionIcon[reacted.type]}
+                      alt={ReactionName[reacted.type]}
+                      className="animate-popup w-5 h-5"
+                    />
                     <span className={ReactionColor[reacted.type]}>
                       {ReactionName[reacted.type]}
                     </span>
@@ -224,26 +231,22 @@ function Post({ post }) {
               </>
             ) : (
               <div
-                className="w-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                className="w-full p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
                 onClick={addLike}
               >
                 <span>
-                  <i className="bx bx-like mr-2 text-lg align-middle mb-1"></i>
+                  <i className="bx bx-like mr-2 text-lg align-middle"></i>
                   Like
                 </span>
               </div>
             )}
           </span>
           <span
-            className="flex-1 p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+            className="flex-1 p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
             onClick={() => setIsOpenCommentList((preState) => !preState)}
           >
             <i className="bx bx-comment mr-2 text-lg align-middle "></i>
             Comment
-          </span>
-          <span className="flex-1 p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base ">
-            <i className="bx bx-share bx-flip-horizontal mr-2 text-lg align-middle"></i>
-            Share
           </span>
         </div>
         <CommentInput postId={post.id} currentUser={currentUser} />
