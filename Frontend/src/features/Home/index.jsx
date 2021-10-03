@@ -33,6 +33,12 @@ function Home() {
             isHasMore={isHasMore}
             loadMoreContent="Load more posts..."
           />
+          {posts?.totalRecords <= 0 && (
+            <div className="text-center py-3">
+              Not found any posts. You should create first post or add more
+              friends
+            </div>
+          )}
         </div>
         <SideBar className="hidden lg:block md:col-span-3 sticky top-20" />
       </div>
