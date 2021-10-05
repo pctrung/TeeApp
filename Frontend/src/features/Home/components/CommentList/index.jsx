@@ -15,11 +15,11 @@ export default function CommentList({
   postId,
 }) {
   const myCommentList = [...comments]
-    .filter((x) => x.creator.userName === currentUser.userName)
+    .filter((x) => x.creator?.userName === currentUser.userName)
     .sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1));
 
   const otherCommentList = [...comments]
-    .filter((x) => x.creator.userName !== currentUser.userName)
+    .filter((x) => x.creator?.userName !== currentUser.userName)
     .sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1));
 
   return (
@@ -150,26 +150,26 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
                 }}
               />
               {isOpenMenu && (
-                <div className="animate-fadeIn transition-base absolute top-7 p-2 w-48 right-3 border border-gray-200 bg-white rounded-lg shadow-lg overflow-hidden dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
+                <div className="animate-fadeIn transition-base absolute top-7 p-1 w-48 right-3 border border-gray-200 bg-white rounded-lg shadow-lg overflow-hidden dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
                   <button
-                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
+                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
                     onClick={() => {
                       setIsEditMode(true);
                       setIsOpenMenu(false);
                     }}
                   >
                     <i className="text-center-middle bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
-                    Edit comment
+                    <span className="text-sm">Edit comment</span>
                   </button>
                   <button
-                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
+                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
                     onClick={() => {
                       setIsOpenConfirm(true);
                       setIsOpenMenu(false);
                     }}
                   >
                     <i className="text-center-middle bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
-                    Delete comment
+                    <span className="text-sm">Delete comment</span>
                   </button>
                 </div>
               )}

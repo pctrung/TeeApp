@@ -225,6 +225,7 @@ function EditPost({ post, isOpen, setIsOpen }) {
                   type="file"
                   multiple
                   onChange={(e) => addFiles(e.target.files)}
+                  accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"
                 />
                 <label
                   htmlFor="imageFiles"

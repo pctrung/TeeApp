@@ -87,11 +87,19 @@ namespace TeeApp.Application.Services
                 return IdentityResult.Failed(
                     new IdentityError()
                     {
-                        Description = "Password and confirm password must be same",
+                        Description = "Password and confirm password must be same.",
                         Code = "400"
                     });
             }
-
+            if (request.DateOfBirth > DateTime.Now)
+            {
+                return IdentityResult.Failed(
+                    new IdentityError()
+                    {
+                        Description = "Please select date of birth smaller than today.",
+                        Code = "400"
+                    });  
+            }
             var user = new User()
             {
                 FirstName = request.FirstName.Trim(),

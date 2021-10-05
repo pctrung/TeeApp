@@ -10,11 +10,25 @@ export const ChatType = {
   PRIVATE: 1,
   GROUP: 2,
 };
-
+export const FriendshipType = {
+  PENDING: 0,
+  ACCEPTED: 1,
+};
+export const RelationType = {
+  FRIEND_REQUEST_TO_ME: 0,
+  FRIEND: 1,
+  FRIEND_REQUEST_BY_ME: 2,
+  NOT_FRIEND: 3,
+};
 export const Gender = {
   MALE: 0,
   FEMALE: 1,
   OTHER: 2,
+};
+export const GenderName = {
+  [Gender.MALE]: "Male",
+  [Gender.FEMALE]: "Female",
+  [Gender.OTHER]: "Other",
 };
 
 export const NotificationType = {

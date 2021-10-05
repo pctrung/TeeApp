@@ -37,6 +37,19 @@ namespace TeeApp.Api.Controllers
             return Ok(result);
         }
 
+        [HttpGet("{userName}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetRelation(string userName)
+        {
+            var result = await _friendService.GetRelationAsync(userName);
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Data),
+                _ => NotFound(result.Message)
+            };
+        }
+
         [HttpGet("/friendRequests")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetFriendRequest([FromQuery] PaginationRequestBase request)

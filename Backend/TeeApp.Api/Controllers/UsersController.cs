@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using TeeApp.Application.Interfaces;
@@ -14,14 +15,15 @@ namespace TeeApp.Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IPostService _postService;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, IPostService postService)
         {
             _userService = userService;
+            _postService = postService;
         }
 
         [HttpGet]
-        [Authorize]
         public async Task<IActionResult> GetUserList([FromQuery] PaginationRequestBase request)
         {
             var result = await _userService.GetUserListPaginationAsync(request);
@@ -29,15 +31,32 @@ namespace TeeApp.Api.Controllers
         }
 
         [HttpGet("{userName}")]
-        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<UserViewModel>> GetByUserName(string userName)
         {
-            var result = await _userService.GetByUserName(userName);
-            return Ok(result);
+            var result = await _userService.GetByUserNameAsync(userName);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound("Not found user.");
+        }
+
+        [HttpGet("{userName}/posts")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetPostsByUserName(string userName, [FromQuery] PaginationRequestBase request)
+        {
+            var result = await _postService.GetByUserNameAsync(userName, request);
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Data),
+                _ => NotFound(result.Message),
+            };
         }
 
         [HttpGet("current")]
-        [Authorize]
         public ActionResult<UserViewModel> GetCurrentUser()
         {
             var result = _userService.GetCurrentUser();
@@ -45,10 +64,33 @@ namespace TeeApp.Api.Controllers
         }
 
         [HttpPut]
-        [Authorize]
-        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserRequest request)
+        public async Task<IActionResult> UpdateInformation(UpdateUserRequest request)
         {
-            var result = await _userService.UpdateUserAsync(request);
+            var result = await _userService.UpdateInformationAsync(request);
+
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Data),
+                _ => BadRequest(result.Message),
+            };
+        }
+
+        [HttpPatch("avatar")]
+        public async Task<IActionResult> UpdateAvatar([FromForm] FileRequest request)
+        {
+            var result = await _userService.UpdateAvatarAsync(request);
+
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Data),
+                _ => BadRequest(result.Message),
+            };
+        }
+
+        [HttpPatch("cover")]
+        public async Task<IActionResult> UpdateCover([FromForm] FileRequest request)
+        {
+            var result = await _userService.UpdateCoverAsync(request);
 
             return result.StatusCode switch
             {

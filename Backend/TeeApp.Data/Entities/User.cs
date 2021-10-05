@@ -11,7 +11,9 @@ namespace TeeApp.Data.Entities
         public string LastName { get; set; }
         public string FullName { get => $"{LastName} {FirstName}"; }
         public string AvatarFileName { get; set; }
+        public string CoverFileName { get; set; }
         public string AboutMe { get; set; }
+        public string NickName { get; set; } 
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
         public DateTime DateCreated { get; set; }

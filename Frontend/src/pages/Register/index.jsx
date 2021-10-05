@@ -33,7 +33,7 @@ function Register() {
     dateOfBirth: yup
       .date()
       .required("Date of Birth is required")
-      .test("checkAge", "Must be less than today", (value) => {
+      .test("checkAge", "Must be smaller than today", (value) => {
         var today = new Date();
         return value < today;
       }),
@@ -255,7 +255,7 @@ function Register() {
               <div className="flex justify-evenly items-center text-center space-x-1 px-5 select-none relative h-full">
                 <label
                   className={
-                    "w-16 cursor-pointer z-20 rounded-lg px-3 transition-base" +
+                    "w-16 flex flex-col py-1 text-sm cursor-pointer z-20 rounded-lg px-3 transition-base space-y-1" +
                     " " +
                     (watch.gender === Gender.MALE.toString()
                       ? "bg-green-500 text-white"
@@ -263,12 +263,12 @@ function Register() {
                   }
                   htmlFor="male"
                 >
-                  ♂<br />
-                  Male
+                  <i className="bx bx-male-sign pt-1 text-lg"></i>
+                  <span>Male</span>
                 </label>
                 <label
                   className={
-                    "w-16 cursor-pointer z-20 rounded-lg px-1 transition-base" +
+                    "w-16 flex flex-col py-1 text-sm cursor-pointer z-20 rounded-lg px-1 transition-base space-y-1" +
                     " " +
                     (watch.gender === Gender.FEMALE.toString()
                       ? "bg-green-500 text-white"
@@ -276,12 +276,12 @@ function Register() {
                   }
                   htmlFor="female"
                 >
-                  ♀<br />
-                  Female
+                  <i className="bx bx-female-sign pt-1 text-lg"></i>
+                  <span>Female</span>
                 </label>
                 <label
                   className={
-                    "w-16 cursor-pointer z-20 rounded-lg px-3 transition-base" +
+                    "w-16 flex flex-col   text-sm cursor-pointer z-20 rounded-lg px-3 transition-base space-y-1" +
                     " " +
                     (watch.gender === Gender.OTHER.toString()
                       ? "bg-green-500 text-white"
@@ -289,8 +289,8 @@ function Register() {
                   }
                   htmlFor="other"
                 >
-                  ⚥<br />
-                  Other
+                  <span className="text-lg">⚥</span>
+                  <span>Other</span>
                 </label>
                 <input
                   hidden

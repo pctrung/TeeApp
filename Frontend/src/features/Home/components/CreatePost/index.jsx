@@ -106,7 +106,7 @@ function CreatePost() {
   }
   return (
     <>
-      <div className="bg-white dark:bg-dark-secondary border dark:border-dark-hover w-full rounded-xl shadow px-4 pt-3 pb-1 space-y-3 divide-y">
+      <div className="max-w-xl md:min-w-500 min-w-400 w-full bg-white dark:bg-dark-secondary border dark:border-dark-hover rounded-xl shadow px-4 pt-3 pb-1 space-y-3 divide-y">
         <div className="flex space-x-2 w-full items-center">
           <Link
             className="font-semibold text-sm cursor-pointer flex-shrink-0"
@@ -247,6 +247,7 @@ function CreatePost() {
                   type="file"
                   multiple
                   onChange={(e) => addFiles(e.target.files)}
+                  accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"
                 />
                 <label
                   htmlFor="imageFiles"

@@ -66,54 +66,39 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public async Task<ApiResult<UserViewModel>> UpdateUserAsync(UpdateUserRequest request)
+        public async Task<ApiResult<UserViewModel>> UpdateInformationAsync(UpdateUserRequest request)
         {
-            var user = await _context.Users.FindAsync(_currentUser.Id);
-            if (user == null)
+            if(request.DateOfBirth > DateTime.Now)
             {
-                return ApiResult<UserViewModel>.BadRequest(null, "Something went wrong. Not found user: " + _currentUser.UserName);
-            }
+                return ApiResult<UserViewModel>.BadRequest(null, "Please select date of birth smaller than today.");
 
-            if (request.Avatar != null)
-            {
-                try
-                {
-                    var fileName = await _storageService.SaveImageAsync(request.Avatar);
-
-                    if (!string.IsNullOrWhiteSpace(fileName))
-                    {
-                        if (!string.IsNullOrWhiteSpace(user.AvatarFileName))
-                        {
-                            var currentFileName = user.AvatarFileName;
-                            await _storageService.DeleteFileAsync(currentFileName);
-                        }
-                        user.AvatarFileName = fileName;
-                    }
-                }
-                catch (Exception e)
-                {
-                    return ApiResult<UserViewModel>.BadRequest(null, e.Message);
-                }
             }
-            user.FirstName = request.FirstName?.Trim() ?? user.FirstName;
-            user.LastName = request.LastName?.Trim() ?? user.LastName;
-            user.AboutMe = request.AboutMe?.Trim() ?? user.AboutMe;
-            user.Gender = request.Gender;
-            user.DateOfBirth = request.DateOfBirth;
+            if(!string.IsNullOrWhiteSpace(request.PhoneNumber.Trim()) && request.PhoneNumber.Trim().Length != 10)
+            { 
+                return ApiResult<UserViewModel>.BadRequest(null, "Invalid phone number.");
+            }
+            _currentUser.FirstName = request.FirstName?.Trim() ?? _currentUser.FirstName;
+            _currentUser.LastName = request.LastName?.Trim() ?? _currentUser.LastName;
+            _currentUser.NickName = request.NickName?.Trim() ?? _currentUser.NickName;
+            _currentUser.AboutMe = request.AboutMe?.Trim();
+            _currentUser.PhoneNumber = request.PhoneNumber?.Trim();
+            _currentUser.Email = request.Email?.Trim() ?? _currentUser.Email;
+            _currentUser.Gender = request.Gender;
+            _currentUser.DateOfBirth = request.DateOfBirth;
 
             await _context.SaveChangesAsync();
 
-            var responseUser = _mapper.Map<UserViewModel>(user);
+            var responseUser = _mapper.Map<UserViewModel>(_currentUser);
 
             return ApiResult<UserViewModel>.Ok(responseUser, "Update info successfully!");
-        }
+        } 
 
         public UserViewModel GetCurrentUser()
         {
             return _mapper.Map<UserViewModel>(_currentUser);
         }
 
-        public async Task<UserViewModel> GetByUserName(string userName)
+        public async Task<UserViewModel> GetByUserNameAsync(string userName)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
             if (user == null || IsBlocked(user))
@@ -128,6 +113,68 @@ namespace TeeApp.Application.Services
         private bool IsBlocked(User user)
         {
             return _currentUser.BlockedByUsers.Contains(user) || _currentUser.BlockedUsers.Contains(user);
+        }
+
+        public async Task<ApiResult<UserViewModel>> UpdateAvatarAsync(FileRequest request)
+        {
+            if (request.File != null)
+            {
+                try
+                {
+                    var fileName = await _storageService.SaveImageAsync(request.File);
+
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        if (!string.IsNullOrWhiteSpace(_currentUser.AvatarFileName))
+                        {
+                            var currentFileName = _currentUser.AvatarFileName;
+                            await _storageService.DeleteFileAsync(currentFileName);
+                        }
+                        _currentUser.AvatarFileName = fileName;
+
+                        await _context.SaveChangesAsync();
+                        var responseUser = _mapper.Map<UserViewModel>(_currentUser);
+
+                        return ApiResult<UserViewModel>.Ok(responseUser, "Update info successfully!");
+                    }
+                }
+                catch (Exception e)
+                {
+                    return ApiResult<UserViewModel>.BadRequest(null, e.Message);
+                }
+            }
+            return ApiResult<UserViewModel>.BadRequest(null);
+        }
+
+        public async Task<ApiResult<UserViewModel>> UpdateCoverAsync(FileRequest request)
+        {
+            if (request.File != null)
+            {
+                try
+                {
+                    var fileName = await _storageService.SaveImageAsync(request.File);
+
+                    if (!string.IsNullOrWhiteSpace(fileName))
+                    {
+                        if (!string.IsNullOrWhiteSpace(_currentUser.CoverFileName))
+                        {
+                            var currentFileName = _currentUser.CoverFileName;
+                            await _storageService.DeleteFileAsync(currentFileName);
+                        }
+                        _currentUser.CoverFileName = fileName;
+
+                        await _context.SaveChangesAsync();
+                        var responseUser = _mapper.Map<UserViewModel>(_currentUser);
+
+                        return ApiResult<UserViewModel>.Ok(responseUser, "Update info successfully!");
+                    }
+                }
+                catch (Exception e)
+                {
+                    return ApiResult<UserViewModel>.BadRequest(null, e.Message);
+                }
+            }
+            return ApiResult<UserViewModel>.BadRequest(null);
         }
     }
 }

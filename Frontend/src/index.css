@@ -7,53 +7,50 @@
 
   /* width */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 10px;
     transition: all 0.2s ease-in-out;
   }
 
   /* Track */
   ::-webkit-scrollbar-track {
-    border-radius: 100vh;
     transition: all 0.2s ease-in-out;
   }
 
   /* Handle */
   ::-webkit-scrollbar-thumb {
-    background: #e9eaee;
     border-radius: 100vh;
-    border: 0px solid #edf2f7;
     transition: all 0.2s ease-in-out;
+    background: #c1c1c1;
   }
-
   /* Handle on hover */
   ::-webkit-scrollbar-thumb:hover {
-    background: #e2e3e8;
     transition: all 0.2s ease-in-out;
+    background: #adacac;
   }
   ::-webkit-scrollbar-thumb:active {
-    background: #dadadf;
     transition: all 0.2s ease-in-out;
+    background: #9c9a9a;
   }
 
   /* Dark mode */
 
+  /* Track */
+  .dark ::-webkit-scrollbar-track {
+    background: #242526;
+  }
   /* Handle */
   .dark ::-webkit-scrollbar-thumb {
-    background: #242526;
-    border-radius: 100vh;
-    border: 0px solid #edf2f7;
+    background: #939596;
     transition: all 0.2s ease-in-out;
   }
-
   /* Handle on hover */
   .dark ::-webkit-scrollbar-thumb:hover {
-    background: #454849;
+    background: #7a7c7d;
     transition: all 0.2s ease-in-out;
   }
   /* Handle on active */
   .dark ::-webkit-scrollbar-thumb:active {
-    background: #3a3b3c;
+    background: #6a6d6e;
     transition: all 0.2s ease-in-out;
   }
 
@@ -77,6 +74,13 @@
     text-overflow: ellipsis;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
+  .max-row-3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* number of lines to show */
     -webkit-box-orient: vertical;
   }
 }

@@ -10,10 +10,14 @@ namespace TeeApp.Application.Interfaces
     {
         Task<PagedResult<UserViewModel>> GetUserListPaginationAsync(PaginationRequestBase request);
 
-        Task<UserViewModel> GetByUserName(string userName);
+        Task<UserViewModel> GetByUserNameAsync(string userName);
 
         UserViewModel GetCurrentUser();
 
-        Task<ApiResult<UserViewModel>> UpdateUserAsync(UpdateUserRequest request);
+        Task<ApiResult<UserViewModel>> UpdateInformationAsync(UpdateUserRequest request);
+
+        Task<ApiResult<UserViewModel>> UpdateAvatarAsync(FileRequest request);
+
+        Task<ApiResult<UserViewModel>> UpdateCoverAsync(FileRequest request);
     }
 }

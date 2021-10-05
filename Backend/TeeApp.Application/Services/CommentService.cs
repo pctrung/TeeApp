@@ -97,15 +97,26 @@ namespace TeeApp.Application.Services
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
-            if (post == null)
+            if (post == null || IsBlocked(post.Creator))
             {
                 return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
             }
-
-            if (IsBlocked(post.Creator))
+            if (!post.Creator.Id.Equals(_currentUser.Id))
             {
-                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post.");
+                switch (post.Privacy)
+                {
+                    case PrivacyType.Private:
+                        return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
+
+                    case PrivacyType.Friend:
+                        if (!IsMyFriend(post.Creator))
+                        {
+                            return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
+                        }
+                        break;
+                }
             }
+
             var comment = new Comment()
             {
                 Content = request.Content,
@@ -144,14 +155,24 @@ namespace TeeApp.Application.Services
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
-            if (post == null)
+            if (post == null || IsBlocked(post.Creator))
             {
                 return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
             }
-
-            if (IsBlocked(post.Creator))
+            if (!post.Creator.Id.Equals(_currentUser.Id))
             {
-                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post.");
+                switch (post.Privacy)
+                {
+                    case PrivacyType.Private:
+                        return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
+
+                    case PrivacyType.Friend:
+                        if (!IsMyFriend(post.Creator))
+                        {
+                            return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
+                        }
+                        break;
+                }
             }
 
             var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);
@@ -191,14 +212,24 @@ namespace TeeApp.Application.Services
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
-            if (post == null)
+            if (post == null || IsBlocked(post.Creator))
             {
                 return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
             }
-
-            if (IsBlocked(post.Creator))
+            if (!post.Creator.Id.Equals(_currentUser.Id))
             {
-                return ApiResult<CommentResponse>.BadRequest(null, "Cannot comment this post.");
+                switch (post.Privacy)
+                {
+                    case PrivacyType.Private:
+                        return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
+
+                    case PrivacyType.Friend:
+                        if (!IsMyFriend(post.Creator))
+                        {
+                            return ApiResult<CommentResponse>.NotFound(null, "Not found this post.");
+                        }
+                        break;
+                }
             }
 
             var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);

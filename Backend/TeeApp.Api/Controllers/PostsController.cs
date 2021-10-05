@@ -46,14 +46,6 @@ namespace TeeApp.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("myPosts")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<PagedResult<PostViewModel>>> GetMyPosts([FromQuery] PaginationRequestBase request)
-        {
-            var result = await _postService.GetMyPostsPaginationAsync(request);
-            return Ok(result);
-        }
-
         [HttpGet("{postId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]

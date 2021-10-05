@@ -17,6 +17,13 @@ export default function usePostApi() {
       const url = `${baseApiUrl}`;
       return Api.get(url, { params });
     },
+    getByUserName: (userName, params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.POST };
+      }
+      const url = `users/${userName}/posts`;
+      return Api.get(url, { params });
+    },
     getById: (id) => {
       const url = `${baseApiUrl}/${id}`;
       return Api.get(url);

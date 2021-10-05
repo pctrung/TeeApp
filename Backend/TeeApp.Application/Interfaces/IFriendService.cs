@@ -10,6 +10,8 @@ namespace TeeApp.Application.Interfaces
     {
         Task<PagedResult<FriendshipViewModel>> GetFriendsPaginationAsync(PaginationRequestBase request);
 
+        Task<ApiResult<RelationViewModel>> GetRelationAsync(string userName);
+
         Task<PagedResult<FriendshipViewModel>> GetFriendRequestsPaginationAsync(PaginationRequestBase request);
 
         Task<PagedResult<FriendshipViewModel>> GetRequestedPaginationAsync(PaginationRequestBase request);

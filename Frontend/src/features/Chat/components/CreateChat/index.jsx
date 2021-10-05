@@ -21,7 +21,7 @@ function CreateChat({ isOpen, setIsOpen }) {
   const [selectedUsers, setSelectedUsers] = useState([]);
 
   const ref = useRef();
-  const friendListRef = useRef();
+  const userListRef = useRef();
 
   const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ function CreateChat({ isOpen, setIsOpen }) {
   useDisableBodyScroll(isOpen);
   useEscToClose(setIsOpen);
   useCloseOnClickOutside(isOpen, setIsOpen, ref);
-  useCloseOnClickOutside(isOpenUserList, setIsOpenUserList, isOpenUserList);
+  useCloseOnClickOutside(isOpenUserList, setIsOpenUserList, userListRef);
 
   useEffect(() => {
     userApi.getUserList().then((response) => {
@@ -157,7 +157,7 @@ function CreateChat({ isOpen, setIsOpen }) {
                   className="dark:bg-dark-third bg-gray-100 rounded-lg w-full py-2 px-3 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-base mb-2 "
                 />
               </div>
-              <div ref={friendListRef} className="space-y-2">
+              <div ref={userListRef} className="space-y-2">
                 <label
                   htmlFor="search"
                   className="font-semibold text-base md:text-lg dark:text-gray-200"
@@ -267,7 +267,7 @@ function CreateChat({ isOpen, setIsOpen }) {
               </div>
             </>
           ) : (
-            <div ref={friendListRef} className="space-y-2">
+            <div ref={userListRef} className="space-y-2">
               <label
                 htmlFor="selectFriend"
                 className="font-semibold md:text-lg dark:text-gray-200"

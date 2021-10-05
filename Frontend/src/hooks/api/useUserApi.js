@@ -21,9 +21,14 @@ export default function useUserApi() {
       const url = `${baseApiUrl}/${userName}`;
       return Api.get(url);
     },
-    updateUser: (content) => {
+    updateInformation: (content) => {
       dispatch(setIsLoading(true));
       const url = `${baseApiUrl}`;
+      return Api.put(url, content);
+    },
+    updateAvatar: (content) => {
+      dispatch(setIsLoading(true));
+      const url = `${baseApiUrl}/avatar`;
       Api.interceptors.request.use(async (config) => {
         var token = window.localStorage.getItem("token");
         var newConfig = {};
@@ -38,7 +43,26 @@ export default function useUserApi() {
         }
         return newConfig;
       });
-      return Api.put(url, content);
+      return Api.patch(url, content);
+    },
+    updateCover: (content) => {
+      dispatch(setIsLoading(true));
+      const url = `${baseApiUrl}/cover`;
+      Api.interceptors.request.use(async (config) => {
+        var token = window.localStorage.getItem("token");
+        var newConfig = {};
+        if (token) {
+          newConfig = {
+            ...config,
+            headers: {
+              "content-type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          };
+        }
+        return newConfig;
+      });
+      return Api.patch(url, content);
     },
   };
   return userApi;

@@ -11,7 +11,7 @@ namespace TeeApp.Application.Interfaces
     {
         Task<PagedResult<PostViewModel>> GetAllPaginationAsync(PaginationRequestBase request);
 
-        Task<PagedResult<PostViewModel>> GetMyPostsPaginationAsync(PaginationRequestBase request);
+        Task<ApiResult<PagedResult<PostViewModel>>> GetByUserNameAsync(string userName, PaginationRequestBase request);
 
         Task<ApiResult<PostViewModel>> GetByIdAsync(int postId);
 

@@ -16,7 +16,7 @@ import usePostApi from "hooks/api/usePostApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import useAccountApi from "hooks/api/useAccountApi";
 
-function Header() {
+function Header({ className }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -118,8 +118,14 @@ function Header() {
           confirmButtonAction={confirmModal.confirmButtonAction}
         />
       )}
-      <div className="fixed top-0 bg-white dark:bg-dark-secondary dark:text-white w-screen p-2 shadow z-20">
-        <div className="container mx-auto flex justify-between items-center">
+      <div
+        className={
+          "bg-white dark:bg-dark-secondary dark:text-white p-2 shadow border-b dark:border-dark-hover z-20" +
+          " " +
+          className
+        }
+      >
+        <div className="max-full md:max-w-screen-md lg:max-w-screen-lg mx-auto flex justify-between items-center">
           <div className="md:flex hidden space-x-4 flex-shrink-0">
             <Link to="/">
               <img src={Logo} alt="Logo" className="h-10 w-10 cursor-pointer" />
@@ -144,10 +150,11 @@ function Header() {
                 <div
                   key={nav.route}
                   className={
-                    "relative group " +
+                    "relative group border-b-4 border-transparent" +
+                    " " +
                     (nav.isMobile ? "block md:hidden" : "") +
                     " " +
-                    (isCurrentRoute ? " border-b-4 border-green-500" : "")
+                    (isCurrentRoute ? " border-green-500" : "")
                   }
                   onClick={() => goTo(nav.route, isCurrentRoute)}
                 >
@@ -166,7 +173,12 @@ function Header() {
           </div>
           <ul className="flex items-center space-x-2" ref={ref}>
             <li
-              className="active:transform active:scale-95 p-1 h-full rounded-full flex items-center dark:hover:bg-dark-third hover:bg-gray-200 transition-base cursor-pointer select-none mr-3"
+              className={
+                "active:transform active:scale-95 p-1 h-full rounded-full flex items-center  transition-base cursor-pointer select-none mr-3 " +
+                (location.pathname.substring(0, 8) === "/profile"
+                  ? "dark:bg-green-600 dark:bg-opacity-40 bg-green-100 text-green-600 dark:text-green-400 "
+                  : "dark:hover:bg-dark-third hover:bg-gray-200")
+              }
               onClick={() => goToProfile(user.userName)}
             >
               <ImageCircle src={user.avatarUrl} size="sm" />
@@ -248,7 +260,7 @@ function Header() {
                   }}
                 />
                 {isOpenMenu && (
-                  <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
+                  <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
                     <button
                       className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                       onClick={() => setDarkMode(!darkMode)}

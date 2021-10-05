@@ -1,4 +1,5 @@
 import ClickableIcon from "components/ClickableIcon";
+import DefaultImage from "assets/img/default-image.jpg";
 import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 import { useEscToClose } from "hooks/utils/useEscToClose";
 import React, { useEffect, useRef, useState } from "react";
@@ -65,7 +66,7 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
           onClick={previousImage}
           iconClass="bx bxs-chevron-left"
           className={
-            "absolute md:right-10 right-5 animate-swipeUp " +
+            "absolute md:left-10 left-5 animate-swipeUp " +
             (index > 0 ? "" : "hidden")
           }
         />
@@ -83,7 +84,7 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
 
         <img
           ref={imageRef}
-          src={photos[index]?.imageUrl}
+          src={photos[index]?.imageUrl ?? DefaultImage}
           alt={photos[index]?.caption ?? `Post photo ${index}`}
           className="animate-swipeDown max-h-11/12 max-w-full md:max-w-3/4 min-w-2/12 object-contain rounded"
         />

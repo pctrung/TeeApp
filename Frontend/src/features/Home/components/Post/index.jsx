@@ -21,11 +21,11 @@ import EditPost from "../EditPost";
 import PhotoList from "../PhotoList";
 import ReactionInput from "../ReactionInput";
 
-function Post({ post }) {
+function Post({ post, isOpenComment = false }) {
   const currentUser = useSelector((state) => state.users.currentUser);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenReaction, setIsOpenReaction] = useState(false);
-  const [isOpenCommentList, setIsOpenCommentList] = useState(false);
+  const [isOpenCommentList, setIsOpenCommentList] = useState(isOpenComment);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
   const [topThreeType, setTopThreeType] = useState();
@@ -34,7 +34,7 @@ function Post({ post }) {
   const reactionRef = useRef();
 
   const reacted = post?.reactions?.find(
-    (x) => x.creator.userName === currentUser.userName,
+    (x) => x.creator?.userName === currentUser?.userName,
   );
 
   const addLike = () => {
@@ -52,16 +52,18 @@ function Post({ post }) {
     setIsOpenReaction(false);
   };
   const topThreeReaction = (post) => {
-    const group = groupBy(post.reactions, ["type"]);
-    var topThree = [];
-    for (const key in group) {
-      topThree.push({ type: key, total: group[key].length });
+    if (post?.reactions) {
+      const group = groupBy(post.reactions, ["type"]);
+      var topThree = [];
+      for (const key in group) {
+        topThree.push({ type: key, total: group[key].length });
+      }
+      return topThree
+        .sort((a, b) => (a.total > b.total ? 1 : -1))
+        .slice(0, 3)
+        .map((x) => x.type);
     }
-
-    return topThree
-      .sort((a, b) => (a.total > b.total ? 1 : -1))
-      .slice(0, 3)
-      .map((x) => x.type);
+    return [];
   };
   useEffect(() => {
     setTopThreeType(topThreeReaction(post));
@@ -89,28 +91,28 @@ function Post({ post }) {
       {isOpenEdit && (
         <EditPost post={post} isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} />
       )}
-      <div className="py-4 px-5 bg-white dark:bg-dark-secondary border dark:border-dark-hover w-full flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
+      <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-400 w-full mx-auto bg-white dark:bg-dark-secondary border dark:border-dark-hover flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
         <div className="flex justify-between items-center w-full">
           <div className="flex space-x-2">
             <Link
               className="font-semibold text-sm cursor-pointer"
-              to={`/profile/${post.creator.userName}`}
+              to={`/profile/${post?.creator?.userName}`}
             >
               <ImageCircle
-                src={post.creator.avatarUrl}
+                src={post?.creator?.avatarUrl}
                 userName={post?.creator?.userName}
               />
             </Link>
             <div className="flex flex-col justify-evenly">
               <Link
                 className="font-semibold text-sm cursor-pointer hover:underline"
-                to={`/profile/${post.creator.userName}`}
+                to={`/profile/${post?.creator?.userName}`}
               >
-                {post.creator.fullName}
+                {post?.creator?.fullName}
               </Link>
               <Link
                 className="text-xs text-gray-500 dark:text-dark-txt hover:underline space-x-2"
-                to={`/post/${post.id}`}
+                to={`/posts/${post?.id}`}
               >
                 <span>
                   {moment(new Date(post?.dateCreated), "YYYYMMDD")
@@ -130,20 +132,20 @@ function Post({ post }) {
                 onClick={() => setIsOpenMenu(!isOpenMenu)}
               />
               {isOpenMenu && (
-                <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-48 rounded-lg shadow-lg overflow-hidden p-2 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
+                <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-48 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
                   <button
-                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                     onClick={() => setIsOpenEdit(true)}
                   >
                     <i className="text-center-middle bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
-                    <span>Edit post</span>
+                    <span className="text-sm">Edit post</span>
                   </button>
                   <button
-                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                     onClick={() => setIsOpenConfirm(true)}
                   >
                     <i className="text-center-middle bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
-                    <span>Delete post</span>
+                    <span className="text-sm">Delete post</span>
                   </button>
                 </div>
               )}
@@ -151,17 +153,17 @@ function Post({ post }) {
           )}
         </div>
         <span className="text-sm break-words overflow-ellipsis max-w-full">
-          {post.content}
+          {post?.content}
         </span>
 
         {post?.photos?.length > 0 && (
           <div className="w-full max-h-500 cursor-pointer">
-            <PhotoList photos={post.photos} />{" "}
+            <PhotoList photos={post?.photos} />{" "}
           </div>
         )}
 
         <div className="flex justify-between w-full text-xs text-gray-500 hover:underline pt-2">
-          <div className="cursor-pointer flex space-x-1">
+          <div className="cursor-pointer flex">
             <div className="flex">
               {topThreeType &&
                 topThreeType.map((type, index) => (
@@ -249,10 +251,10 @@ function Post({ post }) {
             Comment
           </span>
         </div>
-        <CommentInput postId={post.id} currentUser={currentUser} />
+        <CommentInput postId={post?.id} currentUser={currentUser} />
         <CommentList
-          postId={post.id}
-          comments={post.comments}
+          postId={post?.id}
+          comments={post?.comments}
           isOpen={isOpenCommentList}
           currentUser={currentUser}
         />

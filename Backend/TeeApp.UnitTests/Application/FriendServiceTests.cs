@@ -547,7 +547,7 @@ namespace TeeApp.UnitTests.Application
         }
 
         [Fact]
-        public async Task DeleteFriend_WithNonFriendship_ReturnsNotFound()
+        public async Task DeleteFriend_WithNonFriendship_ReturnsOk()
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -561,7 +561,7 @@ namespace TeeApp.UnitTests.Application
             var result = await friendService.DeleteFriendshipAsync(friendUserName);
 
             // Assert
-            Assert.Equal(404, result.StatusCode);
+            Assert.Equal(200, result.StatusCode);
         }
 
         [Fact]

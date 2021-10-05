@@ -39,7 +39,7 @@ namespace TeeApp.UnitTests.Application
         [Theory]
         [InlineData(3)] // 3 is post id from user blocked current user
         [InlineData(4)] // 4 is post id from user blocked by current user
-        public async Task CreateReaction_WithPostHaveBlockedCreator_ReturnsBadRequest(int postId)
+        public async Task CreateReaction_WithPostHaveBlockedCreator_ReturnsNotFound(int postId)
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -56,7 +56,7 @@ namespace TeeApp.UnitTests.Application
             var result = await service.CreateAsync(postId, request);
 
             // Assert
-            Assert.Equal(400, result.StatusCode);
+            Assert.Equal(404, result.StatusCode);
         }
 
         [Theory]
@@ -129,7 +129,7 @@ namespace TeeApp.UnitTests.Application
         [Theory]
         [InlineData(3)] // 3 is post id from user blocked current user
         [InlineData(4)] // 4 is post id from user blocked by current user
-        public async Task UpdateReaction_WithPostHaveBlockedCreator_ReturnsBadRequest(int postId)
+        public async Task UpdateReaction_WithPostHaveBlockedCreator_ReturnsNotFound(int postId)
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -146,7 +146,7 @@ namespace TeeApp.UnitTests.Application
             var result = await service.UpdateAsync(postId, request);
 
             // Assert
-            Assert.Equal(400, result.StatusCode);
+            Assert.Equal(404, result.StatusCode);
         }
 
         [Theory]
@@ -193,7 +193,7 @@ namespace TeeApp.UnitTests.Application
         [Theory]
         [InlineData(3)] // 3 is post id from user blocked current user
         [InlineData(4)] // 4 is post id from user blocked by current user
-        public async Task DeleteReaction_WithPostHaveBlockedCreator_ReturnsBadRequest(int postId)
+        public async Task DeleteReaction_WithPostHaveBlockedCreator_ReturnsNotFound(int postId)
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -206,7 +206,7 @@ namespace TeeApp.UnitTests.Application
             var result = await service.DeleteAsync(postId);
 
             // Assert
-            Assert.Equal(400, result.StatusCode);
+            Assert.Equal(404, result.StatusCode);
         }
 
         [Theory]

@@ -224,6 +224,7 @@ module.exports = {
       backgroundColor: ["active", "disabled"],
       opacity: ["disabled"],
       display: ["group-hover", "group-focus"],
+      brightness: ["hover", "focus"],
     },
   },
   plugins: [],

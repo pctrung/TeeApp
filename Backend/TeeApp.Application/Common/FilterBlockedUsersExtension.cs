@@ -2,7 +2,6 @@
 using System.Linq;
 using TeeApp.Data.Entities;
 using TeeApp.Models.RequestModels.Common;
-using TeeApp.Utilities.Enums.SortFields;
 using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Application.Common
@@ -12,6 +11,7 @@ namespace TeeApp.Application.Common
         // Filter blocked users for users list
         public static IQueryable<Friendship> FilterBlockedAndRequestWithoutPagination(this IQueryable<Friendship> source, User currentUser, PaginationRequestBase request)
         {
+            request.Keyword = request.Keyword.ToLower();
             var query = source
                 .Where(
                     x =>
@@ -42,6 +42,7 @@ namespace TeeApp.Application.Common
 
         public static IList<User> FilterBlockedAndRequestWithoutPagination(this IList<User> source, User currentUser, PaginationRequestBase request)
         {
+            request.Keyword = request.Keyword.ToLower();
             var query = source
                 .Where(
                     x =>
@@ -65,6 +66,7 @@ namespace TeeApp.Application.Common
 
         public static IQueryable<User> FilterBlockedAndRequestWithoutPagination(this IQueryable<User> source, User currentUser, PaginationRequestBase request)
         {
+            request.Keyword = request.Keyword.ToLower();
             var query = source
                 .Where(
                     x =>
@@ -89,6 +91,7 @@ namespace TeeApp.Application.Common
         // Filter blocked users for post
         public static IQueryable<Post> FilterBlockedAndRequestWithoutPagination(this IQueryable<Post> source, User currentUser, PaginationRequestBase request)
         {
+            request.Keyword = request.Keyword.ToLower();
             var query = source
                 .Where(
                     x =>

@@ -47,6 +47,11 @@ namespace TeeApp.Application.Services
             }
         }
 
+        private bool IsBlocked(User user)
+        {
+            return _currentUser.BlockedByUsers.Contains(user) || _currentUser.BlockedUsers.Contains(user);
+        }
+
         private Friendship GetFriendship(User user)
         {
             return _context.Friendships
@@ -137,16 +142,42 @@ namespace TeeApp.Application.Services
             return result;
         }
 
-        public async Task<PagedResult<PostViewModel>> GetMyPostsPaginationAsync(PaginationRequestBase request)
+        public async Task<ApiResult<PagedResult<PostViewModel>>> GetByUserNameAsync(string userName, PaginationRequestBase request)
         {
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
+            if (user == null || IsBlocked(user))
+            {
+                return ApiResult<PagedResult<PostViewModel>>.NotFound(null, "Not found user.");
+            }
             var posts = await _context.Posts
-                .Where(x => _currentUser.Id.Equals(x.Creator.Id) && x.DateDeleted == null)
-                .Include(x => x.Comments)
-                .Include(x => x.Reactions)
-                .Include(x => x.Photos)
-                .OrderByDescending(x => x.DateCreated)
-                .AsSplitQuery()
-                .ToListAsync();
+            .Where(x => (user.Id.Equals(x.Creator.Id) && x.DateDeleted == null && x.Content.ToLower().Contains(request.Keyword.ToLower())))
+            .Include(x => x.Comments)
+            .Include(x => x.Reactions)
+            .Include(x => x.Photos)
+            .OrderByDescending(x => x.DateCreated)
+            .AsSplitQuery()
+            .ToListAsync();
+
+            posts.ToList().ForEach(post =>
+            {
+                if (!post.Creator.Id.Equals(_currentUser.Id))
+                {
+                    switch (post.Privacy)
+                    {
+                        case PrivacyType.Private:
+                            posts.Remove(post);
+                            return;
+
+                        case PrivacyType.Friend:
+                            if (!IsMyFriend(post.Creator))
+                            {
+                                posts.Remove(post);
+                                return;
+                            }
+                            break;
+                    }
+                }
+            });
 
             var totalRecords = posts.Count;
             var pagedPosts = posts.Paged(request.Page, request.Limit);
@@ -160,7 +191,7 @@ namespace TeeApp.Application.Services
                 Page = request.Page,
                 TotalRecords = totalRecords
             };
-            return result;
+            return ApiResult<PagedResult<PostViewModel>>.Ok(result);
         }
 
         public async Task<ApiResult<PostViewModel>> GetByIdAsync(int postId)
@@ -170,6 +201,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Reactions)
                 .Include(x => x.Comments)
                 .Include(x => x.Photos)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id == postId);
 
             if (post == null)

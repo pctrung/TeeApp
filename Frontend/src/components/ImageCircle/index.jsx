@@ -13,10 +13,12 @@ ImageCircle.propTypes = {
 function ImageCircle({
   src = DefaultAvatar,
   className = "",
+  parentClassName = "",
   alt = "Avatar",
   size = "md",
   userName = "",
   participants,
+  onClick,
 }) {
   const onlineUserNameList = useSelector(
     (state) => state.users.onlineUserNameList,
@@ -52,7 +54,7 @@ function ImageCircle({
       onlineSize = "border-2 w-4 h-4";
       break;
     case "full":
-      onlineSize = "border-2 w-4 h-4";
+      onlineSize = "border-4 w-1/5 h-1/5";
       break;
     default:
       onlineSize = "border-2 md:w-4 md:h-4 h-3 w-3";
@@ -79,8 +81,9 @@ function ImageCircle({
       avatarSize = "h-10 w-10 md:h-12 md:w-12";
   }
   return (
-    <div className="relative flex-shrink-0">
+    <div className={`relative flex-shrink-0 ${parentClassName}`}>
       <img
+        onClick={onClick}
         className={
           avatarSize +
             " " +

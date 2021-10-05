@@ -97,14 +97,24 @@ namespace TeeApp.Application.Services
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
-            if (post == null)
+            if (post == null || IsBlocked(post.Creator))
             {
                 return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
             }
-
-            if (IsBlocked(post.Creator))
+            if (!post.Creator.Id.Equals(_currentUser.Id))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post.");
+                switch (post.Privacy)
+                {
+                    case PrivacyType.Private:
+                        return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
+
+                    case PrivacyType.Friend:
+                        if (!IsMyFriend(post.Creator))
+                        {
+                            return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
+                        }
+                        break;
+                }
             }
 
             // check exists reaction
@@ -153,14 +163,24 @@ namespace TeeApp.Application.Services
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
-            if (post == null)
+            if (post == null || IsBlocked(post.Creator))
             {
                 return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
             }
-
-            if (IsBlocked(post.Creator))
+            if (!post.Creator.Id.Equals(_currentUser.Id))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post.");
+                switch (post.Privacy)
+                {
+                    case PrivacyType.Private:
+                        return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
+
+                    case PrivacyType.Friend:
+                        if (!IsMyFriend(post.Creator))
+                        {
+                            return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
+                        }
+                        break;
+                }
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));
@@ -200,14 +220,24 @@ namespace TeeApp.Application.Services
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
 
-            if (post == null)
+            if (post == null || IsBlocked(post.Creator))
             {
                 return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
             }
-
-            if (IsBlocked(post.Creator))
+            if (!post.Creator.Id.Equals(_currentUser.Id))
             {
-                return ApiResult<ReactionResponse>.BadRequest(null, "Cannot react this post.");
+                switch (post.Privacy)
+                {
+                    case PrivacyType.Private:
+                        return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
+
+                    case PrivacyType.Friend:
+                        if (!IsMyFriend(post.Creator))
+                        {
+                            return ApiResult<ReactionResponse>.NotFound(null, "Not found this post.");
+                        }
+                        break;
+                }
             }
 
             var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));

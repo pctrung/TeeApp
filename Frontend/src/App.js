@@ -27,6 +27,7 @@ import {
   deletePost,
   addNewPost,
 } from "app/postSlice";
+import PostDetail from "pages/PostDetail";
 
 function App(props) {
   const isLoading = useSelector((state) => state.app.isLoading);
@@ -107,13 +108,14 @@ function App(props) {
           />
         )}
         <Chat />
-        <Header />
-        <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-20">
-          <div className="container mx-auto">
+        <Header className="fixed top-0 w-screen" />
+        <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-16 pb-10">
+          <div className="max-full md:max-w-screen-md lg:max-w-screen-lg mx-auto pt-1 md:pt-3">
             <Switch>
               <Route exact path="/Forbid" component={Forbid} />
               <Route exact path="/ServerError" component={ServerError} />
               <Route exact path="/profile/:userName" component={Profile} />
+              <Route exact path="/posts/:postId" component={PostDetail} />
               <Route exact path="/" component={Home} />
               <Route path="*" component={NotFound} />
             </Switch>

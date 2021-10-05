@@ -1,9 +1,10 @@
 ﻿namespace TeeApp.Utilities.Enums.Types
 {
-    public enum FriendListType
+    public enum RelationType
     {
         FriendRequestToMe,
         Friend,
-        FriendRequestByMe
+        FriendRequestByMe,
+        NotFriend
     }
 }

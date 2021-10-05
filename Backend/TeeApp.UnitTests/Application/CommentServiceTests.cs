@@ -39,7 +39,7 @@ namespace TeeApp.UnitTests.Application
         [Theory]
         [InlineData(3)] // 3 is post id from user blocked current user
         [InlineData(4)] // 4 is post id from user blocked by current user
-        public async Task CreateComment_WithPostHaveBlockedCreator_ReturnsBadRequest(int postId)
+        public async Task CreateComment_WithPostHaveBlockedCreator_ReturnsNotFound(int postId)
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -56,7 +56,7 @@ namespace TeeApp.UnitTests.Application
             var result = await service.CreateAsync(postId, request);
 
             // Assert
-            Assert.Equal(400, result.StatusCode);
+            Assert.Equal(404, result.StatusCode);
         }
 
         [Theory]
@@ -131,7 +131,7 @@ namespace TeeApp.UnitTests.Application
         [Theory]
         [InlineData(3, 1)] // 3 is post id from user blocked current user
         [InlineData(4, 1)] // 4 is post id from user blocked by current user
-        public async Task UpdateComment_WithPostHaveBlockedCreator_ReturnsBadRequest(int postId, int commentId)
+        public async Task UpdateComment_WithPostHaveBlockedCreator_ReturnsNotFound(int postId, int commentId)
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -148,7 +148,7 @@ namespace TeeApp.UnitTests.Application
             var result = await service.UpdateAsync(postId, commentId, request);
 
             // Assert
-            Assert.Equal(400, result.StatusCode);
+            Assert.Equal(404, result.StatusCode);
         }
 
         [Theory]
@@ -215,7 +215,7 @@ namespace TeeApp.UnitTests.Application
         [Theory]
         [InlineData(3, 1)] // 3 is post id from user blocked current user
         [InlineData(4, 1)] // 4 is post id from user blocked by current user
-        public async Task DeleteComment_WithPostHaveBlockedCreator_ReturnsBadRequest(int postId, int commentId)
+        public async Task DeleteComment_WithPostHaveBlockedCreator_ReturnsNotFound(int postId, int commentId)
         {
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
@@ -228,7 +228,7 @@ namespace TeeApp.UnitTests.Application
             var result = await service.DeleteAsync(postId, commentId);
 
             // Assert
-            Assert.Equal(400, result.StatusCode);
+            Assert.Equal(404, result.StatusCode);
         }
 
         [Theory]

@@ -5,7 +5,7 @@ using TeeApp.Application.Common;
 using TeeApp.Application.Identity;
 using TeeApp.Data.Entities;
 using TeeApp.Models.ViewModels;
-using TeeApp.Utilities.Constants;
+using TeeApp.Utilities.Constants; 
 
 namespace TeeApp.Api
 {
@@ -19,7 +19,13 @@ namespace TeeApp.Api
             {
                 CreateMap<User, UserViewModel>()
                     .ForMember(des => des.AvatarUrl,
-                    act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.AvatarFileName) ? "" : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.AvatarFileName}")));
+                    act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.AvatarFileName)
+                    ? $"https://{hostUrl}/{SystemConstants.DEFAULT_FOLDER}/{SystemConstants.DEFAULT_AVATAR[src.Gender]}"
+                    : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.AvatarFileName}")))
+                    .ForMember(des => des.CoverUrl,
+                    act => act.MapFrom(src => (string.IsNullOrWhiteSpace(src.CoverFileName)
+                    ? $"https://{hostUrl}/{SystemConstants.DEFAULT_FOLDER}/{SystemConstants.DEFAULT_COVER}"
+                    : $"https://{hostUrl}/{SystemConstants.IMAGE_FOLDER}/{src.CoverFileName}")));
 
                 CreateMap<Chat, ChatViewModel>()
                     .ForMember(

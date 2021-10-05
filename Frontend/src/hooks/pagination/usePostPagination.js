@@ -3,7 +3,7 @@ import usePostApi from "hooks/api/usePostApi";
 import { useDispatch, useSelector } from "react-redux";
 import { loadPost, refreshPost } from "app/postSlice";
 
-export default function usePostPagination(page = 1) {
+export default function usePostPagination(pagination, userName = "") {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const posts = useSelector((state) => state.posts.posts);
@@ -13,25 +13,42 @@ export default function usePostPagination(page = 1) {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (isHasMore) {
+    if ((isHasMore && pagination) || pagination.page === 1) {
       setIsLoading(true);
       setError(false);
-      postApi
-        .getAll({ page })
-        .then((response) => {
-          if (page > 1) {
-            dispatch(loadPost(response));
-          } else {
-            dispatch(refreshPost(response));
-          }
-          setIsHasMore(page < response.pageCount);
-          setIsLoading(false);
-        })
-        .catch((e) => {
-          setError(e);
-        });
+      if (userName) {
+        postApi
+          .getByUserName(userName, { page: pagination.page })
+          .then((response) => {
+            if (pagination.page > 1) {
+              dispatch(loadPost(response));
+            } else {
+              dispatch(refreshPost(response));
+            }
+            setIsHasMore(pagination.page < response.pageCount);
+            setIsLoading(false);
+          })
+          .catch((e) => {
+            setError(e);
+          });
+      } else {
+        postApi
+          .getAll({ page: pagination.page })
+          .then((response) => {
+            if (pagination.page > 1) {
+              dispatch(loadPost(response));
+            } else {
+              dispatch(refreshPost(response));
+            }
+            setIsHasMore(pagination.page < response.pageCount);
+            setIsLoading(false);
+          })
+          .catch((e) => {
+            setError(e);
+          });
+      }
     }
-  }, [page]);
+  }, [pagination]);
 
   return { posts, isLoading, error, isHasMore };
 }

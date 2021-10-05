@@ -9,7 +9,7 @@ namespace TeeApp.Models.RequestModels.Common
     {
         private int _limit;
         private string _keyword;
-        private int _page; 
+        private int _page;
 
         [DefaultValue(1)]
         [Range(0, int.MaxValue, ErrorMessage = "Only positive number allowed")]

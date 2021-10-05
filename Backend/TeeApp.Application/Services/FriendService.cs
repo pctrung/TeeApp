@@ -63,6 +63,44 @@ namespace TeeApp.Application.Services
                 .FirstOrDefaultAsync(x => x.RequestedUserId.Equals(user.Id) && x.RecievedUserId.Equals(_currentUser.Id));
         }
 
+        public async Task<ApiResult<RelationViewModel>> GetRelationAsync(string userName)
+        {
+            var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
+            if (friend == null || IsBlocked(friend))
+            {
+                return ApiResult<RelationViewModel>.NotFound(null, "Not found user.");
+            }
+            var friendship = await GetFriendshipAsync(friend);
+
+            var relation = new RelationViewModel()
+            {
+                IsFollowing = _currentUser.Following.Contains(friend),
+            };
+            if(friendship == null)
+            {
+                relation.RelationType = RelationType.NotFriend;
+            }
+            else
+            {
+                if (friendship.Type == FriendshipType.Pending)
+                {
+                    if (friendship.RequestedUserId.Equals(_currentUser.Id))
+                    {
+                        relation.RelationType = RelationType.FriendRequestByMe;
+                    }
+                    else
+                    {
+                        relation.RelationType = RelationType.FriendRequestToMe;
+                    }
+                }
+                else
+                {
+                    relation.RelationType = RelationType.Friend;
+                }
+            }
+            return ApiResult<RelationViewModel>.Ok(relation);
+        }
+
         public async Task<PagedResult<FriendshipViewModel>> GetFriendsPaginationAsync(PaginationRequestBase request)
         {
             // Filter friend contain keyword on first, last, user name
@@ -306,7 +344,7 @@ namespace TeeApp.Application.Services
 
             if (friendship == null)
             {
-                return ApiResult.NotFound("Not found friendship with " + friend.FullName);
+                return ApiResult.Ok("Not found friendship with " + friend.FullName);
             }
 
             _context.Friendships.Remove(friendship);
