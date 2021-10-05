@@ -158,7 +158,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
                       setIsOpenMenu(false);
                     }}
                   >
-                    <i className="text-center-middle bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
+                    <i className="bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
                     <span className="text-sm">Edit comment</span>
                   </button>
                   <button
@@ -168,7 +168,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
                       setIsOpenMenu(false);
                     }}
                   >
-                    <i className="text-center-middle bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
+                    <i className="bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 mr-2"></i>
                     <span className="text-sm">Delete comment</span>
                   </button>
                 </div>

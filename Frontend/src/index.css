@@ -55,11 +55,6 @@
   }
 
   /* expand css */
-  .text-center-middle::before {
-    text-align: center;
-    vertical-align: middle;
-  }
-
   .transition-base {
     @apply transition-all duration-300 ease-in-out;
   }

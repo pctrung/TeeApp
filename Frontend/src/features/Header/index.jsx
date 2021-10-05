@@ -267,7 +267,7 @@ function Header({ className }) {
                     >
                       <i
                         className={
-                          "text-center-middle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx " +
+                          "text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx " +
                           " " +
                           (darkMode ? " bx-sun" : " bx-moon")
                         }
@@ -280,7 +280,7 @@ function Header({ className }) {
                         openConfirmModal("Do you want to log out?", logout);
                       }}
                     >
-                      <i className="text-center-middle bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                      <i className="bx bx-log-in-circle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                       <span>Log Out</span>
                     </button>
                   </div>

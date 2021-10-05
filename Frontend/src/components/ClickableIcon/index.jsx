@@ -58,7 +58,7 @@ function ClickableIcon({
         ) : (
           <i
             className={
-              "text-center align-middle items text-xl w-7 h-7 text-center-middle " +
+              "text-center align-middle text-xl w-7 h-7 " +
               " " +
               colorIconClass +
               " " +

@@ -281,7 +281,7 @@ function Register() {
                 </label>
                 <label
                   className={
-                    "w-16 flex flex-col   text-sm cursor-pointer z-20 rounded-lg px-3 transition-base space-y-1" +
+                    "w-16 flex flex-col py-1 text-sm cursor-pointer z-20 rounded-lg px-3 transition-base space-y-1" +
                     " " +
                     (watch.gender === Gender.OTHER.toString()
                       ? "bg-green-500 text-white"

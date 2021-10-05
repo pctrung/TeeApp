@@ -11,8 +11,8 @@ namespace TeeApp.Data.Configurations
             builder.ToTable("Users");
             builder.Property(x => x.LastName).HasMaxLength(30).IsRequired();
             builder.Property(x => x.FirstName).HasMaxLength(30).IsRequired();
-            builder.Property(x => x.NickName).HasMaxLength(20).IsRequired();
-            builder.Property(x => x.AboutMe).HasMaxLength(150).IsRequired();
+            builder.Property(x => x.NickName).HasMaxLength(20);
+            builder.Property(x => x.AboutMe).HasMaxLength(150);
             builder.Ignore(x => x.FullName);
 
             builder

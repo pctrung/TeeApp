@@ -37,7 +37,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
       firstName: firstName.substring(0, 30),
       lastName: lastName.substring(0, 30),
       email,
-      nickName: nickName.substring(0, 20),
+      nickName: nickName?.substring(0, 20),
       aboutMe,
       gender,
       dateOfBirth,
@@ -140,7 +140,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             </label>
             <label
               className={
-                "w-16 flex flex-col   text-sm cursor-pointer z-20 rounded-lg px-3 transition-base space-y-1" +
+                "w-16 flex flex-col py-1 text-sm cursor-pointer z-20 rounded-lg px-3 transition-base space-y-1" +
                 " " +
                 (gender === Gender.OTHER ? "bg-green-500 text-white" : "")
               }
@@ -221,7 +221,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
           >
             About Me{" "}
             <span className="font-normal text-sm">
-              ({`${aboutMe.length}/150`})
+              ({`${aboutMe?.length ?? 0}/150`})
             </span>
           </label>
           <textarea
@@ -230,7 +230,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             id="aboutMe"
             value={aboutMe}
             onChange={(e) => {
-              if (aboutMe.length < 150) {
+              if (aboutMe?.length < 150) {
                 setAboutMe(e.target.value);
               }
             }}

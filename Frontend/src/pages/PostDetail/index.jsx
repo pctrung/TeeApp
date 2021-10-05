@@ -30,8 +30,7 @@ function PostDetail() {
           });
       }
     }
-  }, [postId]);
-
+  }, [postId, posts]);
   return (
     <>
       <Post post={post} isOpenComment={true} />

@@ -248,153 +248,156 @@ function Profile() {
         accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"
         onChange={updateCover}
       />
-      <div className="absolute top-5 left-0 right-0 bg-white dark:bg-dark-secondary mt-5 md:mt-10 shadow border-b-2 border-transparent dark:border-dark-third">
-        <div className=" flex flex-col items-center max-w-screen-lg md:px-10 mx-auto z-10">
-          <div className="relative h-60 md:h-80 w-full flex mb-6 select-none">
-            <img
-              src={user?.coverUrl ?? DefaultCover}
-              alt={`${user?.fullName} cover`}
-              className="w-full object-cover rounded-xl cursor-pointer"
-              onClick={() =>
-                openPhotoView([{ imageUrl: user?.coverUrl ?? DefaultCover }])
-              }
-            />
-            {isCurrentUser && (
-              <label
-                htmlFor="cover"
-                className="absolute right-3 bottom-3 flex items-center space-x-2 bg-white bg-opacity-95 rounded-lg p-1 px-2 text-black hover:bg-gray-200 active:bg-gray-300 active:transform active:scale-95 cursor-pointer transition-base text-sm md:text-base"
-              >
-                <i className="bx bxs-camera"></i>
-                <span className="font-semibold">Edit Cover Photo</span>
-              </label>
-            )}
-            <div className="absolute h-44 w-44 rounded-full left-1/2 transform bottom-0 translate-y-5 -translate-x-1/2 border-4 border-white dark:border-dark-secondary ring-4 ring-green-400 dark:ring-green-500 cursor-pointer">
-              <ImageCircle
-                parentClassName="w-full h-full"
-                className="filter hover:brightness-110"
-                src={user?.avatarUrl}
-                userName={isCurrentUser ? "" : user?.userName}
-                size="full"
-                onClick={() => openPhotoView([{ imageUrl: user?.avatarUrl }])}
+      <div className="absolute top-5 left-0 right-0 bg-gray-100 dark:bg-dark-primary">
+        <div className="mt-5 md:mt-10 shadow border-b-2 bg-white dark:bg-dark-secondary border-transparent dark:border-dark-third">
+          <div className=" flex flex-col items-center max-w-screen-lg md:px-10 mx-auto z-10">
+            <div className="relative h-60 md:h-80 w-full flex mb-6 select-none">
+              <img
+                src={user?.coverUrl ?? DefaultCover}
+                alt={`${user?.fullName} cover`}
+                className="w-full object-cover rounded-xl cursor-pointer"
+                onClick={() =>
+                  openPhotoView([{ imageUrl: user?.coverUrl ?? DefaultCover }])
+                }
               />
               {isCurrentUser && (
-                <label htmlFor="avatar">
-                  <ClickableIcon
-                    reverse
-                    className="absolute right-0 bottom-0"
-                    iconClass="bx bxs-camera"
-                  />
+                <label
+                  htmlFor="cover"
+                  className="absolute right-3 bottom-3 flex items-center space-x-2 bg-white bg-opacity-95 rounded-lg p-1 px-2 text-black hover:bg-gray-200 active:bg-gray-300 active:transform active:scale-95 cursor-pointer transition-base text-sm md:text-base"
+                >
+                  <i className="bx bxs-camera"></i>
+                  <span className="font-semibold">Edit Cover Photo</span>
                 </label>
               )}
+              <div className="absolute h-44 w-44 rounded-full left-1/2 transform bottom-0 translate-y-5 -translate-x-1/2 border-4 border-white dark:border-dark-secondary ring-4 ring-green-400 dark:ring-green-500 cursor-pointer">
+                <ImageCircle
+                  parentClassName="w-full h-full"
+                  className="filter hover:brightness-110"
+                  src={user?.avatarUrl}
+                  userName={isCurrentUser ? "" : user?.userName}
+                  size="full"
+                  onClick={() => openPhotoView([{ imageUrl: user?.avatarUrl }])}
+                />
+                {isCurrentUser && (
+                  <label htmlFor="avatar">
+                    <ClickableIcon
+                      reverse
+                      className="absolute right-0 bottom-0"
+                      iconClass="bx bxs-camera"
+                    />
+                  </label>
+                )}
+              </div>
             </div>
-          </div>
-          <div className="w-full mx-4 border-b border-gray-400 dark:border-dark-hover pb-6">
-            <div className="w-full text-center font-bold text-3xl md:text-4xl py-2 max-row-2">
-              {user.fullName}{" "}
-              {user.nickName && (
-                <span className="font-normal text-2xl md:text-3xl">
-                  {`(${user.nickName})`}
-                </span>
+            <div className="w-full mx-4 border-b border-gray-400 dark:border-dark-hover pb-6">
+              <div className="w-full text-center font-bold text-3xl md:text-4xl py-2 max-row-2">
+                {user.fullName}{" "}
+                {user.nickName && (
+                  <span className="font-normal text-2xl md:text-3xl">
+                    {`(${user.nickName})`}
+                  </span>
+                )}
+              </div>
+              <div className="md:max-w-2/3 max-w-11/12 mx-auto text-center max-row-3">
+                {user.aboutMe}
+              </div>
+            </div>
+            <div className="flex self-end justify-end my-3 md:px-2 px-5 space-x-2">
+              {isCurrentUser ? (
+                <>
+                  <Button
+                    onClick={() => setIsOpenEdit((pre) => !pre)}
+                    secondary
+                    className="flex items-center space-x-1"
+                  >
+                    <i className="bx bxs-edit-alt text-2xl"></i>
+                    <span>Edit profile</span>
+                  </Button>
+                </>
+              ) : (
+                <div ref={menuRef} className="relative flex space-x-2">
+                  {relationButton}
+                  <Button
+                    secondary
+                    small
+                    onClick={() => setIsOpenMenu((pre) => !pre)}
+                  >
+                    <i className="bx bx-dots-horizontal-rounded text-2xl align-middle"></i>
+                  </Button>
+                  {isOpenMenu && (
+                    <div className="animate-fadeIn transition-base absolute top-7 p-1 w-44 right-0 border border-gray-200 bg-white rounded-lg shadow-lg overflow-hidden dark:bg-dark-secondary dark:border-dark-hover mt-3 select-none z-10">
+                      <button
+                        className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
+                        onClick={() => {
+                          if (relation.isFollowing) {
+                            unfollow();
+                          } else {
+                            follow();
+                          }
+                        }}
+                      >
+                        <i
+                          className={
+                            "text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 " +
+                            (relation.isFollowing
+                              ? "bx bxs-user-check"
+                              : "bx bxs-user-plus")
+                          }
+                        ></i>
+                        <span>
+                          {relation.isFollowing ? "Unfollow" : "Follow"}
+                        </span>
+                      </button>
+                      <button
+                        className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
+                        onClick={block}
+                      >
+                        <i className="bx bx-block text-lg text-black dark:text-dark-txt w-7 h-7 text-center align-middle"></i>
+                        <span>Block</span>
+                      </button>
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-            <div className="md:max-w-2/3 max-w-11/12 mx-auto text-center max-row-3">
-              {user.aboutMe}
-            </div>
           </div>
-          <div className="flex self-end justify-end my-3 md:px-2 px-5 space-x-2">
-            {isCurrentUser ? (
-              <>
-                <Button
-                  onClick={() => setIsOpenEdit((pre) => !pre)}
-                  secondary
-                  className="flex items-center space-x-1"
-                >
-                  <i className="bx bxs-edit-alt text-2xl"></i>
-                  <span>Edit profile</span>
-                </Button>
-              </>
-            ) : (
-              <div ref={menuRef} className="relative flex space-x-2">
-                {relationButton}
-                <Button
-                  secondary
-                  small
-                  onClick={() => setIsOpenMenu((pre) => !pre)}
-                >
-                  <i className="bx bx-dots-horizontal-rounded text-2xl align-middle"></i>
-                </Button>
-                {isOpenMenu && (
-                  <div className="animate-fadeIn transition-base absolute top-7 p-1 w-44 right-0 border border-gray-200 bg-white rounded-lg shadow-lg overflow-hidden dark:bg-dark-secondary dark:border-dark-hover mt-3 select-none z-10">
-                    <button
-                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
-                      onClick={() => {
-                        if (relation.isFollowing) {
-                          unfollow();
-                        } else {
-                          follow();
-                        }
-                      }}
-                    >
-                      <i
-                        className={
-                          "text-center-middle text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 " +
-                          (relation.isFollowing
-                            ? "bx bxs-user-check"
-                            : "bx bxs-user-plus")
-                        }
-                      ></i>
-                      <span>
-                        {relation.isFollowing ? "Unfollow" : "Follow"}
-                      </span>
-                    </button>
-                    <button
-                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
-                      onClick={block}
-                    >
-                      <i className="bx bx-block text-lg text-black dark:text-dark-txt w-7 h-7 text-center align-middle text-center-middle"></i>
-                      <span>Block</span>
-                    </button>
-                  </div>
-                )}
+        </div>
+        <div className="md:max-w-4xl pt-2 px-2 pb-10 lg:px-0 mx-auto flex flex-col md:flex-row md:items-start items-center justify-center md:space-x-3">
+          <UserInfo
+            className={
+              "md:sticky top-20 left-0 space-y-2 md:space-y-3 " +
+              (isOpenEdit ? "hidden md:block" : "")
+            }
+            user={user}
+          />
+          <div className="max-w-xl w-full mx-auto space-y-2 md:space-y-3">
+            {isOpenEdit && (
+              <EditUser
+                isOpen={isOpenEdit}
+                setIsOpen={setIsOpenEdit}
+                user={user}
+              />
+            )}
+            {isCurrentUser && <CreatePost />}
+            {[...posts?.items]
+              ?.sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1))
+              ?.map((post) => (
+                <Post key={post.id} post={post} />
+              ))}
+            <Pagination
+              loadMoreClassName="bg-gray-200 hover:bg-gray-300"
+              onClick={loadMore}
+              isLoading={isLoading}
+              error={error}
+              isHasMore={isHasMore}
+              loadMoreContent="Load more posts..."
+            />
+            {posts?.totalRecords <= 0 && (
+              <div className="text-center py-3 font-semibold">
+                Not found any posts.
               </div>
             )}
           </div>
-        </div>
-      </div>
-      <div className="mt-96 md:mt-128 md:max-w-4xl md:pt-6 pt-14 mx-auto flex flex-col md:flex-row md:items-start items-center justify-center space-y-2 md:space-y-0 md:space-x-3">
-        <UserInfo
-          className={
-            "md:sticky top-20 left-0 " + (isOpenEdit ? "hidden md:block" : "")
-          }
-          user={user}
-        />
-        <div className="max-w-xl w-full mx-auto space-y-2 md:space-y-3">
-          {isOpenEdit && (
-            <EditUser
-              isOpen={isOpenEdit}
-              setIsOpen={setIsOpenEdit}
-              user={user}
-            />
-          )}
-          {isCurrentUser && <CreatePost />}
-          {[...posts?.items]
-            ?.sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1))
-            ?.map((post) => (
-              <Post key={post.id} post={post} />
-            ))}
-          <Pagination
-            loadMoreClassName="bg-gray-200 hover:bg-gray-300"
-            onClick={loadMore}
-            isLoading={isLoading}
-            error={error}
-            isHasMore={isHasMore}
-            loadMoreContent="Load more posts..."
-          />
-          {posts?.totalRecords <= 0 && (
-            <div className="text-center py-3 font-semibold">
-              Not found any posts.
-            </div>
-          )}
         </div>
       </div>
     </>

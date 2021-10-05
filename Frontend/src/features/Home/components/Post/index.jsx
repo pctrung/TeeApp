@@ -137,14 +137,14 @@ function Post({ post, isOpenComment = false }) {
                     className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                     onClick={() => setIsOpenEdit(true)}
                   >
-                    <i className="text-center-middle bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                    <i className="bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                     <span className="text-sm">Edit post</span>
                   </button>
                   <button
                     className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                     onClick={() => setIsOpenConfirm(true)}
                   >
-                    <i className="text-center-middle bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                    <i className="bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
                     <span className="text-sm">Delete post</span>
                   </button>
                 </div>
