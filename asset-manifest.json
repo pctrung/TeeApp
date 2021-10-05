@@ -1,21 +1,22 @@
 {
   "files": {
-    "main.css": "/TeeApp/static/css/main.2f2391d9.chunk.css",
-    "main.js": "/TeeApp/static/js/main.a851afbe.chunk.js",
-    "main.js.map": "/TeeApp/static/js/main.a851afbe.chunk.js.map",
+    "main.css": "/TeeApp/static/css/main.2f2eb6e7.chunk.css",
+    "main.js": "/TeeApp/static/js/main.0ea1e96e.chunk.js",
+    "main.js.map": "/TeeApp/static/js/main.0ea1e96e.chunk.js.map",
     "runtime-main.js": "/TeeApp/static/js/runtime-main.0609997e.js",
     "runtime-main.js.map": "/TeeApp/static/js/runtime-main.0609997e.js.map",
     "static/css/2.75509a7d.chunk.css": "/TeeApp/static/css/2.75509a7d.chunk.css",
-    "static/js/2.87a3739a.chunk.js": "/TeeApp/static/js/2.87a3739a.chunk.js",
-    "static/js/2.87a3739a.chunk.js.map": "/TeeApp/static/js/2.87a3739a.chunk.js.map",
+    "static/js/2.ddbf0f7a.chunk.js": "/TeeApp/static/js/2.ddbf0f7a.chunk.js",
+    "static/js/2.ddbf0f7a.chunk.js.map": "/TeeApp/static/js/2.ddbf0f7a.chunk.js.map",
     "index.html": "/TeeApp/index.html",
     "static/css/2.75509a7d.chunk.css.map": "/TeeApp/static/css/2.75509a7d.chunk.css.map",
-    "static/css/main.2f2391d9.chunk.css.map": "/TeeApp/static/css/main.2f2391d9.chunk.css.map",
-    "static/js/2.87a3739a.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.87a3739a.chunk.js.LICENSE.txt",
+    "static/css/main.2f2eb6e7.chunk.css.map": "/TeeApp/static/css/main.2f2eb6e7.chunk.css.map",
+    "static/js/2.ddbf0f7a.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.ddbf0f7a.chunk.js.LICENSE.txt",
     "static/media/angry.5d2c62b0.svg": "/TeeApp/static/media/angry.5d2c62b0.svg",
     "static/media/boxicons.min.css": "/TeeApp/static/media/boxicons.c324d2b5.eot",
     "static/media/care.d36c2862.svg": "/TeeApp/static/media/care.d36c2862.svg",
     "static/media/default-avatar.ae67bd1e.jpg": "/TeeApp/static/media/default-avatar.ae67bd1e.jpg",
+    "static/media/default-cover.1aa0fb86.jpg": "/TeeApp/static/media/default-cover.1aa0fb86.jpg",
     "static/media/all.min.css": "/TeeApp/static/media/fa-solid-900.eeccf4f6.woff",
     "static/media/forbid.e276990e.svg": "/TeeApp/static/media/forbid.e276990e.svg",
     "static/media/haha.e568dfbb.svg": "/TeeApp/static/media/haha.e568dfbb.svg",
@@ -35,8 +36,8 @@
   "entrypoints": [
     "static/js/runtime-main.0609997e.js",
     "static/css/2.75509a7d.chunk.css",
-    "static/js/2.87a3739a.chunk.js",
-    "static/css/main.2f2391d9.chunk.css",
-    "static/js/main.a851afbe.chunk.js"
+    "static/js/2.ddbf0f7a.chunk.js",
+    "static/css/main.2f2eb6e7.chunk.css",
+    "static/js/main.0ea1e96e.chunk.js"
   ]
 }
