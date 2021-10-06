@@ -163,8 +163,8 @@ function Post({ post, isOpenComment = false }) {
         )}
 
         <div className="flex justify-between w-full text-xs text-gray-500 hover:underline pt-2">
-          <div className="cursor-pointer flex">
-            <div className="flex">
+          <div className="cursor-pointer flex items-center">
+            <div className="flex items-center">
               {topThreeType &&
                 topThreeType.map((type, index) => (
                   <div
@@ -216,7 +216,7 @@ function Post({ post, isOpenComment = false }) {
             {reacted ? (
               <>
                 <div
-                  className="w-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                  className="w-full p-1 md:p-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
                   onClick={deleteReaction}
                 >
                   <div className="flex-center space-x-2">
@@ -233,7 +233,7 @@ function Post({ post, isOpenComment = false }) {
               </>
             ) : (
               <div
-                className="w-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                className="w-full p-1 md:p-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
                 onClick={addLike}
               >
                 <span>
@@ -244,7 +244,7 @@ function Post({ post, isOpenComment = false }) {
             )}
           </span>
           <span
-            className="flex-1 p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+            className="flex-1 p-1 md:p-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
             onClick={() => setIsOpenCommentList((preState) => !preState)}
           >
             <i className="bx bx-comment mr-2 text-lg align-middle "></i>

@@ -273,7 +273,7 @@ function EditPost({ post, isOpen, setIsOpen }) {
                 disabled={!isValidButton}
                 className="w-full font-semibold"
               >
-                Post
+                Save
               </Button>
             </form>
           </div>
