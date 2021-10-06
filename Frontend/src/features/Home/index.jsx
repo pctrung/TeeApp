@@ -16,7 +16,7 @@ function Home() {
   return (
     <>
       <div className="w-full flex flex-cols animate-fadeIn">
-        <div className="mx-auto space-y-2 md:space-y-3">
+        <div className="mx-auto space-y-2 md:space-y-3 w-600 flex flex-col items-center">
           <CreatePost />
           {[...posts?.items]
             ?.sort((a, b) => (a.dateCreated < b.dateCreated ? 1 : -1))

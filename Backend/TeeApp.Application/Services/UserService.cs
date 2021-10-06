@@ -73,7 +73,7 @@ namespace TeeApp.Application.Services
                 return ApiResult<UserViewModel>.BadRequest(null, "Please select date of birth smaller than today.");
 
             }
-            if(!string.IsNullOrWhiteSpace(request.PhoneNumber.Trim()) && request.PhoneNumber.Trim().Length != 10)
+            if(!string.IsNullOrWhiteSpace(request.PhoneNumber?.Trim()) && request.PhoneNumber?.Trim().Length != 10)
             { 
                 return ApiResult<UserViewModel>.BadRequest(null, "Invalid phone number.");
             }
@@ -143,7 +143,7 @@ namespace TeeApp.Application.Services
                     return ApiResult<UserViewModel>.BadRequest(null, e.Message);
                 }
             }
-            return ApiResult<UserViewModel>.BadRequest(null);
+            return ApiResult<UserViewModel>.Ok(null);
         }
 
         public async Task<ApiResult<UserViewModel>> UpdateCoverAsync(FileRequest request)

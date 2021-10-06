@@ -126,8 +126,9 @@ function Header({ className }) {
           confirmButtonAction={confirmModal.confirmButtonAction}
         />
       )}
+      {/* Dark mode toggle */}
       <div
-        class="fixed bottom-4 left-4 items-center cursor-pointer z-50 hidden md:flex"
+        className="fixed bottom-4 left-4 items-center cursor-pointer z-50 hidden md:flex"
         onClick={() => setDarkMode(!darkMode)}
       >
         <i
@@ -136,10 +137,10 @@ function Header({ className }) {
             (darkMode ? "bx-moon" : "bx-sun")
           }
         ></i>
-        <div class="relative">
-          <div class="block bg-gray-600 w-10 h-6 rounded-full"></div>
+        <div className="relative">
+          <div className="block bg-gray-600 w-10 h-6 rounded-full"></div>
           <div
-            class={
+            className={
               "absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-base transform " +
               (darkMode ? "translate-x-full bg-green600 dark:bg-green-400" : "")
             }
@@ -368,11 +369,11 @@ function Header({ className }) {
           >
             <div className="flex justify-end space-x-4">
               <div
-                class="fixed bottom-8 left-8 flex items-center cursor-pointer "
+                className="fixed bottom-8 left-8 flex items-center cursor-pointer "
                 onClick={() => setDarkMode(!darkMode)}
               >
-                <div class="relative">
-                  <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                <div className="relative">
+                  <div className="block bg-gray-600 w-14 h-8 rounded-full"></div>
                   <div
                     class={
                       "absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-base transform " +

@@ -364,7 +364,7 @@ function Profile() {
             </div>
           </div>
         </div>
-        <div className="md:max-w-4xl pt-2 px-2 pb-10 lg:px-0 mx-auto flex flex-col md:flex-row md:items-start items-center justify-center md:space-x-3">
+        <div className="md:max-w-4xl pt-2 px-2 pb-10 lg:px-0 mx-auto flex flex-col md:flex-row md:items-start items-center justify-between md:space-x-3">
           <UserInfo
             className={
               "md:sticky top-20 left-0 space-y-2 md:space-y-3 mb-2" +
