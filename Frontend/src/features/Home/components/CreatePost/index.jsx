@@ -106,7 +106,7 @@ function CreatePost() {
   }
   return (
     <>
-      <div className="max-w-xl md:min-w-500 min-w-400 w-full bg-white dark:bg-dark-secondary border dark:border-dark-hover rounded-xl shadow px-4 pt-3 pb-1 space-y-3 divide-y">
+      <div className="max-w-xl md:min-w-500 min-w-400 w-full bg-white dark:bg-dark-secondary rounded-xl shadow px-4 pt-3 pb-1 space-y-3 divide-y">
         <div className="flex space-x-2 w-full items-center">
           <Link
             className="font-semibold text-sm cursor-pointer flex-shrink-0"
@@ -148,7 +148,7 @@ function CreatePost() {
           style={{ margin: 0 }}
         >
           <div
-            className="flex-center flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full animate-swipeDown overflow-x-auto"
+            className="flex-center flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full animate-swipeDown overflow-x-auto "
             ref={ref}
           >
             {popup.isOpen && (

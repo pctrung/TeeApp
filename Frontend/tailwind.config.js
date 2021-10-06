@@ -170,6 +170,7 @@ module.exports = {
       },
       animation: {
         zoomIn: "zoomIn 0.3s ease-in-out",
+        swipeRight: "swipeRight 0.4s ease-in-out",
         swipeDown: "swipeDown 0.4s ease-in-out",
         swipeUp: "swipeUp 0.3s ease-out",
         popup: "popup 0.3s ease-in-out",
@@ -195,6 +196,10 @@ module.exports = {
         swipeDown: {
           "0%": { opacity: 0, transform: "translateY(-40%)" },
           "100%": { opacity: 1, transform: "translateY(0%)" },
+        },
+        swipeRight: {
+          "0%": { opacity: 0, transform: "translateX(80%)" },
+          "100%": { opacity: 1, transform: "translateX(0%)" },
         },
         zoomIn: {
           "0%": { opacity: 0, transform: "scale(0%)" },

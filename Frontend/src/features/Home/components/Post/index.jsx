@@ -91,7 +91,7 @@ function Post({ post, isOpenComment = false }) {
       {isOpenEdit && (
         <EditPost post={post} isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} />
       )}
-      <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-400 w-full mx-auto bg-white dark:bg-dark-secondary border dark:border-dark-hover flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
+      <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-400 w-full mx-auto bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
         <div className="flex justify-between items-center w-full">
           <div className="flex space-x-2">
             <Link
@@ -132,7 +132,7 @@ function Post({ post, isOpenComment = false }) {
                 onClick={() => setIsOpenMenu(!isOpenMenu)}
               />
               {isOpenMenu && (
-                <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-48 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
+                <div className="animate-fadeIn transition-base absolute top-5 right-0 border border-gray-200 bg-white w-48 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
                   <button
                     className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                     onClick={() => setIsOpenEdit(true)}
@@ -197,7 +197,7 @@ function Post({ post, isOpenComment = false }) {
                 (post?.comments?.length > 1 ? "s" : "")}
           </span>
         </div>
-        <div className="w-full text-center flex justify-between select-none cursor-pointer py-1 border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt font-semibold text-sm">
+        <div className="w-full text-center flex justify-between select-none cursor-pointer border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt font-semibold text-sm">
           <span
             className="relative flex-1 transition-base"
             ref={reactionRef}
@@ -216,14 +216,14 @@ function Post({ post, isOpenComment = false }) {
             {reacted ? (
               <>
                 <div
-                  className="w-full p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                  className="w-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
                   onClick={deleteReaction}
                 >
                   <div className="flex-center space-x-2">
                     <img
                       src={ReactionIcon[reacted.type]}
                       alt={ReactionName[reacted.type]}
-                      className="animate-popup w-5 h-5"
+                      className="animate-popup md:w-5 md:h-5 h-4 w-4"
                     />
                     <span className={ReactionColor[reacted.type]}>
                       {ReactionName[reacted.type]}
@@ -233,7 +233,7 @@ function Post({ post, isOpenComment = false }) {
               </>
             ) : (
               <div
-                className="w-full p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                className="w-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
                 onClick={addLike}
               >
                 <span>
@@ -244,14 +244,16 @@ function Post({ post, isOpenComment = false }) {
             )}
           </span>
           <span
-            className="flex-1 p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+            className="flex-1 p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
             onClick={() => setIsOpenCommentList((preState) => !preState)}
           >
             <i className="bx bx-comment mr-2 text-lg align-middle "></i>
             Comment
           </span>
         </div>
-        <CommentInput postId={post?.id} currentUser={currentUser} />
+        {isOpenCommentList && (
+          <CommentInput postId={post?.id} currentUser={currentUser} />
+        )}
         <CommentList
           postId={post?.id}
           comments={post?.comments}

@@ -249,7 +249,7 @@ function Profile() {
         onChange={updateCover}
       />
       <div className="absolute top-5 left-0 right-0 bg-gray-100 dark:bg-dark-primary">
-        <div className="mt-5 md:mt-10 shadow border-b-2 bg-white dark:bg-dark-secondary border-transparent dark:border-dark-third">
+        <div className="mt-5 md:mt-10 shadow bg-white dark:bg-dark-secondary ">
           <div className=" flex flex-col items-center max-w-screen-lg md:px-10 mx-auto z-10">
             <div className="relative h-60 md:h-80 w-full flex mb-6 select-none">
               <img
@@ -263,10 +263,12 @@ function Profile() {
               {isCurrentUser && (
                 <label
                   htmlFor="cover"
-                  className="absolute right-3 bottom-3 flex items-center space-x-2 bg-white bg-opacity-95 rounded-lg p-1 px-2 text-black hover:bg-gray-200 active:bg-gray-300 active:transform active:scale-95 cursor-pointer transition-base text-sm md:text-base"
+                  className="absolute right-3 bottom-3 flex items-center space-x-2 bg-white bg-opacity-95 rounded-lg md:p-2 md:px-3 p-1 px-2 text-black hover:bg-gray-200 active:bg-gray-300 active:transform active:scale-95 cursor-pointer transition-base text-sm md:text-base"
                 >
-                  <i className="bx bxs-camera"></i>
-                  <span className="font-semibold">Edit Cover Photo</span>
+                  <i className="bx bxs-camera md:text-base text-xl"></i>
+                  <span className="font-semibold hidden md:inline">
+                    Edit Cover Photo
+                  </span>
                 </label>
               )}
               <div className="absolute h-44 w-44 rounded-full left-1/2 transform bottom-0 translate-y-5 -translate-x-1/2 border-4 border-white dark:border-dark-secondary ring-4 ring-green-400 dark:ring-green-500 cursor-pointer">
@@ -365,7 +367,8 @@ function Profile() {
         <div className="md:max-w-4xl pt-2 px-2 pb-10 lg:px-0 mx-auto flex flex-col md:flex-row md:items-start items-center justify-center md:space-x-3">
           <UserInfo
             className={
-              "md:sticky top-20 left-0 space-y-2 md:space-y-3 " +
+              "md:sticky top-20 left-0 space-y-2 md:space-y-3 mb-2" +
+              " " +
               (isOpenEdit ? "hidden md:block" : "")
             }
             user={user}

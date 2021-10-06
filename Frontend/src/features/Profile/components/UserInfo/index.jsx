@@ -6,7 +6,7 @@ function UserInfo({ user, className }) {
     <>
       <div
         className={
-          "md:max-w-xs max-w-xl min-w-0 bg-white dark:bg-dark-secondary border dark:border-dark-hover w-full rounded-xl shadow px-5 py-4 space-y-3" +
+          "md:max-w-xs max-w-xl min-w-0 bg-white dark:bg-dark-secondary w-full rounded-xl shadow px-5 py-4 space-y-3" +
           " " +
           className
         }

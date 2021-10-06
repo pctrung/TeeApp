@@ -58,7 +58,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
   return isOpen ? (
     <div
       className={
-        "py-4 px-5 max-w-xl min-w-400 bg-white dark:bg-dark-secondary border dark:border-dark-hover flex flex-col justify-start items-start space-y-3 rounded-xl shadow" +
+        "py-4 px-5 max-w-xl min-w-400 bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow" +
         " " +
         className
       }
@@ -68,7 +68,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
       </h3>
       <div className="space-y-2 md:space-y-4 md:pt-3 pt-1 w-full">
         <div className="mb-3 flex flex-col md:grid md:grid-cols-2 md:place-items-start space-y-2 md:space-y-0">
-          <div className="w-full md:col-span-1 md:mr-2 space-y-2">
+          <div className="w-full md:col-span-1 md:mr-2 space-y-2 flex flex-col">
             <label
               htmlFor="fistName"
               className="md:text-base text-sm font-semibold dark:text-dark-txt"
@@ -81,7 +81,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
               onChange={(e) => setFirstName(e.target.value)}
             />
           </div>
-          <div className="w-full md:col-span-1 md:ml-2 space-y-2">
+          <div className="w-full md:col-span-1 md:ml-2 space-y-2 flex flex-col">
             <label
               htmlFor="lastName"
               className="md:text-base text-sm font-semibold dark:text-dark-txt"
@@ -95,7 +95,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             />
           </div>
         </div>
-        <div className="w-full space-y-2">
+        <div className="w-full space-y-2 flex flex-col">
           <label
             htmlFor="nickName"
             className="md:text-base text-sm font-semibold dark:text-dark-txt"
@@ -108,7 +108,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             onChange={(e) => setNickName(e.target.value)}
           />
         </div>
-        <div className="w-full space-y-2">
+        <div className="w-full space-y-2 flex flex-col">
           <label
             htmlFor="gender"
             className="md:text-base text-sm font-semibold dark:text-dark-txt"
@@ -172,7 +172,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             />
           </div>
         </div>
-        <div className="space-y-2">
+        <div className="w-full space-y-2 flex flex-col">
           <label
             htmlFor="dateOfBirth"
             className="md:text-base text-sm font-semibold dark:text-dark-txt"
@@ -187,7 +187,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
           />
         </div>
 
-        <div className="space-y-2">
+        <div className="w-full space-y-2 flex flex-col">
           <label
             htmlFor="email"
             className="md:text-base text-sm font-semibold dark:text-dark-txt"
@@ -200,7 +200,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             onChange={(e) => setEmail(e.target.value)}
           />
         </div>
-        <div className="space-y-2">
+        <div className="w-full space-y-2 flex flex-col">
           <label
             htmlFor="phoneNumber"
             className="md:text-base text-sm font-semibold dark:text-dark-txt"
@@ -214,7 +214,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             onChange={(e) => setPhoneNumber(e.target.value)}
           />
         </div>
-        <div className="space-y-2">
+        <div className="w-full space-y-2 flex flex-col">
           <label
             htmlFor="aboutMe"
             className="md:text-base text-sm font-semibold dark:text-dark-txt"

@@ -150,7 +150,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
                 }}
               />
               {isOpenMenu && (
-                <div className="animate-fadeIn transition-base absolute top-7 p-1 w-48 right-3 border border-gray-200 bg-white rounded-lg shadow-lg overflow-hidden dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
+                <div className="animate-fadeIn transition-base absolute top-5 p-1 w-48 right-3 border border-gray-200 bg-white rounded-lg shadow-lg overflow-hidden dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
                   <button
                     className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
                     onClick={() => {

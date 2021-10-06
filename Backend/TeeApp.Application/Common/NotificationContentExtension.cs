@@ -13,7 +13,7 @@ namespace TeeApp.Application.Common
                 NotificationType.FriendRequest => $"{source.Creator.FullName} sent you a friend request.",
                 NotificationType.AcceptedFriendRequest => $"{source.Creator.FullName} accepted your friend request.",
                 NotificationType.Comment => (source.Creator.Id.Equals(source.Recipient.Id) ? "You" : source.Creator.FullName) + " commented on your post.",
-                _ => (source.Creator.Id.Equals(source.Recipient.Id) ? "You" : source.Creator.FullName) + " reacted your post.",
+                _ => (source.Creator.Id.Equals(source.Recipient.Id) ? "You" : source.Creator.FullName) + " reacted to your post.",
             };
 
             return content;

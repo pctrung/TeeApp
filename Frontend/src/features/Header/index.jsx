@@ -15,6 +15,8 @@ import { refreshPost, resetNewPost } from "app/postSlice";
 import usePostApi from "hooks/api/usePostApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import useAccountApi from "hooks/api/useAccountApi";
+import { useEscToClose } from "hooks/utils/useEscToClose";
+import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 
 function Header({ className }) {
   const history = useHistory();
@@ -33,6 +35,7 @@ function Header({ className }) {
   const { darkMode, setDarkMode } = useDarkMode();
   const [keyword, setKeyword] = useState("");
 
+  const [isOpenNavBar, setIsOpenNavBar] = useState(false);
   const [isOpenChatList, setIsOpenChatList] = useState(false);
   const [isOpenNotificationList, setIsOpenNotificationList] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
@@ -45,6 +48,7 @@ function Header({ className }) {
   });
 
   const ref = useRef();
+  const navBarRef = useRef();
 
   useEffect(() => {
     userApi.getCurrentUser().then((response) => {
@@ -59,6 +63,9 @@ function Header({ className }) {
     setIsOpenNotificationList,
     ref,
   );
+
+  useEscToClose(setIsOpenNavBar);
+  useDisableBodyScroll(isOpenNavBar);
 
   const search = (e) => {
     e.preventDefault();
@@ -104,6 +111,7 @@ function Header({ className }) {
     } else {
       history.push(route);
     }
+    setIsOpenNavBar(false);
   }
 
   return (
@@ -119,18 +127,44 @@ function Header({ className }) {
         />
       )}
       <div
+        class="fixed bottom-4 left-4 items-center cursor-pointer z-50 hidden md:flex"
+        onClick={() => setDarkMode(!darkMode)}
+      >
+        <i
+          className={
+            "bx p-2 dark:text-dark-txt text-gray-500 " +
+            (darkMode ? "bx-moon" : "bx-sun")
+          }
+        ></i>
+        <div class="relative">
+          <div class="block bg-gray-600 w-10 h-6 rounded-full"></div>
+          <div
+            class={
+              "absolute left-1 top-1 bg-white w-4 h-4 rounded-full transition-base transform " +
+              (darkMode ? "translate-x-full bg-green600 dark:bg-green-400" : "")
+            }
+          ></div>
+        </div>
+      </div>
+      <div
         className={
-          "bg-white dark:bg-dark-secondary dark:text-white p-2 shadow border-b dark:border-dark-hover z-20" +
+          "bg-white dark:bg-dark-secondary dark:text-white p-2 shadow border-b border-transparent dark:border-dark-hover z-20" +
           " " +
           className
         }
       >
-        <div className="max-full md:max-w-screen-md lg:max-w-screen-lg mx-auto flex justify-between items-center">
-          <div className="md:flex hidden space-x-4 flex-shrink-0">
-            <Link to="/">
+        <div
+          ref={ref}
+          className="relative max-full md:max-w-screen-md lg:max-w-screen-lg mx-auto flex justify-between items-center"
+        >
+          <div className="flex space-x-4 flex-shrink-0">
+            <span onClick={() => goTo("/", location.pathname === "/")}>
               <img src={Logo} alt="Logo" className="h-10 w-10 cursor-pointer" />
-            </Link>
-            <form onSubmit={(e) => search(e)} className="relative">
+            </span>
+            <form
+              onSubmit={(e) => search(e)}
+              className="relative md:inline-block hidden"
+            >
               <input
                 type="search"
                 className="bg-gray-100 dark:bg-dark-third dark:text-white rounded-full outline-none pl-10 pr-3 py-2 focus:ring-2 ring-green-400 ring-opacity-50 transition-base select-none"
@@ -141,7 +175,7 @@ function Header({ className }) {
               <i className="bx bx-search absolute text-xl top-1/2 left-3 transform text-gray-400 -translate-y-1/2 cursor-pointer"></i>
             </form>
           </div>
-          <div className="flex text-3xl text-green-500">
+          <div className="text-3xl text-green-500 md:flex hidden">
             {NavList.map((nav) => {
               const currentRoute = location.pathname;
               const isCurrentRoute = nav.route === currentRoute;
@@ -171,7 +205,7 @@ function Header({ className }) {
               );
             })}
           </div>
-          <ul className="flex items-center space-x-2" ref={ref}>
+          <ul className="flex items-center space-x-2">
             <li
               className={
                 "active:transform active:scale-95 p-1 h-full rounded-full flex items-center  transition-base cursor-pointer select-none mr-3 " +
@@ -241,9 +275,11 @@ function Header({ className }) {
                 </span>
               )}
             </li>
-            <li>
+
+            <li className="md:inline hidden">
               <div className="relative">
                 <ClickableIcon
+                  className="p-2"
                   iconClass="bx bx-caret-down"
                   colorClass={
                     isOpenMenu
@@ -260,7 +296,7 @@ function Header({ className }) {
                   }}
                 />
                 {isOpenMenu && (
-                  <div className="animate-fadeIn transition-base absolute top-full right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
+                  <div className="animate-fadeIn transition-base absolute top-full transform translate-y-1 right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
                     <button
                       className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
                       onClick={() => setDarkMode(!darkMode)}
@@ -285,28 +321,136 @@ function Header({ className }) {
                     </button>
                   </div>
                 )}
-                <ChatList
-                  setChatNotificationNumber={setChatNotificationNumber}
-                  className={
-                    "absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 " +
-                    " " +
-                    (isOpenChatList ? "" : "hidden")
-                  }
-                />
-                <NotificationList
-                  setIsOpen={setIsOpenNotificationList}
-                  className={
-                    "absolute animate-fadeIn top-full transform translate-y-3 right-0 lg:w-112 w-96 max-h-600 overflow-y-auto " +
-                    " " +
-                    (isOpenNotificationList ? "" : "hidden")
-                  }
-                  setNotificationNumber={setNotificationNumber}
-                />
               </div>
             </li>
+            <li className="md:hidden">
+              <ClickableIcon
+                className="p-2"
+                iconClass="bx bx-menu"
+                colorClass={
+                  isOpenNavBar
+                    ? "bg-green-100 hover:bg-green-200 active:bg-green-300 dark:bg-green-900 dark:hover:bg-green-800 dark:active:bg-green-700 "
+                    : ""
+                }
+                colorIconClass={
+                  isOpenNavBar ? "text-green-600 dark:text-green-400" : ""
+                }
+                onClick={() => {
+                  setIsOpenNavBar(!isOpenNavBar);
+                }}
+              />
+            </li>
           </ul>
+          <ChatList
+            setChatNotificationNumber={setChatNotificationNumber}
+            className={
+              "absolute animate-fadeIn top-full transform translate-y-2 right-0 lg:w-112 md:w-96 w-full max-h-600 " +
+              " " +
+              (isOpenChatList ? "" : "hidden")
+            }
+          />
+          <NotificationList
+            setIsOpen={setIsOpenNotificationList}
+            className={
+              "absolute animate-fadeIn top-full transform translate-y-2 right-0 lg:w-112 md:w-96 w-full max-h-600 overflow-y-auto " +
+              " " +
+              (isOpenNotificationList ? "" : "hidden")
+            }
+            setNotificationNumber={setNotificationNumber}
+          />
         </div>
       </div>
+      {isOpenNavBar && (
+        <>
+          <div
+            ref={navBarRef}
+            className="text-gray-500 dark:text-dark-txt md:hidden w-screen fixed animate-swipeRight inset-0 bg-white dark:bg-dark-primary z-40 px-4 py-4 pt-5 flex flex-col space-y-3 outline-none cursor-pointer"
+          >
+            <div className="flex justify-end space-x-4">
+              <div
+                class="fixed bottom-8 left-8 flex items-center cursor-pointer "
+                onClick={() => setDarkMode(!darkMode)}
+              >
+                <div class="relative">
+                  <div class="block bg-gray-600 w-14 h-8 rounded-full"></div>
+                  <div
+                    class={
+                      "absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition-base transform " +
+                      (darkMode
+                        ? "translate-x-full bg-green600 dark:bg-green-400"
+                        : "")
+                    }
+                  ></div>
+                </div>
+                <i
+                  className={"bx p-2 " + (darkMode ? "bx-moon" : "bx-sun")}
+                ></i>
+              </div>
+              <ClickableIcon
+                className="p-2 w-10 h-10"
+                iconClass="bx bx-x"
+                onClick={() => setIsOpenNavBar(false)}
+              />{" "}
+            </div>
+            <div className="flex flex-col w-full">
+              {NavList.map((nav) => {
+                const currentRoute = location.pathname;
+                const isCurrentRoute = nav.route === currentRoute;
+                const icon = isCurrentRoute ? nav.icon : nav.inactiveIcon;
+                return (
+                  <div
+                    key={nav.route}
+                    className={
+                      "animate-swipeRight relative group w-full hover:bg-gray-200 active:bg-gray-200 dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg " +
+                      (isCurrentRoute
+                        ? "bg-gray-100 dark:bg-dark-secondary"
+                        : "")
+                    }
+                    onClick={() => goTo(nav.route, isCurrentRoute)}
+                  >
+                    <div
+                      className={
+                        "flex space-x-4 text-2xl py-2 px-4 rounded-lg items-center " +
+                        (isCurrentRoute
+                          ? "font-bold text-green-500"
+                          : "font-medium")
+                      }
+                    >
+                      <i
+                        className={`select-none py-1 px-2 text-3xl align-middle ${icon}`}
+                      ></i>
+                      <span className="">{nav.name}</span>
+                    </div>
+                    {nav.name.toLowerCase() === "home" && newPostTotal > 0 && (
+                      <span className="animate-fadeIn absolute top-1 left-1 bg-green-500 dark:bg-green-600 text-white rounded-full select-none text-xs font-bold w-3 h-3"></span>
+                    )}
+                    {isCurrentRoute && (
+                      <span className="animate-fadeIn absolute top-1/2 right-3 transform -translate-y-1/2 bg-green-500 dark:bg-green-600 text-white rounded-full select-none text-xs font-bold w-3 h-3"></span>
+                    )}
+                  </div>
+                );
+              })}
+              <div
+                className={
+                  "animate-swipeRight w-full hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-third dark:active:bg-dark-hover "
+                }
+              >
+                <div
+                  className="flex space-x-4 text-2xl py-2 px-4 rounded-lg items-center font-medium"
+                  onClick={() => {
+                    openConfirmModal("Do you want to log out?", logout);
+                  }}
+                >
+                  <i
+                    className={`select-none py-1 px-2 text-3xl align-middle bx bx-log-in-circle`}
+                  ></i>
+                  <span>Log out</span>
+                </div>
+              </div>
+            </div>
+          </div>{" "}
+        </>
+      )}
     </>
   );
 }
