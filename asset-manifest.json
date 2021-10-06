@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/TeeApp/static/css/main.2ceaa52b.chunk.css",
-    "main.js": "/TeeApp/static/js/main.25dd68e5.chunk.js",
-    "main.js.map": "/TeeApp/static/js/main.25dd68e5.chunk.js.map",
+    "main.js": "/TeeApp/static/js/main.1cf470d3.chunk.js",
+    "main.js.map": "/TeeApp/static/js/main.1cf470d3.chunk.js.map",
     "runtime-main.js": "/TeeApp/static/js/runtime-main.0609997e.js",
     "runtime-main.js.map": "/TeeApp/static/js/runtime-main.0609997e.js.map",
     "static/css/2.75509a7d.chunk.css": "/TeeApp/static/css/2.75509a7d.chunk.css",
@@ -38,6 +38,6 @@
     "static/css/2.75509a7d.chunk.css",
     "static/js/2.ddbf0f7a.chunk.js",
     "static/css/main.2ceaa52b.chunk.css",
-    "static/js/main.25dd68e5.chunk.js"
+    "static/js/main.1cf470d3.chunk.js"
   ]
 }
