@@ -66,10 +66,8 @@ function NotificationList({ className, setIsOpen, setNotificationNumber }) {
           "flex flex-col bg-white dark:bg-dark-secondary shadow-lg rounded-xl px-5 py-4 pb-3 border dark:border-dark-hover "
         }
       >
-        <div className="flex justify-between items-center border-b dark:border-dark-hover pb-1">
-          <span className="text-lg md:text-2xl font-bold mb-2">
-            Notifications
-          </span>
+        <div className="flex justify-between items-baseline border-b dark:border-dark-hover pb-1 mb-2">
+          <span className="text-2xl font-bold">Notifications</span>
           <span
             className="text-green-600 hover:text-green-700 active:text-green-800 dark:text-green-400 dark:hover:text-green-300 dark:active:text-green-200 cursor-pointer select-none transition-base text-sm"
             onClick={readAll}

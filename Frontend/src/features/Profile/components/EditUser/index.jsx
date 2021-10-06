@@ -7,12 +7,12 @@ import { useDispatch } from "react-redux";
 import { Gender } from "utils/Enums";
 
 function EditUser({ isOpen, setIsOpen, user, className }) {
-  const [firstName, setFirstName] = useState(user.firstName);
-  const [lastName, setLastName] = useState(user.lastName);
-  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
-  const [email, setEmail] = useState(user.email);
-  const [nickName, setNickName] = useState(user.nickName);
-  const [aboutMe, setAboutMe] = useState(user.aboutMe);
+  const [firstName, setFirstName] = useState(user.firstName ?? "");
+  const [lastName, setLastName] = useState(user.lastName ?? "");
+  const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber ?? "");
+  const [email, setEmail] = useState(user.email ?? "");
+  const [nickName, setNickName] = useState(user.nickName ?? "");
+  const [aboutMe, setAboutMe] = useState(user.aboutMe ?? "");
   const [gender, setGender] = useState(user.gender);
   const [dateOfBirth, setDateOfBirth] = useState(user.dateOfBirth);
   const [isValidButton, setIsValidButton] = useState(false);
@@ -22,12 +22,12 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
 
   useEffect(() => {
     if (user) {
-      setFirstName(user.firstName);
-      setLastName(user.lastName);
-      setPhoneNumber(user.phoneNumber);
-      setEmail(user.email);
-      setNickName(user.nickName);
-      setAboutMe(user.aboutMe);
+      setFirstName(user.firstName ?? "");
+      setLastName(user.lastName ?? "");
+      setPhoneNumber(user.phoneNumber ?? "");
+      setEmail(user.email ?? "");
+      setNickName(user.nickName ?? "");
+      setAboutMe(user.aboutMe ?? "");
       setGender(user.gender);
       setDateOfBirth(user.dateOfBirth);
     }
@@ -38,7 +38,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
       lastName: lastName.substring(0, 30),
       email,
       nickName: nickName?.substring(0, 20),
-      aboutMe,
+      aboutMe: aboutMe?.substring(0, 149),
       gender,
       dateOfBirth,
       phoneNumber,
@@ -230,7 +230,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             id="aboutMe"
             value={aboutMe}
             onChange={(e) => {
-              if (aboutMe?.length < 150) {
+              if (aboutMe.length < 150) {
                 setAboutMe(e.target.value);
               }
             }}
