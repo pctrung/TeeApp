@@ -372,7 +372,7 @@ namespace TeeApp.UnitTests.Common
                 cfg.CreateMap<Friendship, FriendshipViewModel>()
                     .ForMember(
                         des => des.User,
-                        act => act.MapFrom(src => src.RequestedUserId == MAIN_USER_ID ? src.RecievedUser : src.RequestedUser));
+                        act => act.MapFrom(src => src.RequestedUserId.Equals(MAIN_USER_ID) ? src.RecievedUser : src.RequestedUser));
             });
 
             IMapper mapper = configMapper.CreateMapper();

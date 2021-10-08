@@ -31,11 +31,7 @@ function PostDetail() {
       }
     }
   }, [postId, posts]);
-  return (
-    <>
-      <Post post={post} isOpenComment={true} />
-    </>
-  );
+  return <>{post?.dateCreated && <Post post={post} isOpenComment={true} />}</>;
 }
 
 export default PostDetail;

@@ -90,7 +90,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<CommentResponse>> CreateAsync(int postId, CommentRequest request)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Comments)
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Followers)
@@ -148,7 +148,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<CommentResponse>> UpdateAsync(int postId, int commentId, CommentRequest request)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Comments)
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Followers)
@@ -175,7 +175,7 @@ namespace TeeApp.Application.Services
                 }
             }
 
-            var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);
+            var comment = post.Comments.FirstOrDefault(x => x.Id.Equals(commentId));
             if (comment == null)
             {
                 return ApiResult<CommentResponse>.NotFound(null, "Not found this comment");
@@ -205,7 +205,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<CommentResponse>> DeleteAsync(int postId, int commentId)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Comments)
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Followers)
@@ -232,7 +232,7 @@ namespace TeeApp.Application.Services
                 }
             }
 
-            var comment = post.Comments.FirstOrDefault(x => x.Id == commentId);
+            var comment = post.Comments.FirstOrDefault(x => x.Id.Equals(commentId));
             if (comment == null)
             {
                 return ApiResult<CommentResponse>.NotFound(null, "Not found this comment.");

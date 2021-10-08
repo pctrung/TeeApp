@@ -90,7 +90,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<ReactionResponse>> CreateAsync(int postId, ReactionRequest request)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Reactions)
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Followers)
@@ -156,7 +156,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<ReactionResponse>> UpdateAsync(int postId, ReactionRequest request)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Reactions)
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Followers)
@@ -183,7 +183,7 @@ namespace TeeApp.Application.Services
                 }
             }
 
-            var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));
+            var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id.Equals(post.Id) && x.Creator.Id.Equals(_currentUser.Id));
             if (reaction == null)
             {
                 return ApiResult<ReactionResponse>.NotFound(null, "Not found this reaction");
@@ -213,7 +213,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<ReactionResponse>> DeleteAsync(int postId)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Reactions)
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Followers)
@@ -240,7 +240,7 @@ namespace TeeApp.Application.Services
                 }
             }
 
-            var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id == post.Id && x.Creator.Id.Equals(_currentUser.Id));
+            var reaction = post.Reactions.FirstOrDefault(x => x.Post.Id.Equals(post.Id) && x.Creator.Id.Equals(_currentUser.Id));
             if (reaction == null)
             {
                 return ApiResult<ReactionResponse>.NotFound(null, "Not found this reaction.");

@@ -202,7 +202,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Comments)
                 .Include(x => x.Photos)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == postId);
+                .FirstOrDefaultAsync(x => x.Id.Equals(postId));
 
             if (post == null)
             {
@@ -266,7 +266,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<PostResponse>> UpdateAsync(int postId, UpdatePostRequest request)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Photos)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();
@@ -302,7 +302,7 @@ namespace TeeApp.Application.Services
         public async Task<ApiResult<PostResponse>> DeleteAsync(int postId)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId && x.DateDeleted == null)
+                .Where(x => x.Id.Equals(postId) && x.DateDeleted == null)
                 .Include(x => x.Photos)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync();

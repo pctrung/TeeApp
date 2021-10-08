@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Moq;
 using System.IO;
 using System.Threading.Tasks;
@@ -58,8 +59,9 @@ namespace TeeApp.UnitTests.Application
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+            IMapper mapper = FakeData.GetIMapperTest();
 
-            var postPhotoService = new PostPhotoService(context, currentUserMock.Object, GetStorageServiceMock());
+            var postPhotoService = new PostPhotoService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = GetFakeRequest();
 
             // Act
@@ -75,8 +77,9 @@ namespace TeeApp.UnitTests.Application
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+            IMapper mapper = FakeData.GetIMapperTest();
 
-            var postPhotoService = new PostPhotoService(context, currentUserMock.Object, GetStorageServiceMock());
+            var postPhotoService = new PostPhotoService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = GetFakeRequest();
 
             // Act
@@ -92,8 +95,9 @@ namespace TeeApp.UnitTests.Application
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+            IMapper mapper = FakeData.GetIMapperTest();
 
-            var postPhotoService = new PostPhotoService(context, currentUserMock.Object, GetStorageServiceMock());
+            var postPhotoService = new PostPhotoService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
             var request = GetFakeRequest();
 
             // Act
@@ -109,8 +113,9 @@ namespace TeeApp.UnitTests.Application
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+            IMapper mapper = FakeData.GetIMapperTest();
 
-            var postPhotoService = new PostPhotoService(context, currentUserMock.Object, GetStorageServiceMock());
+            var postPhotoService = new PostPhotoService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
 
             // Act
             var result = await postPhotoService.DeleteAsync(NON_EXIST_POST_ID, MY_PHOTO_ID);
@@ -125,8 +130,9 @@ namespace TeeApp.UnitTests.Application
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+            IMapper mapper = FakeData.GetIMapperTest();
 
-            var postPhotoService = new PostPhotoService(context, currentUserMock.Object, GetStorageServiceMock());
+            var postPhotoService = new PostPhotoService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
 
             // Act
             var result = await postPhotoService.DeleteAsync(MY_POST_ID, NON_EXIST_PHOTO_ID);
@@ -141,8 +147,9 @@ namespace TeeApp.UnitTests.Application
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+            IMapper mapper = FakeData.GetIMapperTest();
 
-            var postPhotoService = new PostPhotoService(context, currentUserMock.Object, GetStorageServiceMock());
+            var postPhotoService = new PostPhotoService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
 
             // Act
             var result = await postPhotoService.DeleteAsync(OTHER_POST_ID, MY_PHOTO_ID);
@@ -157,8 +164,9 @@ namespace TeeApp.UnitTests.Application
             // Arrange
             TeeAppDbContext context = FakeData.GetInMemoryDbTest();
             Mock<ICurrentUser> currentUserMock = FakeData.GetICurrentUserTest();
+            IMapper mapper = FakeData.GetIMapperTest();
 
-            var postPhotoService = new PostPhotoService(context, currentUserMock.Object, GetStorageServiceMock());
+            var postPhotoService = new PostPhotoService(mapper, context, currentUserMock.Object, GetStorageServiceMock());
 
             // Act
             var result = await postPhotoService.DeleteAsync(MY_POST_ID, MY_PHOTO_ID);

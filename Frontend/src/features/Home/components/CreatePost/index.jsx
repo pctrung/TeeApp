@@ -9,10 +9,11 @@ import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 import { useEscToClose } from "hooks/utils/useEscToClose";
 import usePostApi from "hooks/api/usePostApi";
 import React, { useEffect, useRef, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { MAX_IMAGE_SIZE } from "utils/Constants";
 import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
+import { addPost } from "app/postSlice";
 
 function CreatePost() {
   const currentUser = useSelector((state) => state.users.currentUser);
@@ -31,6 +32,7 @@ function CreatePost() {
   const emojiRef = useRef();
   const privacyRef = useRef();
   const postApi = usePostApi();
+  const dispatch = useDispatch();
 
   useDisableBodyScroll(isOpen);
 
@@ -99,7 +101,11 @@ function CreatePost() {
           postApi.addPhoto(response.id, request);
         });
       }
+      postApi.getById(response.id).then((response) => {
+        dispatch(addPost(response));
+      });
     });
+
     setIsOpen(false);
     setContent("");
     setImageFiles([]);
@@ -121,23 +127,27 @@ function CreatePost() {
               placeholder={`What's on your mind${
                 currentUser.firstName ? ", " + currentUser.firstName : ""
               }?`}
-              className="bg-gray-100 dark:bg-dark-third rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative placeholder-gray-500 dark:placeholder-dark-txt hover:bg-gray-200 dark:hover:bg-dark-hover cursor-pointer "
+              className="bg-gray-100 dark:bg-dark-third rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative placeholder-gray-500 dark:placeholder-dark-txt hover:bg-gray-200 dark:hover:bg-dark-hover cursor-pointer text-sm md:text-base"
             />
           </div>
         </div>
         <div className="w-full text-center flex justify-between select-none cursor-pointer py-1 border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt font-semibold">
           <span
-            className="flex-1 p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base flex items-center justify-center space-x-2"
+            className="flex-1 p-1 md:py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base flex items-center justify-center space-x-2 text-sm md:text-base"
             onClick={() => setIsOpen(true)}
           >
-            <img src={ImageIcon} alt="Image icon" className="w-6 h-6" />
+            <img
+              src={ImageIcon}
+              alt="Image icon"
+              className="md:w-6 md:h-6 w-4 h-4"
+            />
             <span>Your Photos</span>
           </span>
           <span
-            className="flex-1 p-1 py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base "
+            className="flex-1 p-1 md:py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base text-sm md:text-base"
             onClick={() => setIsOpen(true)}
           >
-            <i className="far fa-smile-beam mr-2 text-xl align-middle text-green-500 dark:text-green-400"></i>
+            <i className="far fa-smile-beam mr-2 md:text-xl align-middle text-green-500 dark:text-green-400"></i>
             Your Feeling
           </span>
         </div>
@@ -190,15 +200,18 @@ function CreatePost() {
                   </Link>
                   <div className="relative select-none">
                     <div
-                      className="p-1 px-2 text-xs bg-gray-200 dark:bg-dark-hover rounded space-x-2 cursor-pointer "
+                      className="p-1 px-2 flex justify-between items-center text-xs bg-gray-200 dark:bg-dark-hover rounded cursor-pointer "
                       onClick={() => setIsOpenPrivacyList(true)}
                     >
-                      <i className={PrivacyIcon[privacy]}></i>
-                      <span>{PrivacyName[privacy]}</span>
+                      <div className="flex items-center space-x-2">
+                        <i className={PrivacyIcon[privacy]}></i>
+                        <span>{PrivacyName[privacy]}</span>
+                      </div>
+                      <i className="bx bx-caret-down ml-1"></i>
                     </div>
                     {isOpenPrivacyList && (
                       <div
-                        className="animate-fadeIn absolute w-28 top-full transform translate-y-1 -left-2 bg-gray-100 dark:bg-dark-third rounded p-1 text-sm"
+                        className="animate-fadeIn absolute w-full top-full transform translate-y-1 left-0 bg-gray-100 dark:bg-dark-third rounded p-1 text-sm"
                         ref={privacyRef}
                       >
                         {Object.values(PrivacyType).map((privacy) => (
@@ -240,7 +253,7 @@ function CreatePost() {
                   </div>
                 )}
               </div>
-              <div className="w-full overflow-x-auto flex space-x-2 select-none pb-2">
+              <div className="w-full max-w-xs md:max-w-max overflow-x-auto flex space-x-2 select-none pb-2">
                 <input
                   hidden
                   id="imageFiles"

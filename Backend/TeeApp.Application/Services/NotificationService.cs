@@ -52,7 +52,7 @@ namespace TeeApp.Application.Services
 
             var totalRecord = notifications.Count;
             notifications = notifications.Paged(request.Page, request.Limit).ToList();
-             
+
             // not load unread notification when page > 1
             if(request.Page == 1){
                 var unreadNotifications = await _context.Notifications
@@ -181,7 +181,7 @@ namespace TeeApp.Application.Services
         public async Task<NotificationViewModel> CreateCommentNotificationAsync(int postId)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId)
+                .Where(x => x.Id.Equals(postId))
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Notifications)
                 .AsSplitQuery()
@@ -209,7 +209,7 @@ namespace TeeApp.Application.Services
         public async Task<NotificationViewModel> CreateReactionNotificationAsync(int postId, ReactionType reactionType)
         {
             var post = await _context.Posts
-                .Where(x => x.Id == postId)
+                .Where(x => x.Id.Equals(postId))
                 .Include(x => x.Creator)
                 .ThenInclude(x => x.Notifications)
                 .AsSplitQuery()

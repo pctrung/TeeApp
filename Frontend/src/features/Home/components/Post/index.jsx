@@ -163,7 +163,7 @@ function Post({ post, isOpenComment = false }) {
         )}
 
         <div className="flex justify-between w-full text-xs text-gray-500 hover:underline pt-2">
-          <div className="cursor-pointer flex items-center">
+          <div className="cursor-pointer flex items-center space-x-1">
             <div className="flex items-center">
               {topThreeType &&
                 topThreeType.map((type, index) => (
@@ -197,7 +197,7 @@ function Post({ post, isOpenComment = false }) {
                 (post?.comments?.length > 1 ? "s" : "")}
           </span>
         </div>
-        <div className="w-full text-center flex justify-between items-center select-none cursor-pointer border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt font-semibold text-sm">
+        <div className="w-full text-center flex justify-between items-center select-none cursor-pointer border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt font-semibold text-sm p-1">
           <span
             className="relative flex-1 transition-base"
             ref={reactionRef}
@@ -216,7 +216,7 @@ function Post({ post, isOpenComment = false }) {
             {reacted ? (
               <>
                 <div
-                  className="w-full h-full md:p-2 p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                  className="w-full h-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded transition-base"
                   onClick={deleteReaction}
                 >
                   <div className="flex-center space-x-2">
@@ -233,7 +233,7 @@ function Post({ post, isOpenComment = false }) {
               </>
             ) : (
               <div
-                className="w-full h-full md:p-2 p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base"
+                className="w-full h-full p-1 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded transition-base"
                 onClick={addLike}
               >
                 <span>
@@ -244,7 +244,7 @@ function Post({ post, isOpenComment = false }) {
             )}
           </span>
           <span
-            className="flex-1 md:p-2 p-1 h-full w-full bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base flex items-center justify-center"
+            className="flex-1 p-1 h-full w-full bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded transition-base flex items-center justify-center"
             onClick={() => setIsOpenCommentList((preState) => !preState)}
           >
             <i className="bx bx-comment mr-2 text-lg align-middle "></i>

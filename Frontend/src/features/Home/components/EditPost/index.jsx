@@ -92,11 +92,6 @@ function EditPost({ post, isOpen, setIsOpen }) {
     } else {
       setIsValidButton(false);
     }
-    return () => {
-      postApi.getById(post.id).then((response) => {
-        dispatch(updatePost(response));
-      });
-    };
   }, [content, imageFiles]);
 
   async function onSubmit(e) {
@@ -114,7 +109,6 @@ function EditPost({ post, isOpen, setIsOpen }) {
       });
     }
     setIsOpen(false);
-    setContent("");
     setImageFiles([]);
     setOldPhotoIds([]);
   }
@@ -218,7 +212,7 @@ function EditPost({ post, isOpen, setIsOpen }) {
                   </div>
                 )}
               </div>
-              <div className="w-full overflow-x-auto flex space-x-2 select-none pb-2">
+              <div className="w-full max-w-xs md:max-w-max overflow-x-auto flex space-x-2 select-none pb-2">
                 <input
                   hidden
                   id="imageFiles"

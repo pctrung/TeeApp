@@ -38,7 +38,7 @@
 
         public static ApiResult BadRequest(string message = "Something went wrong") => new() { StatusCode = 400, Message = message };
 
-        public static ApiResult ForBid(string message = "You do not have permission to access this resource") => new() { StatusCode = 403, Message = message };
+        public static ApiResult Forbid(string message = "You do not have permission to access this resource") => new() { StatusCode = 403, Message = message };
 
         public static ApiResult NotFound(string message = "Not found resources") => new() { StatusCode = 404, Message = message };
 

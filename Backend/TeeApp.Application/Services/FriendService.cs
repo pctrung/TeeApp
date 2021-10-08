@@ -12,6 +12,7 @@ using TeeApp.Data.Entities;
 using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Constants;
 using TeeApp.Utilities.Enums.Types;
 using TeeApp.Utilities.Extentions;
 
@@ -76,7 +77,7 @@ namespace TeeApp.Application.Services
             {
                 IsFollowing = _currentUser.Following.Contains(friend),
             };
-            if(friendship == null)
+            if (friendship == null)
             {
                 relation.RelationType = RelationType.NotFriend;
             }
@@ -182,7 +183,7 @@ namespace TeeApp.Application.Services
         public PagedResult<UserViewModel> GetBlockedPagination(PaginationRequestBase request)
         {
             var pagedBlockedUsers = _currentUser.BlockedUsers
-                .Where(x => x.UserName.ToLower().Contains(request.Keyword) || x.FullName.ToLower().Contains(request.Keyword.ToLower()))
+                .Where(x => x.UserName.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase) || x.FullName.Contains(request.Keyword, StringComparison.OrdinalIgnoreCase))
                 .OrderByDescending(x => x.FullName)
                 .Paged(request.Page, request.Limit);
 
@@ -308,7 +309,7 @@ namespace TeeApp.Application.Services
 
             if (friendRequest == null)
             {
-                return ApiResult.NotFound("Not found friend request of " + friend.FullName);
+                return ApiResult.NotFound("Not found friend request from " + friend.FullName);
             }
 
             if (friendRequest.Type == FriendshipType.Accepted)
@@ -331,6 +332,10 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult> DeleteFriendshipAsync(string userName)
         {
+            if (userName.Equals(SystemConstants.ADMIN_USERNAME, StringComparison.OrdinalIgnoreCase))
+            {
+                return ApiResult.BadRequest("Sorry! You cannot unfriend Trung because he is the most handsome developer in the universe!");
+            }
             var friend = await _context.Users
                 .Include(x => x.Following)
                 .AsSplitQuery()
@@ -358,6 +363,10 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult> BlockFriendAsync(string userName)
         {
+            if (userName.Equals(SystemConstants.ADMIN_USERNAME, StringComparison.OrdinalIgnoreCase))
+            {
+                return ApiResult.BadRequest("Sorry! You cannot block Trung because he is the most handsome developer in the universe!");
+            }
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
@@ -384,6 +393,10 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult> UnBlockFriendAsync(string userName)
         {
+            if (userName.Equals(SystemConstants.ADMIN_USERNAME, StringComparison.OrdinalIgnoreCase))
+            {
+                return ApiResult.BadRequest("Sorry! You cannot block Trung because he is the most handsome developer in the universe!");
+            }
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {
@@ -427,6 +440,10 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult> UnFollowFriendAsync(string userName)
         {
+            if (userName.Equals(SystemConstants.ADMIN_USERNAME, StringComparison.OrdinalIgnoreCase))
+            {
+                return ApiResult.BadRequest("Sorry! You cannot unfollow Trung because he is the most handsome developer in the universe!");
+            }
             var friend = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName) && !x.UserName.Equals(_currentUser.UserName));
             if (friend == null)
             {

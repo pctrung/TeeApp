@@ -81,7 +81,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Messages)
                 .ThenInclude(x => x.ReadByUsers)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == chatId);
+                .FirstOrDefaultAsync(x => x.Id.Equals(chatId));
             if (chat == null)
             {
                 return ApiResult<ChatViewModel>.NotFound(null, "Not found chat with id: " + chatId);
@@ -140,7 +140,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Messages)
                 .AsSplitQuery()
                 .OrderByDescending(x => x.DateCreated)
-                .FirstOrDefaultAsync(x => x.Id == chatId);
+                .FirstOrDefaultAsync(x => x.Id.Equals(chatId));
             if (chat == null)
             {
                 return ApiResult<SendMessageResponse>.BadRequest(null, "Not found chat with Id: " + chatId);
@@ -287,7 +287,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Messages)
                 .ThenInclude(x => x.ReadByUsers)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == chatId);
+                .FirstOrDefaultAsync(x => x.Id.Equals(chatId));
             if (chat == null)
             {
                 return ApiResult<CreateChatResponse>.BadRequest(null, "Not found chat with id: " + chatId);
@@ -363,7 +363,7 @@ namespace TeeApp.Application.Services
             var chat = await _context.Chats
                 .Include(x => x.Participants)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == chatId);
+                .FirstOrDefaultAsync(x => x.Id.Equals(chatId));
             if (chat == null)
             {
                 return ApiResult<UpdateGroupAvatarResponse>.BadRequest(null, "Not found chat with id: " + chatId);
@@ -420,7 +420,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Participants)
                 .Include(x => x.Messages)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == chatId);
+                .FirstOrDefaultAsync(x => x.Id.Equals(chatId));
             if (chat == null)
             {
                 return ApiResult<SendMessageResponse>.BadRequest(null, "Not found chat with Id: " + chatId);
@@ -485,7 +485,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Messages.Where(x => !x.ReadByUsers.Contains(_currentUser)))
                 .ThenInclude(x => x.ReadByUsers)
                 .AsSplitQuery()
-                .FirstOrDefaultAsync(x => x.Id == chatId);
+                .FirstOrDefaultAsync(x => x.Id.Equals(chatId));
 
             if (chat == null)
             {

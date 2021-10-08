@@ -19,7 +19,7 @@ function ReactionInput({ className = "", reacted, postId, setIsOpen }) {
         className={
           className +
           " " +
-          "flex animate-swipeUp space-x-2 rounded-3xl bg-white dark:bg-dark-secondary shadow border-2 border-gray-100 dark:border-dark-third p-1 transition-base z-50"
+          "flex animate-swipeUp space-x-2 rounded-3xl bg-white dark:bg-dark-secondary shadow border-2 border-gray-100 dark:border-dark-third p-1 transition-base z-10"
         }
       >
         {Object.values(ReactionType).map((type) => (

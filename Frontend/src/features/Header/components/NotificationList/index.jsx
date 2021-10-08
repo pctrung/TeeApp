@@ -75,7 +75,7 @@ function NotificationList({ className, setIsOpen, setNotificationNumber }) {
             Mark all as read
           </span>
         </div>
-        <div className="overflow-y-auto max-h-full">
+        <div className="overflow-y-auto md:max-h-500 max-h-400">
           {notifications &&
             [...notifications?.items]
               .filter((x) => !x.isRead)

@@ -146,7 +146,7 @@ function ChatList({ className, setChatNotificationNumber }) {
                         {lastMessage.content
                           ? lastMessage.content
                           : lastMessage.imageUrl
-                          ? "Sent you an image"
+                          ? "Sent an image"
                           : ""}
                       </span>
                     </div>

@@ -129,6 +129,7 @@ namespace TeeApp.Api.Controllers
             {
                 case 201:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedPost(result.Data.Post);
                         return Created("", result.Message);
                     }
                 case 404: return NotFound(result.Message);
@@ -148,6 +149,7 @@ namespace TeeApp.Api.Controllers
             {
                 case 200:
                     {
+                        await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedPost(result.Data.Post);
                         return Ok(result.Message);
                     }
                 case 403: return Forbid();

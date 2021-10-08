@@ -5,6 +5,7 @@ namespace TeeApp.Utilities.Constants
 {
     public class SystemConstants
     {
+        public const string ADMIN_USERNAME = "teeadmin";
         public const string CONNECTION_NAME = "DefaultConnection";
         public const string IMAGE_FOLDER = "img";
         public const string DEFAULT_FOLDER = "default";

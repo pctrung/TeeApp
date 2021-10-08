@@ -5,7 +5,7 @@ using TeeApp.Application.Common;
 using TeeApp.Application.Identity;
 using TeeApp.Data.Entities;
 using TeeApp.Models.ViewModels;
-using TeeApp.Utilities.Constants; 
+using TeeApp.Utilities.Constants;
 
 namespace TeeApp.Api
 {
@@ -57,7 +57,7 @@ namespace TeeApp.Api
                 CreateMap<Friendship, FriendshipViewModel>()
                     .ForMember(
                         des => des.User,
-                        act => act.MapFrom(src => src.RequestedUserId == currentUser.UserId ? src.RecievedUser : src.RequestedUser));
+                        act => act.MapFrom(src => src.RequestedUserId.Equals(currentUser.UserId) ? src.RecievedUser : src.RequestedUser));
             }
             else
             {

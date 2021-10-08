@@ -25,6 +25,7 @@ export default function usePostApi() {
       return Api.get(url, { params });
     },
     getById: (id) => {
+      dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${id}`;
       return Api.get(url);
     },

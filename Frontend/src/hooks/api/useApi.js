@@ -51,7 +51,7 @@ export default function useApi() {
           case 401:
             popupTitle = "Login required";
             window.localStorage.removeItem("token");
-            history?.push("/login");
+            window.location.href = process.env.PUBLIC_URL + "/";
             break;
           case 403:
             popupTitle = "Forbidden";
@@ -76,7 +76,13 @@ export default function useApi() {
       if (!message.toLowerCase().includes("username or password")) {
         openPopup(popupTitle, message);
       }
+      if (message.toLowerCase().includes("Unable to identify user")) {
+        openPopup(popupTitle, message);
+        window.localStorage.removeItem("token");
+        window.location.href = process.env.PUBLIC_URL + "/";
+      }
       history?.push("/ServerError");
+
       return Promise.reject(error?.response?.data);
     },
   );

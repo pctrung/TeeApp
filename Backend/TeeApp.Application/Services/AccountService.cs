@@ -11,6 +11,7 @@ using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Models.RequestModels.Users;
+using TeeApp.Utilities.Constants;
 
 namespace TeeApp.Application.Services
 {
@@ -43,7 +44,7 @@ namespace TeeApp.Application.Services
             var username = request.Username;
 
             // check email is match if user type email
-            var emailCheck = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Username);
+            var emailCheck = await _context.Users.FirstOrDefaultAsync(x => x.Email.ToLower().Equals(request.Username.ToLower()));
             if (emailCheck != null)
             {
                 username = emailCheck.UserName;
@@ -98,7 +99,7 @@ namespace TeeApp.Application.Services
                     {
                         Description = "Please select date of birth smaller than today.",
                         Code = "400"
-                    });  
+                    });
             }
             var user = new User()
             {
@@ -109,7 +110,15 @@ namespace TeeApp.Application.Services
                 Email = request.Email,
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,
+                Following = new()
             };
+
+            // follow admin when register
+            var admin = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(SystemConstants.ADMIN_USERNAME));
+            if (admin != null)
+            {
+                user.Following.Add(admin);
+            }
 
             var result = await _userManager.CreateAsync(user, request.Password);
             await _userManager.AddClaimAsync(user, new Claim("id", user.Id));
