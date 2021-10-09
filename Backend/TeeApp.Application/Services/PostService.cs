@@ -97,11 +97,61 @@ namespace TeeApp.Application.Services
         public async Task<PagedResult<PostViewModel>> GetAllPaginationAsync(PaginationRequestBase request)
         {
             var posts = await _context.Posts
+                .Where(x => x.DateDeleted == null)
+                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
+                .Include(x => x.Comments)
+                .Include(x => x.Reactions)
+                .Include(x => x.Photos)
+                .Include(x => x.Creator)
+                .OrderByDescending(x => x.DateCreated)
+                .AsSplitQuery()
+                .ToListAsync();
+
+            posts.ToList().ForEach(post =>
+            {
+                if (!post.Creator.Id.Equals(_currentUser.Id))
+                {
+                    switch (post.Privacy)
+                    {
+                        case PrivacyType.Private:
+                            posts.Remove(post);
+                            return;
+
+                        case PrivacyType.Friend:
+                            if (!IsMyFriend(post.Creator))
+                            {
+                                posts.Remove(post);
+                                return;
+                            }
+                            break;
+                    }
+                }
+            });
+
+            var totalRecords = posts.Count;
+            var pagedPosts = posts.Paged(request.Page, request.Limit);
+            var pagedPostsViewModels = _mapper.Map<List<PostViewModel>>(pagedPosts);
+
+            var result = new PagedResult<PostViewModel>()
+            {
+                Items = pagedPostsViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecords
+            };
+            return result;
+        }
+
+        public async Task<PagedResult<PostViewModel>> GetNewsFeedPaginationAsync(PaginationRequestBase request)
+        {
+            var posts = await _context.Posts
                 .Where(x => (_currentUser.Id.Equals(x.Creator.Id) || _currentUser.Following.Contains(x.Creator)) && x.DateDeleted == null)
                 .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
                 .Include(x => x.Comments)
                 .Include(x => x.Reactions)
                 .Include(x => x.Photos)
+                .Include(x => x.Creator)
                 .OrderByDescending(x => x.DateCreated)
                 .AsSplitQuery()
                 .ToListAsync();
@@ -154,6 +204,7 @@ namespace TeeApp.Application.Services
             .Include(x => x.Comments)
             .Include(x => x.Reactions)
             .Include(x => x.Photos)
+            .Include(x => x.Creator)
             .OrderByDescending(x => x.DateCreated)
             .AsSplitQuery()
             .ToListAsync();
@@ -201,6 +252,7 @@ namespace TeeApp.Application.Services
                 .Include(x => x.Reactions)
                 .Include(x => x.Comments)
                 .Include(x => x.Photos)
+                .Include(x => x.Creator)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(x => x.Id.Equals(postId));
 

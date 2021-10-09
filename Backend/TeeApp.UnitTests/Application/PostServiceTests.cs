@@ -38,7 +38,7 @@ namespace TeeApp.UnitTests.Application
             var request = new PaginationRequestBase() { Keyword = "", Limit = 50, Page = 1 };
 
             // Act
-            var list = await postService.GetAllPaginationAsync(request);
+            var list = await postService.GetNewsFeedPaginationAsync(request);
 
             // Assert
             // fake data include 4 valid post
@@ -64,7 +64,7 @@ namespace TeeApp.UnitTests.Application
             var request = new PaginationRequestBase() { Keyword = "", Limit = 50, Page = 1 };
 
             // Act
-            var list = await postService.GetAllPaginationAsync(request);
+            var list = await postService.GetNewsFeedPaginationAsync(request);
 
             // Assert
             Assert.Empty(list.Items);

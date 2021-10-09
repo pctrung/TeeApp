@@ -105,7 +105,7 @@ function Header({ className }) {
         behavior: "smooth",
       });
       dispatch(resetNewPost());
-      postApi.getAll().then((response) => {
+      postApi.getNewsFeed().then((response) => {
         dispatch(refreshPost(response));
       });
     } else {

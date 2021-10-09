@@ -17,6 +17,13 @@ export default function usePostApi() {
       const url = `${baseApiUrl}`;
       return Api.get(url, { params });
     },
+    getNewsFeed: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.POST };
+      }
+      const url = `${baseApiUrl}/newsFeed`;
+      return Api.get(url, { params });
+    },
     getByUserName: (userName, params) => {
       if (!params?.limit) {
         params = { ...params, limit: DefaultLimit.POST };

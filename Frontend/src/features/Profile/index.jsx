@@ -144,7 +144,7 @@ function Profile() {
   function block() {
     if (friendApi) {
       friendApi.block(userName).then((response) => {
-        history.push("/");
+        history.push("/friends");
       });
     }
   }

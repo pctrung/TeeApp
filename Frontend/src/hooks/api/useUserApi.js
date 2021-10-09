@@ -1,5 +1,6 @@
 import { setIsLoading } from "app/appSlice.js";
 import { useDispatch } from "react-redux";
+import { DefaultLimit } from "utils/Constants.js";
 import useApi from "./useApi.js";
 
 const baseApiUrl = "/users";
@@ -9,9 +10,12 @@ export default function useUserApi() {
   const dispatch = useDispatch();
 
   const userApi = {
-    getUserList: () => {
+    getUserList: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.FRIEND };
+      }
       const url = `${baseApiUrl}`;
-      return Api.get(url);
+      return Api.get(url, { params });
     },
     getCurrentUser: () => {
       const url = `${baseApiUrl}/current`;

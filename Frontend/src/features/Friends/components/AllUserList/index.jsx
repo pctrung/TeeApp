@@ -1,15 +1,14 @@
-import Button from "components/Button";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
 import Pagination from "components/Pagination";
-import useFriendApi from "hooks/api/useFriendApi.js";
+import useUserApi from "hooks/api/useUserApi";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function FollowingList({ keyword }) {
+export default function AllUserList({ keyword }) {
   const [list, setList] = useState({ items: [] });
   const [confirmModal, setConfirmModal] = useState({});
-  const friendApi = useFriendApi();
+  const userApi = useUserApi();
   const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState({ page: 1 });
   const [error, setError] = useState("");
@@ -23,8 +22,8 @@ export default function FollowingList({ keyword }) {
     if ((isHasMore && pagination) || pagination.page === 1) {
       setIsLoading(true);
       setError(false);
-      friendApi
-        .getFollowing(pagination)
+      userApi
+        .getUserList(pagination)
         .then((response) => {
           if (pagination.page > 1) {
             setList({
@@ -71,11 +70,11 @@ export default function FollowingList({ keyword }) {
         isLoading={isLoading}
         error={error}
         isHasMore={isHasMore}
-        loadMoreContent="Load more following..."
+        loadMoreContent="Load more users..."
       />
       {list?.totalRecords <= 0 && (
         <div className="text-center py-3 font-semibold mt-4 text-sm md:text-base">
-          You aren't following anyone.
+          Not found any users.
         </div>
       )}
     </>
@@ -83,22 +82,6 @@ export default function FollowingList({ keyword }) {
 }
 
 const Friend = ({ user = {} }) => {
-  const friendApi = useFriendApi();
-  const [isFollowing, setIsFollowing] = useState(true);
-
-  function handleFollow() {
-    if (friendApi) {
-      if (isFollowing) {
-        friendApi.unfollow(user.userName).then((response) => {
-          setIsFollowing(false);
-        });
-      } else {
-        friendApi.follow(user.userName).then((response) => {
-          setIsFollowing(true);
-        });
-      }
-    }
-  }
   return (
     <div className="flex-center flex-col w-full space-y-1">
       <Link
@@ -110,17 +93,6 @@ const Friend = ({ user = {} }) => {
           {user.fullName}
         </div>
       </Link>
-      <div className="flex flex-col space-y-1 w-full">
-        {isFollowing ? (
-          <Button small secondary onClick={handleFollow} className="w-full">
-            Unfollow
-          </Button>
-        ) : (
-          <Button small onClick={handleFollow} className="w-full">
-            Follow
-          </Button>
-        )}
-      </div>
     </div>
   );
 };

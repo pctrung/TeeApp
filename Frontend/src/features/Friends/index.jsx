@@ -5,6 +5,7 @@ import FollowerList from "./components/FollowerList";
 import FollowingList from "./components/FollowingList";
 import FriendList from "./components/FriendList";
 import FriendRequestList from "./components/FriendRequestList";
+import AllUserList from "./components/AllUserList";
 
 function Friends() {
   const [keyword, setKeyword] = useState("");
@@ -58,6 +59,9 @@ function Friends() {
           )}
           {activeTabType === FriendOptionType.FOLLOWING && (
             <FollowingList keyword={keyword} />
+          )}
+          {activeTabType === FriendOptionType.ALL && (
+            <AllUserList keyword={keyword} />
           )}
         </div>
       </div>

@@ -64,7 +64,6 @@ export default function BlockedList({ keyword }) {
         {list?.items.map((user) => (
           <Friend
             setConfirmModal={setConfirmModal}
-            friendship={user}
             user={user}
             fetchData={() => {
               setPagination({ page: 1 });

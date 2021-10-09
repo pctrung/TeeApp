@@ -34,7 +34,7 @@ export default function usePostPagination(pagination, userName = "") {
           });
       } else {
         postApi
-          .getAll({ page: pagination.page })
+          .getNewsFeed({ page: pagination.page })
           .then((response) => {
             if (pagination.page > 1) {
               dispatch(loadPost(response));

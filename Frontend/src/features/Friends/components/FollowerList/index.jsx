@@ -6,7 +6,7 @@ import useFriendApi from "hooks/api/useFriendApi.js";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-export default function BlockedList({ keyword }) {
+export default function FollowerList({ keyword }) {
   const [list, setList] = useState({ items: [] });
   const [confirmModal, setConfirmModal] = useState({});
   const friendApi = useFriendApi();
@@ -64,7 +64,6 @@ export default function BlockedList({ keyword }) {
         {list?.items.map((user) => (
           <Friend
             setConfirmModal={setConfirmModal}
-            friendship={user}
             user={user}
             fetchData={() => {
               setPagination({ page: 1 });

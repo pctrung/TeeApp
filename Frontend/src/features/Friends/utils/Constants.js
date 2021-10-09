@@ -5,9 +5,14 @@ export const FriendOptionType = {
   FOLLOWING: 4,
   FOLLOWERS: 5,
   BLOCKED: 6,
+  ALL: 7,
 };
 
 export const FriendOption = [
+  {
+    name: "All Users",
+    type: FriendOptionType.ALL,
+  },
   {
     name: "Friends",
     type: FriendOptionType.FRIENDS,
