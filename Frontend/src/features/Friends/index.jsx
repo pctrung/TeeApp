@@ -13,7 +13,7 @@ function Friends() {
 
   return (
     <>
-      <div className="w-full rounded-xl bg-white dark:bg-dark-secondary px-5 py-4 pb-6 flex flex-col space-y-4">
+      <div className="w-full max-w-screen-lg mx-auto rounded-xl bg-white dark:bg-dark-secondary px-5 py-4 pb-6 flex flex-col space-y-4">
         <div className="flex justify-between items-center">
           <span className="font-bold md:text-2xl text-xl">Friends</span>
           <div className="relative">

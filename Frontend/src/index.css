@@ -58,6 +58,13 @@
   .transition-base {
     @apply transition-all duration-300 ease-in-out;
   }
+  .clickable {
+    @apply hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-dark-hover dark:active:bg-dark-third cursor-pointer;
+  }
+  .clickable-secondary {
+    @apply hover:bg-gray-200 active:bg-gray-300 dark:hover:bg-dark-hover dark:active:bg-dark-third cursor-pointer;
+  }
+
   .overlay {
     @apply animate-fadeIn h-screen w-screen fixed inset-0 bg-white bg-opacity-60 dark:bg-black dark:bg-opacity-70 z-50 transition-base;
   }

@@ -74,6 +74,7 @@ function Header({ className }) {
 
   const goToProfile = (userName) => {
     history.push("/profile/" + userName);
+    setKeyword("");
   };
   async function logout() {
     await accountApi.logout();
@@ -112,6 +113,7 @@ function Header({ className }) {
       history.push(route);
     }
     setIsOpenNavBar(false);
+    setKeyword("");
   }
 
   return (
@@ -156,7 +158,7 @@ function Header({ className }) {
       >
         <div
           ref={ref}
-          className="relative max-full md:max-w-screen-md lg:max-w-screen-lg mx-auto flex justify-between items-center"
+          className="relative max-w-full md:max-w-screen-xl mx-auto flex justify-between items-center"
         >
           <div className="flex space-x-4 flex-shrink-0">
             <span onClick={() => goTo("/", location.pathname === "/")}>

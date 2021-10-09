@@ -58,8 +58,8 @@ export const ReactionType = {
   LIKE: 0,
   LOVE: 1,
   CARE: 2,
-  WOW: 3,
   HAHA: 4,
+  WOW: 3,
   SAD: 5,
   ANGRY: 6,
 };
