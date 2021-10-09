@@ -148,6 +148,27 @@ function Profile() {
       });
     }
   }
+  function openBlockModal() {
+    setConfirmModal({
+      isOpen: true,
+      content: `Do you want to block ${user.fullName}?`,
+      action: block,
+    });
+  }
+  function openUnfriendModal() {
+    setConfirmModal({
+      isOpen: true,
+      content: `Do you want to unfriend with ${user.fullName}?`,
+      action: unfriend,
+    });
+  }
+  function openDeclineModal() {
+    setConfirmModal({
+      isOpen: true,
+      content: `Do you want to decline friend request from ${user.fullName}?`,
+      action: unfriend,
+    });
+  }
   useEffect(() => {
     if (relation) {
       switch (relation.relationType) {
@@ -155,12 +176,7 @@ function Profile() {
           setRelationButton(
             <Button
               className="relative flex items-center space-x-1"
-              onClick={() =>
-                setConfirmModal({
-                  isOpen: true,
-                  content: `Do you want to unfriend with ${user.fullName}?`,
-                })
-              }
+              onClick={openUnfriendModal}
             >
               <i className="bx bxs-user-check text-xl"></i>
               <span>Friend</span>
@@ -179,7 +195,11 @@ function Profile() {
         }
         case RelationType.FRIEND_REQUEST_BY_ME: {
           setRelationButton(
-            <Button className="flex items-center space-x-1" onClick={unfriend}>
+            <Button
+              secondary
+              className="flex items-center space-x-1"
+              onClick={unfriend}
+            >
               <i className="bx bxs-user-x text-xl"></i>
               <span>Cancel friend request</span>
             </Button>,
@@ -192,12 +212,7 @@ function Profile() {
               <Button
                 secondary
                 className="flex items-center space-x-1"
-                onClick={() =>
-                  setConfirmModal({
-                    isOpen: true,
-                    content: `Do you want to decline friend request from ${user.fullName}?`,
-                  })
-                }
+                onClick={openDeclineModal}
               >
                 <i className="bx bxs-user-x text-xl"></i>
                 <span>Decline</span>
@@ -223,7 +238,7 @@ function Profile() {
           title="Are you sure?"
           content={confirmModal.content}
           confirmButtonTitle="Yes"
-          confirmButtonAction={() => unfriend()}
+          confirmButtonAction={confirmModal.action}
         />
       )}
       {photoView.isOpen && (
@@ -342,8 +357,8 @@ function Profile() {
                           className={
                             "text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 " +
                             (relation.isFollowing
-                              ? "bx bxs-user-check"
-                              : "bx bxs-user-plus")
+                              ? "bx bx-x-circle"
+                              : "bx bx-check-circle")
                           }
                         ></i>
                         <span>
@@ -352,7 +367,7 @@ function Profile() {
                       </button>
                       <button
                         className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-hover text-sm"
-                        onClick={block}
+                        onClick={openBlockModal}
                       >
                         <i className="bx bx-block text-lg text-black dark:text-dark-txt w-7 h-7 text-center align-middle"></i>
                         <span>Block</span>

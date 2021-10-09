@@ -58,7 +58,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
   return isOpen ? (
     <div
       className={
-        "py-4 px-5 max-w-xl min-w-400 bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow" +
+        "py-4 px-5 max-w-xl min-w-200 bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow" +
         " " +
         className
       }

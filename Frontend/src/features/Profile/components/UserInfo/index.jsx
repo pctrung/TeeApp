@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 import { GenderName } from "utils/Enums";
 
@@ -43,7 +44,7 @@ function UserInfo({ user, className }) {
             </span>
             <span className="font-medium max-row-2">
               {new Date(user.dateOfBirth).getFullYear() > 1
-                ? new Date(user.dateOfBirth).toLocaleDateString("en-US")
+                ? moment(user.dateOfBirth).format("LL")
                 : "--"}
             </span>
           </div>

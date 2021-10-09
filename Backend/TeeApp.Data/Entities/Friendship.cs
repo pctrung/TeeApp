@@ -11,6 +11,6 @@ namespace TeeApp.Data.Entities
         public string RecievedUserId { get; set; }
         public FriendshipType Type { get; set; }
         public DateTime RequestedDate { get; set; }
-        public DateTime ResponsedDate { get; set; }
+        public DateTime RespondedDate { get; set; }
     }
 }

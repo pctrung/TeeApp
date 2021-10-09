@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import ChatList from "features/Chat/components/ChatList";
 import NotificationList from "features/Header/components/NotificationList";
 import useUserApi from "hooks/api/useUserApi";
-import { NavList } from "utils/config";
+import { NavList } from "features/Header/utils/config";
 import { refreshPost, resetNewPost } from "app/postSlice";
 import usePostApi from "hooks/api/usePostApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
@@ -217,7 +217,9 @@ function Header({ className }) {
               onClick={() => goToProfile(user.userName)}
             >
               <ImageCircle src={user.avatarUrl} size="sm" />
-              <span className="px-2 font-semibold">{user.firstName}</span>
+              <span className="px-2 font-semibold truncate w-full">
+                {user.firstName}
+              </span>
             </li>
             <li className="relative">
               <ClickableIcon

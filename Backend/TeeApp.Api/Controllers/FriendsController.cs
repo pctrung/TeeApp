@@ -50,7 +50,7 @@ namespace TeeApp.Api.Controllers
             };
         }
 
-        [HttpGet("/friendRequests")]
+        [HttpGet("friendRequests")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetFriendRequest([FromQuery] PaginationRequestBase request)
         {
@@ -58,7 +58,7 @@ namespace TeeApp.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/myRequests")]
+        [HttpGet("myRequests")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<PagedResult<FriendshipViewModel>>> GetRequested([FromQuery] PaginationRequestBase request)
         {
@@ -66,7 +66,7 @@ namespace TeeApp.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/blocked")]
+        [HttpGet("blocked")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<FriendshipViewModel>> GetBlocked([FromQuery] PaginationRequestBase request)
         {
@@ -74,7 +74,7 @@ namespace TeeApp.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/following")]
+        [HttpGet("following")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<FriendshipViewModel>> GetFollowing([FromQuery] PaginationRequestBase request)
         {
@@ -82,7 +82,7 @@ namespace TeeApp.Api.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/followers")]
+        [HttpGet("followers")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<FriendshipViewModel>> GetFollowers([FromQuery] PaginationRequestBase request)
         {
@@ -177,9 +177,9 @@ namespace TeeApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> UnBlock(string userName)
+        public async Task<IActionResult> Unblock(string userName)
         {
-            var result = await _friendService.UnBlockFriendAsync(userName);
+            var result = await _friendService.UnblockFriendAsync(userName);
 
             return result.StatusCode switch
             {

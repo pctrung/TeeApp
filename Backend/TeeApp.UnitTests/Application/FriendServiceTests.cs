@@ -648,7 +648,7 @@ namespace TeeApp.UnitTests.Application
             string friendUserName = "nonexists";
 
             // Act
-            var result = await friendService.UnBlockFriendAsync(friendUserName);
+            var result = await friendService.UnblockFriendAsync(friendUserName);
 
             // Assert
             Assert.Equal(404, result.StatusCode);
@@ -666,7 +666,7 @@ namespace TeeApp.UnitTests.Application
             string friendUserName = "friend1";
 
             // Act
-            var result = await friendService.UnBlockFriendAsync(friendUserName);
+            var result = await friendService.UnblockFriendAsync(friendUserName);
 
             // Assert
             Assert.Equal(400, result.StatusCode);
@@ -684,7 +684,7 @@ namespace TeeApp.UnitTests.Application
             string friendUserName = "blockedbyme";
 
             // Act
-            var result = await friendService.UnBlockFriendAsync(friendUserName);
+            var result = await friendService.UnblockFriendAsync(friendUserName);
 
             // Assert
             Assert.Equal(200, result.StatusCode);

@@ -1,14 +1,54 @@
-import { setIsLoading } from "app/appSlice.js";
-import { useDispatch } from "react-redux";
+import { DefaultLimit } from "utils/Constants.js";
 import useApi from "./useApi.js";
 
 const baseApiUrl = "/friends";
 
 export default function useFriendApi() {
   const Api = useApi();
-  const dispatch = useDispatch();
 
   const friendApi = {
+    getFriends: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.FRIEND };
+      }
+      const url = `${baseApiUrl}`;
+      return Api.get(url, { params });
+    },
+    getFriendRequests: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.FRIEND };
+      }
+      const url = `${baseApiUrl}/friendRequests`;
+      return Api.get(url, { params });
+    },
+    getMyRequests: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.FRIEND };
+      }
+      const url = `${baseApiUrl}/myRequests`;
+      return Api.get(url, { params });
+    },
+    getFollowers: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.FRIEND };
+      }
+      const url = `${baseApiUrl}/followers`;
+      return Api.get(url, { params });
+    },
+    getFollowing: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.FRIEND };
+      }
+      const url = `${baseApiUrl}/following`;
+      return Api.get(url, { params });
+    },
+    getBlocked: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.FRIEND };
+      }
+      const url = `${baseApiUrl}/blocked`;
+      return Api.get(url, { params });
+    },
     getRelationByUserName: (userName) => {
       const url = `${baseApiUrl}/${userName}`;
       return Api.get(url);

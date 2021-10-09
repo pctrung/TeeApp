@@ -117,6 +117,9 @@ namespace TeeApp.Application.Services
             var pagedFriendships = friendships.Paged(request.Page, request.Limit);
             var pagedFriendshipViewModels = _mapper.Map<List<FriendshipViewModel>>(pagedFriendships);
 
+            var following = _currentUser.Following.Select(x => x.UserName);
+            pagedFriendshipViewModels.ForEach(friendship => { friendship.IsFollowing = following.Contains(friendship.User.UserName); });
+
             var result = new PagedResult<FriendshipViewModel>()
             {
                 Items = pagedFriendshipViewModels,
@@ -276,7 +279,7 @@ namespace TeeApp.Application.Services
             if (friendship.RequestedUserId.Equals(friend.Id))
             {
                 friendship.Type = FriendshipType.Accepted;
-                friendship.ResponsedDate = DateTime.Now;
+                friendship.RespondedDate = DateTime.Now;
 
                 if (!_currentUser.Following.Contains(friend))
                 {
@@ -318,7 +321,7 @@ namespace TeeApp.Application.Services
             }
 
             friendRequest.Type = FriendshipType.Accepted;
-            friendRequest.ResponsedDate = DateTime.Now;
+            friendRequest.RespondedDate = DateTime.Now;
 
             if (!_currentUser.Following.Contains(friend))
             {
@@ -391,7 +394,7 @@ namespace TeeApp.Application.Services
             return ApiResult.Ok("Blocked " + friend.FullName);
         }
 
-        public async Task<ApiResult> UnBlockFriendAsync(string userName)
+        public async Task<ApiResult> UnblockFriendAsync(string userName)
         {
             if (userName.Equals(SystemConstants.ADMIN_USERNAME, StringComparison.OrdinalIgnoreCase))
             {

@@ -100,7 +100,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
           <div className="flex flex-col space-y-1 justify-evenly w-full bg-gray-100 dark:bg-dark-third rounded-2xl px-3 py-3">
             <div className="w-full flex justify-between items-center mr-9">
               <Link
-                className="font-semibold text-sm cursor-pointer hover:underline"
+                className="font-semibold text-xs md:text-sm cursor-pointer hover:underline"
                 to={`/profile/${comment?.creator?.userName}`}
               >
                 {comment?.creator?.fullName}
@@ -127,12 +127,12 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
                 </span>
               </form>
             ) : (
-              <div className="break-words overflow-x-auto text-sm max-w-350 md:max-w-450">
+              <div className="break-words overflow-x-auto text-xs md:text-sm max-w-350 md:max-w-450">
                 {comment?.content}
               </div>
             )}
           </div>
-          <span className="ml-2 text-xs text-gray-500 dark:text-dark-txt">
+          <span className="ml-2 text-tiny md:text-xs text-gray-500 dark:text-dark-txt">
             {moment(new Date(comment?.dateCreated), "YYYYMMDD")
               .fromNow()
               ?.replace("ago", "")

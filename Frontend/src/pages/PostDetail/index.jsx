@@ -15,7 +15,9 @@ function PostDetail() {
 
   useEffect(() => {
     if (postId && posts) {
-      const findPost = posts?.items?.find((post) => post.id === postId);
+      const findPost = posts?.items?.find(
+        (post) => post.id.toString() === postId,
+      );
       if (findPost) {
         setPost(findPost);
       } else {

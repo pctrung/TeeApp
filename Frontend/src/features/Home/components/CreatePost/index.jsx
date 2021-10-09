@@ -112,7 +112,7 @@ function CreatePost() {
   }
   return (
     <>
-      <div className="max-w-xl md:min-w-500 min-w-400 w-full bg-white dark:bg-dark-secondary rounded-xl shadow px-4 pt-3 pb-1 space-y-3 divide-y">
+      <div className="max-w-xl md:min-w-500 min-w-200 w-full bg-white dark:bg-dark-secondary rounded-xl shadow px-4 pt-3 pb-1 space-y-3 divide-y">
         <div className="flex space-x-2 w-full items-center">
           <Link
             className="font-semibold text-sm cursor-pointer flex-shrink-0"

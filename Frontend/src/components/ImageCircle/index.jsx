@@ -51,7 +51,7 @@ function ImageCircle({
       onlineSize = "border-2 w-4 h-4";
       break;
     case "xl":
-      onlineSize = "border-2 w-4 h-4";
+      onlineSize = "border-2 w-5 h-5";
       break;
     case "full":
       onlineSize = "border-4 w-1/5 h-1/5";

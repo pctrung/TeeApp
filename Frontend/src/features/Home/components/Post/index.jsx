@@ -91,7 +91,7 @@ function Post({ post, isOpenComment = false }) {
       {isOpenEdit && (
         <EditPost post={post} isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} />
       )}
-      <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-400 w-full mx-auto bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
+      <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-200 w-full mx-auto bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
         <div className="flex justify-between items-center w-full">
           <div className="flex space-x-2">
             <Link

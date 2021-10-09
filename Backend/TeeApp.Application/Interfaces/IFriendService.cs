@@ -30,7 +30,7 @@ namespace TeeApp.Application.Interfaces
 
         Task<ApiResult> BlockFriendAsync(string userName);
 
-        Task<ApiResult> UnBlockFriendAsync(string userName);
+        Task<ApiResult> UnblockFriendAsync(string userName);
 
         Task<ApiResult> FollowFriendAsync(string userName);
 

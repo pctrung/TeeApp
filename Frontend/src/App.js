@@ -28,6 +28,7 @@ import {
   addNewPost,
 } from "app/postSlice";
 import PostDetail from "pages/PostDetail";
+import Friends from "features/Friends";
 
 function App(props) {
   const isLoading = useSelector((state) => state.app.isLoading);
@@ -110,10 +111,11 @@ function App(props) {
         <Chat />
         <Header className="fixed top-0 w-screen" />
         <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-16 pb-10">
-          <div className="max-full md:max-w-screen-md lg:max-w-screen-lg mx-auto pt-1 md:pt-3">
+          <div className="max-full md:max-w-screen-md lg:max-w-screen-lg mx-auto pt-2 md:pt-4">
             <Switch>
               <Route exact path="/Forbid" component={Forbid} />
               <Route exact path="/ServerError" component={ServerError} />
+              <Route exact path="/friends" component={Friends} />
               <Route exact path="/profile/:userName" component={Profile} />
               <Route exact path="/posts/:postId" component={PostDetail} />
               <Route exact path="/" component={Home} />
