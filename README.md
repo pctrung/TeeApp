@@ -10,9 +10,9 @@ Now available at https://pctrung.github.io/TeeApp/
  - SQL Server
  - Entity Framework Core
  ### Frontend
- - TailwindCSS
  - ReactJs
  - Redux
+ - TailwindCSS
 
  ## UI
 - TeeApp:
