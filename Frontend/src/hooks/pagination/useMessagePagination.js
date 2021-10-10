@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import useChatApi from "../api/useChatApi";
 
-export default function useMessagePagination(currentChat, page) {
+export default function useMessagePagination(currentChat = {}, page) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const [isHasMore, setIsHasMore] = useState(false);

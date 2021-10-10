@@ -15,7 +15,6 @@ export default function useChatApi() {
       return Api.get(url);
     },
     getById: (chatId, params) => {
-      dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/${chatId}`;
       return Api.get(url, { params });
     },

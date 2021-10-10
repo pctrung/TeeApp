@@ -1,22 +1,22 @@
-import React, { useEffect, useRef, useState } from "react";
-import Logo from "logo-circle.png";
-import ClickableIcon from "components/ClickableIcon";
-import ImageCircle from "components/ImageCircle";
-import { Link, useHistory, useLocation } from "react-router-dom";
-import useDarkMode from "hooks/utils/useDarkMode";
-import ConfirmModal from "components/ConfirmModal";
+import { refreshPost, resetNewPost } from "app/postSlice";
 import { setCurrentUser } from "app/userSlice";
-import { useDispatch, useSelector } from "react-redux";
+import ClickableIcon from "components/ClickableIcon";
+import ConfirmModal from "components/ConfirmModal";
+import ImageCircle from "components/ImageCircle";
 import ChatList from "features/Chat/components/ChatList";
 import NotificationList from "features/Header/components/NotificationList";
-import useUserApi from "hooks/api/useUserApi";
 import { NavList } from "features/Header/utils/config";
-import { refreshPost, resetNewPost } from "app/postSlice";
-import usePostApi from "hooks/api/usePostApi";
-import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import useAccountApi from "hooks/api/useAccountApi";
-import { useEscToClose } from "hooks/utils/useEscToClose";
+import usePostApi from "hooks/api/usePostApi";
+import useUserApi from "hooks/api/useUserApi";
+import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
+import useDarkMode from "hooks/utils/useDarkMode";
 import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
+import { useEscToClose } from "hooks/utils/useEscToClose";
+import Logo from "logo-circle.png";
+import React, { useEffect, useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 
 function Header({ className }) {
   const history = useHistory();

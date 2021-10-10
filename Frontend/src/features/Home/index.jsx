@@ -22,7 +22,7 @@ function Home() {
   return (
     <>
       <div className="w-full flex flex-cols items-start justify-between animate-fadeIn space-x-2">
-        <div className="sticky top-20 lg:block hidden w-full bg-white dark:bg-dark-secondary rounded-lg">
+        <div className="sticky top-20 lg:block hidden w-full bg-white dark:bg-dark-secondary rounded-lg shadow">
           <div className="flex flex-col items-center w-full">
             <Link
               to={`/profile/${user.userName}`}

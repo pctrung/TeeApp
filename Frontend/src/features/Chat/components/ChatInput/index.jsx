@@ -1,9 +1,10 @@
-import EmojiIcon from "assets/icons/emoji.svg";
+import EmojiIcon from "assets/icons/emoji-icon.svg";
 import ImageIcon from "assets/icons/image-icon.svg";
 import SendIconNormal from "assets/icons/send-icon.svg";
 import ClickableIcon from "components/ClickableIcon";
 import Picker from "emoji-picker-react";
 import useChatApi from "hooks/api/useChatApi";
+import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import PropTypes from "prop-types";
 import React, { useRef, useState } from "react";
 
@@ -47,7 +48,7 @@ function ChatInput({ chatId }) {
     <div>
       <form
         onSubmit={(e) => onSendMessage(e)}
-        className="flex justify-between items-center space-x-1 pl-4 pr-2 md:pr-6 z-0"
+        className="flex justify-between items-center space-x-1"
       >
         <div className="relative w-full flex">
           <input
@@ -58,18 +59,23 @@ function ChatInput({ chatId }) {
             onChange={sendImage}
           />
           <label htmlFor="imageFile">
-            <ClickableIcon className="h-10 w-10 p-2 mr-2" icon={ImageIcon} />
+            <ClickableIcon
+              secondMode
+              className="h-9 w-9 p-2 mr-2"
+              icon={ImageIcon}
+            />
           </label>
           <input
             value={content}
             onChange={(e) => setContent(e.target.value)}
             type="text"
             placeholder="Aa"
-            className="bg-gray-200 dark:bg-dark-secondary rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-base relative"
+            className="bg-gray-200 dark:bg-dark-third rounded-3xl w-full py-1 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-base relative text-sm"
           />
           <div ref={ref} className="relative">
             <ClickableIcon
-              className="absolute h-10 w-10 p-2 right-1 top-0"
+              secondMode
+              className="absolute h-9 w-9 p-2 right-1 top-0"
               icon={EmojiIcon}
               onClick={() => setIsOpenEmoji(!isOpenEmoji)}
             />
@@ -88,8 +94,9 @@ function ChatInput({ chatId }) {
         <button>
           <ClickableIcon
             disableAutoFocus
+            secondMode
             icon={SendIconNormal}
-            className="w-12 h-12 p-3"
+            className="w-9 h-9 p-2"
           />
         </button>
       </form>

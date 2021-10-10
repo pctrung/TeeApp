@@ -28,10 +28,8 @@ function ChatList({ className, setChatNotificationNumber }) {
   }, [chats]);
 
   function handleClick(id) {
-    if (selectedIds && !selectedIds.includes(id)) {
-      const action = addSelectedId(id);
-      dispatch(action);
-    }
+    const action = addSelectedId(id);
+    dispatch(action);
   }
 
   return (

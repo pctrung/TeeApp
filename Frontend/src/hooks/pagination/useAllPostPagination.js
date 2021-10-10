@@ -14,6 +14,9 @@ export default function useAllPostPagination(pagination) {
 
   useEffect(() => {
     // auto fetch data when page = 1
+    if (pagination.page === -1) {
+      dispatch(refreshPost({ items: [] }));
+    }
     if (
       ((isHasMore && pagination) || pagination.page === 1) &&
       pagination.page !== -1

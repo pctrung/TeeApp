@@ -238,16 +238,16 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
         </div>
         <div className="flex flex-col md:flex-row justify-end md:space-x-2 space-y-2 md:space-y-0 items-center pt-2">
           <Button
-            className="w-full"
-            outline
-            content="Close"
-            onClick={() => setIsOpen(false)}
-          />
-          <Button
             disabled={!isValidButton}
             className="w-full"
             content="Save"
             onClick={() => submit()}
+          />
+          <Button
+            className="w-full"
+            outline
+            content="Close"
+            onClick={() => setIsOpen(false)}
           />
         </div>
       </div>

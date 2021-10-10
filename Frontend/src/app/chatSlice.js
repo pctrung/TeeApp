@@ -45,19 +45,21 @@ const chats = createSlice({
     appendMessageToChat: (state, action) => {
       const chatToAppend = action.payload;
       const messagesToAppend = chatToAppend?.messages;
-      const index = state.findIndex((chat) => {
-        return chat.id === chatToAppend.id;
-      });
-      if (index >= 0) {
-        state[index].totalRecords = chatToAppend.totalRecords;
-        state[index].limit = chatToAppend.limit;
-        state[index].page = chatToAppend.page;
-        state[index].pageCount = chatToAppend.pageCount;
-        if (chatToAppend.keyword) {
-          state[index].messages = messagesToAppend;
-        } else {
-          state[index].messages =
-            state[index].messages.concat(messagesToAppend);
+      if (chatToAppend && messagesToAppend) {
+        const index = state.findIndex((chat) => {
+          return chat.id === chatToAppend.id;
+        });
+        if (index >= 0) {
+          state[index].totalRecords = chatToAppend.totalRecords;
+          state[index].limit = chatToAppend.limit;
+          state[index].page = chatToAppend.page;
+          state[index].pageCount = chatToAppend.pageCount;
+          if (chatToAppend.keyword) {
+            state[index].messages = messagesToAppend;
+          } else {
+            state[index].messages =
+              state[index].messages.concat(messagesToAppend);
+          }
         }
       }
     },
@@ -102,11 +104,17 @@ const selectedIds = createSlice({
   reducers: {
     addSelectedId: (state, action) => {
       if (!state.includes(action.payload)) {
-        if (state.length > 3) {
-          state.shift();
-          state.push(action.payload);
-          return state;
+        // maximum 2 chat windows
+        if (state.length >= 2) {
+          state.splice(0, 1);
         }
+        state.push(action.payload);
+      }
+    },
+    removeSelectedId: (state, action) => {
+      const index = state.indexOf(action.payload);
+      if (index >= 0) {
+        state.splice(index, 1);
       }
     },
   },
@@ -128,5 +136,6 @@ export const {
   addNotification,
   addReadByUserName,
 } = chats.actions;
-export const { addSelectedId } = selectedIds.actions;
+
+export const { addSelectedId, removeSelectedId } = selectedIds.actions;
 export default reducer;

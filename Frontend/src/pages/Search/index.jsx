@@ -32,7 +32,7 @@ function Search() {
     <>
       <form
         onSubmit={(e) => search(e)}
-        className="sticky top-16 md:hidden mb-4 z-30"
+        className="sticky top-16 md:hidden mb-4 z-20"
       >
         <input
           type="search"

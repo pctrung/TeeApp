@@ -14,16 +14,23 @@ import useChatApi from "hooks/api/useChatApi";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { ChatClient } from "utils/Constants";
+import ChatWindow from "./components/ChatWindow";
 
 function Chat() {
   const dispatch = useDispatch();
   const chatApi = useChatApi();
 
   const [connection, setConnection] = useState(null);
+  const [selectedChats, setSelectedChats] = useState([]);
 
   const currentUser = useSelector((state) => state.users.currentUser);
-  const selectedId = useSelector((state) => state.chats.selectedId);
+  const selectedIds = useSelector((state) => state.chats.selectedIds);
+  const chats = useSelector((state) => state.chats.chats);
 
+  useEffect(() => {
+    const selected = chats.filter((x) => selectedIds.includes(x.id));
+    setSelectedChats(selected ?? []);
+  }, [selectedIds, chats]);
   useEffect(() => {
     async function fetchData() {
       chatApi
@@ -37,7 +44,6 @@ function Chat() {
     }
     fetchData();
   }, []);
-
   // for realtime
   useEffect(() => {
     const newConnection = new HubConnectionBuilder()
@@ -56,7 +62,7 @@ function Chat() {
         connection.on(ChatClient.RECEIVE_MESSAGE, (response) => {
           const action = addMessage(response);
           dispatch(action);
-          if (response.chatId && selectedId !== response.chatId) {
+          if (response.chatId && selectedIds !== response.chatId) {
             dispatch(addNotification(response.chatId));
           }
         });
@@ -95,7 +101,23 @@ function Chat() {
     };
   }, [connection]);
 
-  return <div></div>;
+  return (
+    <>
+      <div className="fixed right-2 md:right-10 bottom-1 flex space-x-2 z-20">
+        {selectedChats.map((chat, index) => (
+          <div
+            className={
+              "md:h-112 md:w-400 h-128 max-w-xs flex-shrink-0 " +
+              (index > 0 ? "hidden md:inline" : "")
+            }
+            key={chat.id}
+          >
+            <ChatWindow chat={chat} />
+          </div>
+        ))}
+      </div>
+    </>
+  );
 }
 
 export default Chat;
