@@ -31,7 +31,7 @@ function Notification({ notification, onClick }) {
               className={
                 "text-sm md:text-base text-gray-800 dark:text-dark-txt max-w-full overflow-ellipsis break-word max-row-2" +
                 " " +
-                (!notification?.isRead ? "font-bold" : "")
+                (!notification?.isRead ? "font-bold pr-3" : "")
               }
             >
               {notification?.content}

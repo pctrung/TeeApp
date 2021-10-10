@@ -2,9 +2,11 @@ import ImageCircle from "components/ImageCircle";
 import useUserApi from "hooks/api/useUserApi";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router";
 
 export default function OnlineUserList() {
   const userApi = useUserApi();
+  const location = useLocation();
   const [users, setUsers] = useState([]);
   const [onlineUsers, setOnlineUsers] = useState([]);
   const onlineUserNameList = useSelector(
@@ -15,11 +17,11 @@ export default function OnlineUserList() {
     userApi.getUserList().then((response) => {
       setUsers(response.items);
     });
-  }, []);
+  }, [location.pathname]);
   useEffect(() => {
     const online = users.filter((x) => onlineUserNameList.includes(x.userName));
     setOnlineUsers(online);
-  }, [onlineUserNameList]);
+  }, [onlineUserNameList, users]);
 
   return (
     <>

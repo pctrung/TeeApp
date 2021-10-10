@@ -2,7 +2,7 @@ import { setCurrentUser } from "app/userSlice";
 import Button from "components/Button";
 import Input from "components/Input";
 import useUserApi from "hooks/api/useUserApi";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { Gender } from "utils/Enums";
 

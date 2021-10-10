@@ -10,7 +10,7 @@ export const FriendOptionType = {
 
 export const FriendOption = [
   {
-    name: "All Users",
+    name: "All",
     type: FriendOptionType.ALL,
   },
   {
@@ -18,7 +18,7 @@ export const FriendOption = [
     type: FriendOptionType.FRIENDS,
   },
   {
-    name: "Friend Requests",
+    name: "Requests",
     type: FriendOptionType.FRIEND_REQUESTS,
   },
   {

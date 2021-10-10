@@ -10,13 +10,13 @@ import { Link } from "react-router-dom";
 import OnlineUserList from "./components/OnlineUserList";
 
 function Home() {
-  const [page, setPage] = useState(1);
-  const { posts, isHasMore, isLoading, error } = usePostPagination(page);
+  const [pagination, setPagination] = useState({ page: 1 });
+  const { posts, isHasMore, isLoading, error } = usePostPagination(pagination);
   const user = useSelector((state) => state.users.currentUser);
 
   function loadMore() {
     if (isHasMore) {
-      setPage((prevPage) => prevPage + 1);
+      setPagination({ ...pagination, page: pagination.page + 1 });
     }
   }
   return (
@@ -26,7 +26,7 @@ function Home() {
           <div className="flex flex-col items-center w-full">
             <Link
               to={`/profile/${user.userName}`}
-              className="relative h-20 w-full flex mb-6 select-none"
+              className="relative h-28 w-full flex mb-6 select-none"
             >
               <img
                 src={user?.coverUrl ?? DefaultCover}

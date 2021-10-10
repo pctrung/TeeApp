@@ -19,7 +19,7 @@ function Friends() {
           <div className="relative">
             <input
               type="search"
-              className="bg-gray-100 dark:bg-dark-third dark:text-white rounded-full outline-none pl-10 pr-3 py-2 focus:ring-2 ring-green-400 ring-opacity-50 transition-base select-none text-sm md:text-base"
+              className="bg-gray-100 dark:bg-dark-third dark:text-white rounded-full outline-none pl-10 pr-3 py-2 focus:ring-2 ring-green-400 ring-opacity-50 transition-base text-sm md:text-base"
               placeholder="Search friends!"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}

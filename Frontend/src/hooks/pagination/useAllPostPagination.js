@@ -14,7 +14,10 @@ export default function useAllPostPagination(pagination) {
 
   useEffect(() => {
     // auto fetch data when page = 1
-    if ((isHasMore && pagination) || pagination.page === 1) {
+    if (
+      ((isHasMore && pagination) || pagination.page === 1) &&
+      pagination.page !== -1
+    ) {
       setIsLoading(true);
       setError(false);
       postApi
