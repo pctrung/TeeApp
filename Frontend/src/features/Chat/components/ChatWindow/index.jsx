@@ -18,10 +18,11 @@ import EditChat from "../EditChat";
 import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
 import Pagination from "components/Pagination";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();
+  const history = useHistory();
   const currentUser = useSelector((state) => state.users.currentUser);
   const chatApi = useChatApi();
 
@@ -114,7 +115,13 @@ function ChatWindow({ chat }) {
         {/* Header chat window */}
         <div className="w-full border-b border-gray-300 dark:border-dark-third flex justify-between items-center py-1 pl-2 flex-shrink-0 overflow-hidden ">
           <div
-            onClick={() => setIsOpenInfoPopup(!isOpenInfoPopup)}
+            onClick={() => {
+              if (chat.type === ChatType.GROUP) {
+                setIsOpenInfoPopup(!isOpenInfoPopup);
+              } else {
+                history.push("/profile/" + friend?.userName);
+              }
+            }}
             className="flex min-w-0 justify-start clickable cursor-pointer items-center space-x-3 p-2 transition-base rounded-lg"
           >
             <ImageCircle
