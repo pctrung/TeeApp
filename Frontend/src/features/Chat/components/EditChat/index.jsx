@@ -192,7 +192,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
       <div
         ref={ref}
         className={
-          "animate-swipeDown px-6 md:px-14 md:py-6 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full overflow-y-auto md:overflow-visible" +
+          "animate-swipeDown px-6 md:px-14 md:py-6 flex flex-col bg-white dark:bg-dark-secondary dark:border-dark-third rounded-xl shadow-xl border border-gray-300 w-full md:w-5/6 lg:w-2/5 transition-all duration-300 ease-in-out max-h-full overflow-y-auto md:overflow-visible dark:text-white" +
           " " +
           (isOpenFriendList ? "mb-16" : "")
         }
