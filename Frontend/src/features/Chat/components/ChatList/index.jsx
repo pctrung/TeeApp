@@ -8,8 +8,7 @@ import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
 import CreateChat from "../CreateChat";
 
-function ChatList({ className, setChatNotificationNumber }) {
-  const selectedIds = useSelector((state) => state.chats.selectedIds);
+function ChatList({ className, setChatNotificationNumber, setIsOpen }) {
   const currentUser = useSelector((state) => state.users.currentUser);
   const chats = useSelector((state) => state.chats.chats);
 
@@ -30,6 +29,7 @@ function ChatList({ className, setChatNotificationNumber }) {
   function handleClick(id) {
     const action = addSelectedId(id);
     dispatch(action);
+    setIsOpen(false);
   }
 
   return (

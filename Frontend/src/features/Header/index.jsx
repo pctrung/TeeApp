@@ -347,6 +347,7 @@ function Header({ className }) {
             </li>
           </ul>
           <ChatList
+            setIsOpen={setIsOpenChatList}
             setChatNotificationNumber={setChatNotificationNumber}
             className={
               "absolute animate-fadeIn top-full transform translate-y-2 right-0 lg:w-112 md:w-96 w-full max-h-600 " +
