@@ -7,6 +7,7 @@ Now available at https://pctrung.github.io/TeeApp/
  ## Tech Stack
  ### Backend
  - ASP.NET Core 5.0
+ - SignalR
  - SQL Server
  - Entity Framework Core
  ### Frontend
