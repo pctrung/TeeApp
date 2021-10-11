@@ -212,7 +212,7 @@ function Header({ className }) {
             <li
               className={
                 "active:transform active:scale-95 p-1 h-full rounded-full flex items-center  transition-base cursor-pointer select-none mr-3 " +
-                (location.pathname.substring(0, 8) === "/profile"
+                (location.pathname === `/profile/${user.userName}`
                   ? "dark:bg-green-600 dark:bg-opacity-40 bg-green-100 text-green-600 dark:text-green-400 "
                   : "dark:hover:bg-dark-third hover:bg-gray-200")
               }
