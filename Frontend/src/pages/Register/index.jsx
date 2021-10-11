@@ -71,11 +71,11 @@ function Register() {
       .required("Password is required")
       .test(
         "checkPassword",
-        "Passwords must be at least 8 characters, one digit, one uppercase, one non alphanumeric character",
+        "Passwords must be at least 6 characters, 1 uppercase letter, 1 lowercase letter and 1 number",
         (value) => {
           return checkRegex(
             value,
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,}$",
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",
           );
         },
       ),

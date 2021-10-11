@@ -101,6 +101,16 @@ namespace TeeApp.Api
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<TeeAppDbContext>()
                 .AddDefaultTokenProviders();
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Passwords must be at least 6 characters, at least 1 uppercase letter, 1 lowercase letter and 1 number
+                options.Password.RequireDigit = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequiredLength = 6;
+                options.Password.RequiredUniqueChars = 1;
+            });
 
             string issuer = Configuration.GetValue<string>("Tokens:Issuer");
             string signingKey = Configuration.GetValue<string>("Tokens:Key");
