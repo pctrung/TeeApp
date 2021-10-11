@@ -162,14 +162,17 @@ function Post({ post, isOpenComment = false }) {
           </div>
         )}
 
-        <div className="flex justify-between w-full text-xs text-gray-500 hover:underline pt-2">
+        <div className="flex justify-between w-full text-xs text-gray-500 pt-2">
           <div className="cursor-pointer flex items-center space-x-1">
             <div className="flex items-center">
               {topThreeType &&
                 topThreeType.map((type, index) => (
                   <div
                     key={type}
-                    className={"w-5 h-5 " + (index > 0 ? "z-0" : "z-10")}
+                    className={
+                      "w-5 h-5 " +
+                      (index === 0 ? "z-3" : index === 1 ? "z-2" : "z-1")
+                    }
                   >
                     <img
                       src={ReactionIcon[type]}
@@ -177,18 +180,22 @@ function Post({ post, isOpenComment = false }) {
                       className={
                         "w-full h-full border-2 border-white dark:border-dark-secondary rounded-full" +
                         " " +
-                        (index > 0 ? "transform -translate-x-1" : "")
+                        (index === 1
+                          ? "transform -translate-x-1"
+                          : index === 2
+                          ? "transform -translate-x-2"
+                          : "")
                       }
                     />
                   </div>
                 ))}
             </div>
-            <span className="cursor-pointer text-gray-500 dark:text-dark-txt">
+            <span className="cursor-pointer text-gray-500 dark:text-dark-txt hover:underline">
               {post?.reactions?.length > 0 && post?.reactions?.length}
             </span>
           </div>
           <span
-            className="cursor-pointer text-gray-500 dark:text-dark-txt"
+            className="cursor-pointer text-gray-500 dark:text-dark-txt hover:underline"
             onClick={() => setIsOpenCommentList((preState) => !preState)}
           >
             {post?.comments?.length > 0 &&

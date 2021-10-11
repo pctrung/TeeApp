@@ -97,7 +97,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
           />
         </Link>
         <div className="flex flex-col w-full">
-          <div className="flex flex-col space-y-1 justify-evenly w-full bg-gray-100 dark:bg-dark-third rounded-2xl px-3 py-3">
+          <div className="flex flex-col justify-evenly w-full bg-gray-100 dark:bg-dark-third rounded-2xl px-3 py-2">
             <div className="w-full flex justify-between items-center mr-9">
               <Link
                 className="font-semibold text-xs md:text-sm cursor-pointer hover:underline"
