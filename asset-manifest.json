@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/TeeApp/static/css/main.995b5d5c.chunk.css",
-    "main.js": "/TeeApp/static/js/main.52b8f8ce.chunk.js",
-    "main.js.map": "/TeeApp/static/js/main.52b8f8ce.chunk.js.map",
+    "main.css": "/TeeApp/static/css/main.d8ef08fd.chunk.css",
+    "main.js": "/TeeApp/static/js/main.9dfdfd80.chunk.js",
+    "main.js.map": "/TeeApp/static/js/main.9dfdfd80.chunk.js.map",
     "runtime-main.js": "/TeeApp/static/js/runtime-main.0609997e.js",
     "runtime-main.js.map": "/TeeApp/static/js/runtime-main.0609997e.js.map",
     "static/css/2.75509a7d.chunk.css": "/TeeApp/static/css/2.75509a7d.chunk.css",
-    "static/js/2.f1195baa.chunk.js": "/TeeApp/static/js/2.f1195baa.chunk.js",
-    "static/js/2.f1195baa.chunk.js.map": "/TeeApp/static/js/2.f1195baa.chunk.js.map",
+    "static/js/2.90d43be3.chunk.js": "/TeeApp/static/js/2.90d43be3.chunk.js",
+    "static/js/2.90d43be3.chunk.js.map": "/TeeApp/static/js/2.90d43be3.chunk.js.map",
     "index.html": "/TeeApp/index.html",
     "static/css/2.75509a7d.chunk.css.map": "/TeeApp/static/css/2.75509a7d.chunk.css.map",
-    "static/css/main.995b5d5c.chunk.css.map": "/TeeApp/static/css/main.995b5d5c.chunk.css.map",
-    "static/js/2.f1195baa.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.f1195baa.chunk.js.LICENSE.txt",
+    "static/css/main.d8ef08fd.chunk.css.map": "/TeeApp/static/css/main.d8ef08fd.chunk.css.map",
+    "static/js/2.90d43be3.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.90d43be3.chunk.js.LICENSE.txt",
     "static/media/angry.5d2c62b0.svg": "/TeeApp/static/media/angry.5d2c62b0.svg",
     "static/media/boxicons.min.css": "/TeeApp/static/media/boxicons.c324d2b5.eot",
     "static/media/care.d36c2862.svg": "/TeeApp/static/media/care.d36c2862.svg",
@@ -39,8 +39,8 @@
   "entrypoints": [
     "static/js/runtime-main.0609997e.js",
     "static/css/2.75509a7d.chunk.css",
-    "static/js/2.f1195baa.chunk.js",
-    "static/css/main.995b5d5c.chunk.css",
-    "static/js/main.52b8f8ce.chunk.js"
+    "static/js/2.90d43be3.chunk.js",
+    "static/css/main.d8ef08fd.chunk.css",
+    "static/js/main.9dfdfd80.chunk.js"
   ]
 }
