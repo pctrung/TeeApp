@@ -8,7 +8,6 @@ namespace TeeApp.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [AllowAnonymous]
     public class AccountsController : ControllerBase
     {
         private readonly IAccountService _accountService;
@@ -18,6 +17,7 @@ namespace TeeApp.Api.Controllers
             _accountService = accountService;
         }
 
+        [AllowAnonymous]
         [HttpGet("{userName}/isExists")]
         public async Task<IActionResult> CheckUserExistsAsync(string userName)
         {
@@ -26,6 +26,7 @@ namespace TeeApp.Api.Controllers
             return Ok(new { isExists = result });
         }
 
+        [AllowAnonymous]
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
@@ -46,6 +47,28 @@ namespace TeeApp.Api.Controllers
             }
         }
 
+        [Authorize]
+        [HttpPost("changePassword")]
+        public async Task<IActionResult> ChangePassword(ChangePasswordRequest request)
+        {
+            var result = await _accountService.ChangePasswordAsync(request);
+            if (result.Succeeded)
+            {
+                return Ok(result);
+            }
+            else
+            {
+                var message = "";
+                foreach (var error in result.Errors)
+                {
+                    message = error.Description;
+                    break;
+                }
+                return BadRequest(message);
+            }
+        }
+
+        [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {

@@ -236,7 +236,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             }}
           ></textarea>
         </div>
-        <div className="flex flex-col md:flex-row justify-end md:space-x-2 space-y-2 md:space-y-0 items-center pt-2">
+        <div className="flex flex-col md:flex-row-reverse justify-end space-y-2 md:space-y-0 items-center pt-2">
           <Button
             disabled={!isValidButton}
             className="w-full"
@@ -244,7 +244,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             onClick={() => submit()}
           />
           <Button
-            className="w-full"
+            className="w-full mr-2"
             outline
             content="Close"
             onClick={() => setIsOpen(false)}

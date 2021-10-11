@@ -7,6 +7,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using TeeApp.Application.Identity;
 using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
@@ -21,13 +22,15 @@ namespace TeeApp.Application.Services
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IConfiguration _configuration;
+        private readonly ICurrentUser _currentUser;
 
-        public AccountService(TeeAppDbContext context, UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public AccountService(TeeAppDbContext context, UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration, ICurrentUser currentUser)
         {
             _context = context;
             _userManager = userManager;
             _signInManager = signInManager;
             _configuration = configuration;
+            _currentUser = currentUser;
         }
 
         public async Task<bool> IsUserNameExistsAsync(string userName)
@@ -79,6 +82,23 @@ namespace TeeApp.Application.Services
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordRequest request)
+        {
+            var user = await _userManager.FindByNameAsync(_currentUser.UserName);
+
+            if (user == null)
+            {
+                return IdentityResult.Failed(
+                    new IdentityError()
+                    {
+                        Description = "Cannot identify current user.",
+                        Code = "500"
+                    });
+            }
+
+            return await _userManager.ChangePasswordAsync(user, request.CurrentPassword, request.NewPassword);
         }
 
         public async Task<IdentityResult> RegisterAsync(RegisterRequest request)

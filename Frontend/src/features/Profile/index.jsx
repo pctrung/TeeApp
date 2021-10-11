@@ -14,6 +14,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { RelationType } from "utils/Enums";
+import ChangePassword from "./components/ChangePassword";
 import EditUser from "./components/EditUser";
 import UserInfo from "./components/UserInfo";
 import ConfirmModal from "components/ConfirmModal";
@@ -25,6 +26,7 @@ function Profile() {
   const userApi = useUserApi();
   const friendApi = useFriendApi();
   const [user, setUser] = useState({});
+  const [isOpenChangePassword, setIsOpenChangePassword] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [confirmModal, setConfirmModal] = useState({});
@@ -231,6 +233,12 @@ function Profile() {
 
   return (
     <>
+      {isOpenChangePassword && (
+        <ChangePassword
+          isOpen={isOpenChangePassword}
+          setIsOpen={setIsOpenChangePassword}
+        />
+      )}
       {confirmModal?.isOpen && (
         <ConfirmModal
           isOpen={confirmModal.isOpen}
@@ -323,11 +331,19 @@ function Profile() {
               {isCurrentUser ? (
                 <>
                   <Button
+                    onClick={() => setIsOpenChangePassword((pre) => !pre)}
+                    secondary
+                    className="flex items-center space-x-1"
+                  >
+                    <i className="bx bxs-check-shield md:text-2xl text-lg"></i>
+                    <span>Change password</span>
+                  </Button>
+                  <Button
                     onClick={() => setIsOpenEdit((pre) => !pre)}
                     secondary
                     className="flex items-center space-x-1"
                   >
-                    <i className="bx bxs-edit-alt text-2xl"></i>
+                    <i className="bx bxs-edit-alt md:text-2xl text-lg"></i>
                     <span>Edit profile</span>
                   </Button>
                 </>

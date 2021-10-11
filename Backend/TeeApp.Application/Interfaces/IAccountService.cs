@@ -13,5 +13,7 @@ namespace TeeApp.Application.Interfaces
         Task LogoutAsync();
 
         Task<bool> IsUserNameExistsAsync(string userName);
+
+        Task<IdentityResult> ChangePasswordAsync(ChangePasswordRequest request);
     }
 }

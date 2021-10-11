@@ -31,13 +31,13 @@ function Button({
         onClick={onClick}
         onBlur={onBlur}
         className={
-          " transition-base text-sm md:text-base duration-200 disabled:opacity-50 outline-none z-0 select-none font-semibold" +
+          " transition-base text-sm rounded-lg md:text-base duration-200 disabled:opacity-50 outline-none z-0 select-none font-semibold" +
           " " +
           (outline ? outlineClass : colorClass) +
           " " +
           (className ?? "") +
           " " +
-          (small ? "px-3 py-1 rounded" : "rounded-lg px-4 py-2 min-w-70") +
+          (small ? "px-3 py-1" : "px-4 py-2 min-w-70") +
           " " +
           (!disabled ? "active:scale-95 active:transform" : "cursor-default")
         }

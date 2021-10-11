@@ -14,6 +14,11 @@ export default function useAccountApi() {
       const url = `${baseApiUrl}/login`;
       return Api.post(url, content);
     },
+    changePassword: (content) => {
+      dispatch(setIsLoading(true));
+      const url = `${baseApiUrl}/changePassword`;
+      return Api.post(url, content);
+    },
     logout: () => {
       dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/logout`;
