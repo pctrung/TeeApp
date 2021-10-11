@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
+import { setIsLoading } from "app/appSlice";
 
 function CreateChat({ isOpen, setIsOpen }) {
   const [selectedMode, setSelectedMode] = useState(ChatType.PRIVATE);
@@ -73,6 +74,7 @@ function CreateChat({ isOpen, setIsOpen }) {
         const request = {
           participantUserName: selectedUsers.map((x) => x.userName).shift(),
         };
+        dispatch(setIsLoading(true));
         chatApi.createPrivateChat(request).then((response) => {
           if (response.id) {
             dispatch(addSelectedId(response.id));

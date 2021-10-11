@@ -81,7 +81,7 @@ export default function useChatApi() {
       return Api.patch(url, content);
     },
     createPrivateChat: (content) => {
-      dispatch(setIsLoading(true));
+      //dispatch(setIsLoading(true));
       const url = `${baseApiUrl}/private`;
       return Api.post(url, content);
     },
