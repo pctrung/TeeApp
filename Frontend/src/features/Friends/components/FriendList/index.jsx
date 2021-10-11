@@ -157,7 +157,7 @@ const Friend = ({ friendship = {}, user = {}, setConfirmModal, fetchData }) => {
   function openUnfriendModal() {
     setConfirmModal({
       isOpen: true,
-      content: `Do you want to unfriend with ${user.fullName}?`,
+      content: `Do you want to unfriend ${user.fullName}?`,
       action: unfriend,
     });
   }

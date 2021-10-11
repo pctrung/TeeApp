@@ -59,7 +59,7 @@ function Post({ post, isOpenComment = false }) {
         topThree.push({ type: key, total: group[key].length });
       }
       return topThree
-        .sort((a, b) => (a.total > b.total ? 1 : -1))
+        .sort((a, b) => (a.total < b.total ? 1 : -1))
         .slice(0, 3)
         .map((x) => x.type);
     }
