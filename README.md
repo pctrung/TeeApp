@@ -1,6 +1,7 @@
 # TeeApp
 
- My pet project - TeeApp! Social networking website for everyone! 
+ - My pet project - TeeApp! Social networking website for everyone! 
+ - Features: Post, react, comment, friend, chat, dark mode
  
 Now available at https://pctrung.github.io/TeeApp/
 
