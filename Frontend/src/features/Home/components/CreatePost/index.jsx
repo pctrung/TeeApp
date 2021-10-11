@@ -200,7 +200,7 @@ function CreatePost() {
                   </Link>
                   <div className="relative select-none">
                     <div
-                      className="p-1 px-2 flex justify-between items-center text-xs bg-gray-200 dark:bg-dark-hover rounded cursor-pointer "
+                      className="p-1 px-2 w-28 flex justify-between items-center text-xs bg-gray-200 dark:bg-dark-hover rounded cursor-pointer "
                       onClick={() => setIsOpenPrivacyList(true)}
                     >
                       <div className="flex items-center space-x-2">
@@ -220,7 +220,7 @@ function CreatePost() {
                               setPrivacy(privacy);
                               setIsOpenPrivacyList(false);
                             }}
-                            className="cursor-pointer hover:bg-gray-200 dark:hover:bg-dark-hover p-1 px-2 rounded duration-150 w-full space-x-2"
+                            className="cursor-pointer hover:bg-gray-200 flex items-center dark:hover:bg-dark-hover p-1 px-2 rounded duration-150 w-full space-x-2"
                           >
                             <i className={PrivacyIcon[privacy]}></i>
                             <span>{PrivacyName[privacy]}</span>

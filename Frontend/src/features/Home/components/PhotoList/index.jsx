@@ -72,7 +72,7 @@ export default function PhotoList({ photos = [] }) {
 const OnePhotoList = ({ photos = [], setIsOpen, setStartIndex }) => (
   <>
     <div
-      className="w-full max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+      className="w-full max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
       onClick={() => {
         setIsOpen(true);
         setStartIndex(0);
@@ -93,7 +93,7 @@ const TwoPhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
       {photos.map((photo, index) => (
         <div
           key={photo.id}
-          className="col-span-1 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+          className="col-span-1 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
           onClick={() => {
             setIsOpen(true);
             setStartIndex(index);
@@ -113,7 +113,7 @@ const ThreePhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
   <>
     <div className="grid grid-cols-2 md:grid-cols-3 grid-rows-2 gap-2 h-112 md:h-128 overflow-hidden">
       <div
-        className="col-span-2 row-span-1 md:row-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+        className="col-span-2 row-span-1 md:row-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
         onClick={() => {
           setIsOpen(true);
           setStartIndex(0);
@@ -126,7 +126,7 @@ const ThreePhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
         />
       </div>
       <div
-        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
         onClick={() => {
           setIsOpen(true);
           setStartIndex(1);
@@ -139,7 +139,7 @@ const ThreePhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
         />
       </div>
       <div
-        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-secondary rounded-xl shadow-lg overflow-hidden"
+        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-secondary rounded-xl shadow overflow-hidden"
         onClick={() => {
           setIsOpen(true);
           setStartIndex(2);
@@ -158,7 +158,7 @@ const FourPhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
   <>
     <div className="grid grid-cols-2 grid-rows-2 gap-2 overflow-hidden h-112 md:h-128">
       <div
-        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
         onClick={() => {
           setIsOpen(true);
           setStartIndex(0);
@@ -171,7 +171,7 @@ const FourPhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
         />
       </div>
       <div
-        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
         onClick={() => {
           setIsOpen(true);
           setStartIndex(1);
@@ -184,7 +184,7 @@ const FourPhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
         />
       </div>
       <div
-        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
         onClick={() => {
           setIsOpen(true);
           setStartIndex(2);
@@ -197,7 +197,7 @@ const FourPhotosList = ({ photos = [], setIsOpen, setStartIndex }) => (
         />
       </div>
       <div
-        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+        className="w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
         onClick={() => {
           setIsOpen(true);
           setStartIndex(3);
@@ -218,7 +218,7 @@ const List = ({ photos = [], setIsOpen, setStartIndex }) => {
     <>
       <div className="grid grid-cols-6 grid-rows-2 gap-2 h-112 md:h-128 overflow-hidden">
         <div
-          className="col-span-3 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+          className="col-span-3 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
           onClick={() => {
             setIsOpen(true);
             setStartIndex(0);
@@ -231,7 +231,7 @@ const List = ({ photos = [], setIsOpen, setStartIndex }) => {
           />
         </div>
         <div
-          className="col-span-3 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+          className="col-span-3 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
           onClick={() => {
             setIsOpen(true);
             setStartIndex(1);
@@ -244,7 +244,7 @@ const List = ({ photos = [], setIsOpen, setStartIndex }) => {
           />
         </div>
         <div
-          className="col-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+          className="col-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
           onClick={() => {
             setIsOpen(true);
             setStartIndex(2);
@@ -257,7 +257,7 @@ const List = ({ photos = [], setIsOpen, setStartIndex }) => {
           />
         </div>
         <div
-          className="col-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+          className="col-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
           onClick={() => {
             setIsOpen(true);
             setStartIndex(3);
@@ -270,7 +270,7 @@ const List = ({ photos = [], setIsOpen, setStartIndex }) => {
           />
         </div>
         <div
-          className="relative col-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow-lg overflow-hidden"
+          className="relative col-span-2 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
           onClick={() => {
             setIsOpen(true);
             setStartIndex(4);
@@ -282,7 +282,7 @@ const List = ({ photos = [], setIsOpen, setStartIndex }) => {
             alt={photos[4]?.caption ?? `Post photo 5`}
           />
           {remainingPhotos > 0 && (
-            <div className="absolute inset-0 bg-black bg-opacity-40 flex-center text-xl md:text-2xl font-bold">
+            <div className="absolute inset-0 text-white dark:text-white bg-black bg-opacity-40 flex-center text-xl md:text-2xl font-bold">
               +{remainingPhotos}
             </div>
           )}

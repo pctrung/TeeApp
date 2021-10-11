@@ -244,7 +244,7 @@ function EditUser({ isOpen, setIsOpen, user, className }) {
             onClick={() => submit()}
           />
           <Button
-            className="w-full mr-2"
+            className="w-full md:mr-2"
             outline
             content="Close"
             onClick={() => setIsOpen(false)}

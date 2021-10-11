@@ -162,15 +162,18 @@ function EditPost({ post, isOpen, setIsOpen }) {
                   </Link>
                   <div className="relative select-none">
                     <div
-                      className="p-1 px-2 text-xs bg-gray-200 dark:bg-dark-hover rounded space-x-2 cursor-pointer "
+                      className="p-1 px-2 w-28 flex justify-between items-center text-xs bg-gray-200 dark:bg-dark-hover rounded cursor-pointer "
                       onClick={() => setIsOpenPrivacyList(true)}
                     >
-                      <i className={PrivacyIcon[privacy]}></i>
-                      <span>{PrivacyName[privacy]}</span>
+                      <div className="flex items-center space-x-2">
+                        <i className={PrivacyIcon[privacy]}></i>
+                        <span>{PrivacyName[privacy]}</span>
+                      </div>
+                      <i className="bx bx-caret-down ml-1"></i>
                     </div>
                     {isOpenPrivacyList && (
                       <div
-                        className="animate-fadeIn absolute w-28 top-full transform translate-y-1 -left-2 bg-gray-100 dark:bg-dark-third rounded p-1 text-sm"
+                        className="animate-fadeIn absolute top-full w-full transform translate-y-1 left-0 bg-gray-100 dark:bg-dark-third rounded p-1 text-sm"
                         ref={privacyRef}
                       >
                         {Object.values(PrivacyType).map((privacy) => (
@@ -179,7 +182,7 @@ function EditPost({ post, isOpen, setIsOpen }) {
                               setPrivacy(privacy);
                               setIsOpenPrivacyList(false);
                             }}
-                            className="cursor-pointer hover:bg-gray-200 dark:hover:bg-dark-hover p-1 px-2 rounded duration-150 w-full space-x-2"
+                            className="cursor-pointer hover:bg-gray-200 flex items-center dark:hover:bg-dark-hover p-1 px-2 rounded duration-150 w-full space-x-2"
                           >
                             <i className={PrivacyIcon[privacy]}></i>
                             <span>{PrivacyName[privacy]}</span>
