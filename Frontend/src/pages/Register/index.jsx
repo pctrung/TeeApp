@@ -151,19 +151,27 @@ function Register() {
   // handle submit
   const onSubmit = async (content) => {
     setIsLoading(true);
-    await accountApi.register(content).then((response) => {
-      openPopup(
-        "Success",
-        <span>
-          "Create account successfully! Please{" "}
-          <Link className="font-bold text-green-600" to="/login">
-            log in
-          </Link>
-          !"
-        </span>,
-      );
-      reset({});
-    });
+
+    // format date
+    content.dateOfBirth = new Date(content.dateOfBirth).toDateInputValue();
+    await accountApi
+      .register(content)
+      .then((response) => {
+        openPopup(
+          "Success",
+          <span>
+            "Create account successfully! Please{" "}
+            <Link className="font-bold text-green-600" to="/login">
+              log in
+            </Link>
+            !"
+          </span>,
+        );
+        reset({});
+      })
+      .catch((error) => {
+        setIsLoading(false);
+      });
     setIsLoading(false);
   };
 
@@ -390,3 +398,9 @@ function checkRegex(value, regex) {
     return res;
   }
 }
+
+Date.prototype.toDateInputValue = function () {
+  var local = new Date(this);
+  local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
+  return local.toJSON()?.slice(0, 10);
+};
