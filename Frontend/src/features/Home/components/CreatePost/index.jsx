@@ -200,7 +200,7 @@ function CreatePost() {
                   </Link>
                   <div className="relative select-none">
                     <div
-                      className="p-1 px-2 w-28 flex justify-between items-center text-xs bg-gray-200 dark:bg-dark-hover rounded cursor-pointer "
+                      className="p-1 px-2 w-24 flex justify-between items-center text-xs bg-gray-200 dark:bg-dark-hover rounded cursor-pointer "
                       onClick={() => setIsOpenPrivacyList(true)}
                     >
                       <div className="flex items-center space-x-2">
@@ -211,7 +211,7 @@ function CreatePost() {
                     </div>
                     {isOpenPrivacyList && (
                       <div
-                        className="animate-fadeIn absolute w-full top-full transform translate-y-1 left-0 bg-gray-100 dark:bg-dark-third rounded p-1 text-sm"
+                        className="animate-fadeIn absolute w-28 top-full left-0 bg-gray-100 dark:bg-dark-third rounded p-1 text-sm"
                         ref={privacyRef}
                       >
                         {Object.values(PrivacyType).map((privacy) => (

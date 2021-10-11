@@ -56,10 +56,10 @@ function ChatList({ className, setChatNotificationNumber, setIsOpen }) {
               className="dark:bg-dark-third bg-gray-100"
             />
           </div>
-          <i className="bx bx-search absolute text-xl top-1/4 left-3 transform text-gray-400 cursor-pointer"></i>
+          <i className="bx bx-search absolute text-xl top-1/2 left-3 transform -translate-y-1/2 text-gray-400 cursor-pointer"></i>
         </div>
 
-        <div className="max-h-500 overflow-y-auto pr-2 md:pb-0">
+        <div className="max-h-450 overflow-y-auto pr-2 md:pb-0">
           {chats &&
             getCurrentChats(chats, keyword).map((chat, index) => {
               const currentUserName = currentUser.userName;
@@ -162,7 +162,7 @@ function ChatList({ className, setChatNotificationNumber, setIsOpen }) {
           href={process.env.REACT_APP_CHAT_APP_URL}
           target="_blank"
           rel="noreferrer"
-          className="font-semibold text-center text-sm text-green-500 hover:text-green-600 cursor-pointer block pt-2 mt-3 border-t-2 border-gray-100 dark:border-dark-third transition-base"
+          className="font-semibold text-center text-sm text-green-500 hover:text-green-600 cursor-pointer block px-2 pt-2 border-t-2 border-gray-100 dark:border-dark-third transition-base"
         >
           See all in TeeChat!
         </a>
