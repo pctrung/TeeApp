@@ -294,7 +294,7 @@ function Profile() {
                   </span>
                 </label>
               )}
-              <div className="absolute h-44 w-44 rounded-full left-1/2 transform bottom-0 translate-y-5 -translate-x-1/2 border-4 border-white dark:border-dark-secondary ring-4 ring-green-400 dark:ring-green-500 cursor-pointer">
+              <div className="absolute md:h-44 md:w-44 h-36 w-36 rounded-full left-1/2 transform bottom-0 translate-y-5 -translate-x-1/2 border-4 border-white dark:border-dark-secondary ring-4 ring-green-400 dark:ring-green-500 cursor-pointer">
                 <ImageCircle
                   parentClassName="w-full h-full"
                   className="filter hover:brightness-110"
@@ -315,15 +315,15 @@ function Profile() {
               </div>
             </div>
             <div className="w-full mx-4 border-b border-gray-400 dark:border-dark-hover pb-6">
-              <div className="w-full text-center font-bold text-3xl md:text-4xl py-2 max-row-2">
+              <div className="w-full text-center font-bold text-2xl md:text-4xl md:py-2 py-1 max-row-2">
                 {user.fullName}{" "}
                 {user.nickName && (
-                  <span className="font-normal text-2xl md:text-3xl">
+                  <span className="font-normal text-xl md:text-3xl">
                     {`(${user.nickName})`}
                   </span>
                 )}
               </div>
-              <div className="md:max-w-2/3 max-w-11/12 mx-auto text-center max-row-3">
+              <div className="md:max-w-2/3 max-w-11/12 mx-auto text-center max-row-3 text-sm md:text-base">
                 {user.aboutMe}
               </div>
             </div>
