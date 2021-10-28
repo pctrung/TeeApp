@@ -153,7 +153,7 @@ function ChatList({ className, setChatNotificationNumber, setIsOpen }) {
               );
             })}
           {chats.length < 1 && (
-            <div className="py-2 w-full text-center font-semibold">
+            <div className="pt-2 pb-4 w-full text-center font-semibold">
               Not found any chats. Start a chat now!
             </div>
           )}

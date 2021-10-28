@@ -67,8 +67,8 @@ function Home() {
           />
           {posts?.totalRecords <= 0 && (
             <div className="text-center py-3 font-semibold">
-              Not found any posts.
-              <br /> You should create first post or add more friends.
+              Not found any posts
+              <br /> You should create first post or add more friends
             </div>
           )}
         </div>

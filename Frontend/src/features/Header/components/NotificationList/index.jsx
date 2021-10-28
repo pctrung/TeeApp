@@ -108,7 +108,7 @@ function NotificationList({ className, setIsOpen, setNotificationNumber }) {
           />
         </div>
         {notifications?.items?.length < 1 && (
-          <span className="my-2 text-center w-full font-semibold">
+          <span className="my-2 pb-2 text-center w-full font-semibold">
             Do not have any notifications
           </span>
         )}

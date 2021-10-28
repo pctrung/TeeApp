@@ -82,7 +82,7 @@ export default function FollowerList({ keyword }) {
       />
       {list?.totalRecords <= 0 && (
         <div className="text-center py-3 font-semibold mt-4 text-sm md:text-base">
-          You have no followers.
+          You have no followers
         </div>
       )}
     </>

@@ -428,7 +428,7 @@ function Profile() {
             />
             {posts?.totalRecords <= 0 && (
               <div className="text-center py-3 font-semibold">
-                Not found any posts.
+                Not found any posts
               </div>
             )}
           </div>

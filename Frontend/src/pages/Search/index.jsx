@@ -62,12 +62,12 @@ function Search() {
           )}
           {pagination.page === -1 && (
             <div className="text-center py-3 font-semibold">
-              Please enter keywords to search.
+              Please enter keywords to search
             </div>
           )}
           {posts?.totalRecords <= 0 && (
             <div className="text-center py-3 font-semibold">
-              No posts found for: "{keyword}".
+              No posts found for: "{keyword}"
             </div>
           )}
         </div>

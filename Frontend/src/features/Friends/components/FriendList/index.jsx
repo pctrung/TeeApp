@@ -85,8 +85,8 @@ export default function FriendList({ keyword }) {
       />
       {list?.totalRecords <= 0 && (
         <div className="text-center py-3 font-semibold mt-4 text-sm md:text-base">
-          Not found any friends.
-          <br /> You should make more friends.
+          Not found any friends
+          <br /> You should make more friends
         </div>
       )}
     </>

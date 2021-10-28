@@ -82,7 +82,7 @@ export default function BlockedList({ keyword }) {
       />
       {list?.totalRecords <= 0 && (
         <div className="text-center py-3 font-semibold mt-4 text-sm md:text-base">
-          You haven't blocked anyone yet.
+          You haven't blocked anyone yet
         </div>
       )}
     </>

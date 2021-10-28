@@ -75,7 +75,7 @@ export default function FollowingList({ keyword }) {
       />
       {list?.totalRecords <= 0 && (
         <div className="text-center py-3 font-semibold mt-4 text-sm md:text-base">
-          You aren't following anyone.
+          You aren't following anyone
         </div>
       )}
     </>
