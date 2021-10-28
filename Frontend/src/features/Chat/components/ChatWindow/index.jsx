@@ -152,7 +152,7 @@ function ChatWindow({ chat }) {
 
         {/* Chat content */}
         {chat?.messages ? (
-          <div className="flex-grow overflow-y-auto overflow-x-hidden px-4 pb-4 pt-2 space-y-1 flex flex-col min-w-0">
+          <div className="flex-grow overflow-y-auto overflow-x-hidden px-4 pb-4 pt-1 space-y-1 flex flex-col min-w-0">
             <Pagination
               loadMoreClassName="bg-gray-200 hover:bg-gray-300"
               onClick={loadMore}
@@ -163,7 +163,6 @@ function ChatWindow({ chat }) {
             />
             {!isHasMore && (
               <div className="text-gray-500 text-xs text-center pb-2">
-                Date created:{" "}
                 {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
                   "MMMM Do YYYY, h:mm:ss a",
                 )}
