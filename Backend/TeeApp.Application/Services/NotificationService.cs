@@ -54,7 +54,8 @@ namespace TeeApp.Application.Services
             notifications = notifications.Paged(request.Page, request.Limit).ToList();
 
             // not load unread notification when page > 1
-            if(request.Page == 1){
+            if (request.Page == 1)
+            {
                 var unreadNotifications = await _context.Notifications
                 .Include(x => x.Creator)
                 .Include(x => x.Recipient)
@@ -115,7 +116,7 @@ namespace TeeApp.Application.Services
             var notification = new Notification()
             {
                 Creator = _currentUser,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Recipient = notifier,
                 Type = NotificationType.Follow
             };
@@ -141,7 +142,7 @@ namespace TeeApp.Application.Services
             var notification = new Notification()
             {
                 Creator = _currentUser,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Recipient = notifier,
                 Type = NotificationType.FriendRequest
             };
@@ -167,7 +168,7 @@ namespace TeeApp.Application.Services
             var notification = new Notification()
             {
                 Creator = _currentUser,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Recipient = notifier,
                 Type = NotificationType.AcceptedFriendRequest
             };
@@ -194,7 +195,7 @@ namespace TeeApp.Application.Services
             var notification = new Notification()
             {
                 Creator = _currentUser,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Recipient = post.Creator,
                 Post = post,
                 Type = NotificationType.Comment
@@ -222,7 +223,7 @@ namespace TeeApp.Application.Services
             var notification = new Notification()
             {
                 Creator = _currentUser,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Recipient = post.Creator,
                 Post = post,
                 Type = NotificationType.Reaction,

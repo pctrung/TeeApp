@@ -13,6 +13,7 @@ using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Models.RequestModels.Users;
 using TeeApp.Utilities.Constants;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
 {
@@ -78,7 +79,7 @@ namespace TeeApp.Application.Services
             var token = new JwtSecurityToken(issuer,
                 issuer,
                 claims,
-                expires: DateTime.Now.AddDays(100),
+                expires: DateTime.Now.AddDays(300),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
@@ -112,7 +113,7 @@ namespace TeeApp.Application.Services
                         Code = "400"
                     });
             }
-            if (request.DateOfBirth > DateTime.Now)
+            if (request.DateOfBirth > DateTime.UtcNow.ToVNTimeZone())
             {
                 return IdentityResult.Failed(
                     new IdentityError()
@@ -126,7 +127,7 @@ namespace TeeApp.Application.Services
                 FirstName = request.FirstName.Trim(),
                 LastName = request.LastName.Trim(),
                 UserName = request.Username.Trim(),
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Email = request.Email,
                 Gender = request.Gender,
                 DateOfBirth = request.DateOfBirth,

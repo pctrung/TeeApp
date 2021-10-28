@@ -259,7 +259,7 @@ namespace TeeApp.Application.Services
                     RequestedUser = _currentUser,
                     RecievedUser = friend,
                     Type = FriendshipType.Pending,
-                    RequestedDate = DateTime.Now
+                    RequestedDate = DateTime.UtcNow.ToVNTimeZone()
                 };
 
                 if (!_currentUser.Following.Contains(friend))
@@ -279,7 +279,7 @@ namespace TeeApp.Application.Services
             if (friendship.RequestedUserId.Equals(friend.Id))
             {
                 friendship.Type = FriendshipType.Accepted;
-                friendship.RespondedDate = DateTime.Now;
+                friendship.RespondedDate = DateTime.UtcNow.ToVNTimeZone();
 
                 if (!_currentUser.Following.Contains(friend))
                 {
@@ -321,7 +321,7 @@ namespace TeeApp.Application.Services
             }
 
             friendRequest.Type = FriendshipType.Accepted;
-            friendRequest.RespondedDate = DateTime.Now;
+            friendRequest.RespondedDate = DateTime.UtcNow.ToVNTimeZone();
 
             if (!_currentUser.Following.Contains(friend))
             {

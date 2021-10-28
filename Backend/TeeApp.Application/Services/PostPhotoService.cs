@@ -13,6 +13,7 @@ using TeeApp.Models.RequestModels.PostPhotos;
 using TeeApp.Models.ResponseModels.Posts;
 using TeeApp.Models.ViewModels;
 using TeeApp.Utilities.Enums.Types;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
 {
@@ -121,7 +122,7 @@ namespace TeeApp.Application.Services
                         {
                             Caption = request.Caption,
                             ImageFileName = fileName,
-                            DateCreated = DateTime.Now,
+                            DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                         };
                         post.Photos.Add(photo);
                         await _context.SaveChangesAsync();

@@ -13,6 +13,7 @@ using TeeApp.Models.RequestModels.Reactions;
 using TeeApp.Models.ResponseModels.Reactions;
 using TeeApp.Models.ViewModels;
 using TeeApp.Utilities.Enums.Types;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
 {
@@ -129,7 +130,7 @@ namespace TeeApp.Application.Services
             {
                 Type = request.Type,
                 Creator = _currentUser,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Post = post
             };
 
@@ -194,7 +195,7 @@ namespace TeeApp.Application.Services
             }
 
             reaction.Type = request.Type;
-            reaction.DateModified = DateTime.Now;
+            reaction.DateModified = DateTime.UtcNow.ToVNTimeZone();
 
             await _context.SaveChangesAsync();
 

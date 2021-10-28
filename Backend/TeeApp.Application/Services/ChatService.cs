@@ -164,7 +164,7 @@ namespace TeeApp.Application.Services
                 Sender = sender,
                 Chat = chat,
                 Content = request.Content,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
             };
 
             await _context.Messages.AddAsync(newMessage);
@@ -213,7 +213,7 @@ namespace TeeApp.Application.Services
             };
             chat.Participants.Add(_currentUser);
             chat.Creator = _currentUser;
-            chat.DateCreated = DateTime.Now;
+            chat.DateCreated = DateTime.UtcNow.ToVNTimeZone();
             chat.Name = request.Name.Trim();
 
             await _context.Chats.AddAsync(chat);
@@ -263,7 +263,7 @@ namespace TeeApp.Application.Services
                         Participants = new List<User>() { participant }
                     };
                     chat.Creator = _currentUser;
-                    chat.DateCreated = DateTime.Now;
+                    chat.DateCreated = DateTime.UtcNow.ToVNTimeZone();
                     await _context.Chats.AddAsync(chat);
                     await _context.SaveChangesAsync();
                 }
@@ -283,7 +283,7 @@ namespace TeeApp.Application.Services
                     };
                     chat.Participants.Add(_currentUser);
                     chat.Creator = _currentUser;
-                    chat.DateCreated = DateTime.Now;
+                    chat.DateCreated = DateTime.UtcNow.ToVNTimeZone();
                     await _context.Chats.AddAsync(chat);
                     await _context.SaveChangesAsync();
                 }
@@ -477,7 +477,7 @@ namespace TeeApp.Application.Services
                             Sender = sender,
                             Chat = chat,
                             ImageFileName = fileName,
-                            DateCreated = DateTime.Now,
+                            DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                         };
 
                         await _context.Messages.AddAsync(newMessage);

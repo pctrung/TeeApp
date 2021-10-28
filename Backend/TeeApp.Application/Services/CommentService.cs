@@ -13,6 +13,7 @@ using TeeApp.Models.RequestModels.Comments;
 using TeeApp.Models.ResponseModels.Comments;
 using TeeApp.Models.ViewModels;
 using TeeApp.Utilities.Enums.Types;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
 {
@@ -121,7 +122,7 @@ namespace TeeApp.Application.Services
             {
                 Content = request.Content,
                 Creator = _currentUser,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Post = post
             };
 
@@ -186,7 +187,7 @@ namespace TeeApp.Application.Services
             }
 
             comment.Content = request.Content;
-            comment.DateModified = DateTime.Now;
+            comment.DateModified = DateTime.UtcNow.ToVNTimeZone();
 
             await _context.SaveChangesAsync();
 

@@ -68,13 +68,12 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult<UserViewModel>> UpdateInformationAsync(UpdateUserRequest request)
         {
-            if(request.DateOfBirth > DateTime.Now)
+            if (request.DateOfBirth > DateTime.UtcNow.ToVNTimeZone())
             {
                 return ApiResult<UserViewModel>.BadRequest(null, "Please select date of birth smaller than today.");
-
             }
-            if(!string.IsNullOrWhiteSpace(request.PhoneNumber?.Trim()) && request.PhoneNumber?.Trim().Length != 10)
-            { 
+            if (!string.IsNullOrWhiteSpace(request.PhoneNumber?.Trim()) && request.PhoneNumber?.Trim().Length != 10)
+            {
                 return ApiResult<UserViewModel>.BadRequest(null, "Invalid phone number.");
             }
             _currentUser.FirstName = request.FirstName?.Trim() ?? _currentUser.FirstName;
@@ -91,7 +90,7 @@ namespace TeeApp.Application.Services
             var responseUser = _mapper.Map<UserViewModel>(_currentUser);
 
             return ApiResult<UserViewModel>.Ok(responseUser, "Update info successfully!");
-        } 
+        }
 
         public UserViewModel GetCurrentUser()
         {

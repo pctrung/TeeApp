@@ -296,7 +296,7 @@ namespace TeeApp.Application.Services
             {
                 Content = request.Content,
                 Privacy = request.Privacy,
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 Creator = _currentUser,
                 Comments = new(),
                 Photos = new(),
@@ -343,7 +343,7 @@ namespace TeeApp.Application.Services
 
             post.Content = request.Content;
             post.Privacy = request.Privacy;
-            post.DateModified = DateTime.Now;
+            post.DateModified = DateTime.UtcNow.ToVNTimeZone();
 
             await _context.SaveChangesAsync();
 
@@ -377,7 +377,7 @@ namespace TeeApp.Application.Services
                 return ApiResult<PostResponse>.Forbid(null);
             }
 
-            post.DateDeleted = DateTime.Now;
+            post.DateDeleted = DateTime.UtcNow.ToVNTimeZone();
             if (post.Photos != null)
             {
                 post.Photos.ForEach(x => _storageService.DeleteFileAsync(x.ImageFileName));
