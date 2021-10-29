@@ -36,11 +36,11 @@ export default function ChangePassword({ isOpen, setIsOpen }) {
       .required("Current Password is required")
       .test(
         "checkPassword",
-        "Passwords must be at least 6 characters, 1 uppercase letter, 1 lowercase letter and 1 number",
+        "Password must be at least 8 characters with an uppercase letter and a number",
         (value) => {
           return checkRegex(
             value,
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$",
           );
         },
       ),

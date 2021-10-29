@@ -11,11 +11,8 @@ namespace TeeApp.Models.RequestModels.Users
 
         [Required(ErrorMessage = "Please enter password")]
         [DataType(DataType.Password)]
-        // old regex, now use easier regex
-        //[RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$^+=!*()@%&]).{8,}$",
-        //    ErrorMessage = "Passwords must be at least 8 characters, one digit, one uppercase, one non alphanumeric character")]
-        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{6,}$",
-            ErrorMessage = "Passwords must be at least 6 characters, 1 uppercase letter, 1 lowercase letter and 1 number")]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d@$!%*?&]{8,}$",
+            ErrorMessage = "Password must be at least 8 characters with an uppercase letter and a number")]
         public string NewPassword { get; set; }
 
         [Required(ErrorMessage = "Please enter confirmation password")]
