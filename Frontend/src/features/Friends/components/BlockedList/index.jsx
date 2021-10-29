@@ -109,15 +109,12 @@ const Friend = ({ user = {}, setConfirmModal, fetchData }) => {
   }
   return (
     <div className="flex-center flex-col w-full space-y-1">
-      <Link
-        to={`/profile/${user.userName}`}
-        className="w-full p-3 flex-center flex-col space-y-3 rounded-lg cursor-pointer select-none transition-base hover:bg-gray-100 dark:hover:bg-dark-third"
-      >
+      <div className="w-full p-3 flex-center flex-col space-y-3 rounded-lg select-none transition-base hover:bg-gray-100 dark:hover:bg-dark-third">
         <ImageCircle size="xl" src={user.avatarUrl} userName={user.userName} />
         <div className="w-full font-semibold truncate text-center">
           {user.fullName}
         </div>
-      </Link>
+      </div>
       <div className="flex flex-col space-y-1 w-full">
         <Button small secondary onClick={openUnblockModal} className="w-full">
           Unblock
