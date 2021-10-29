@@ -2,7 +2,8 @@
 
  - My pet project - TeeApp! Social networking website for everyone! 
  - Features: Post, react, comment, friend, chat, dark mode
- - Now available at https://pctrung.github.io/TeeApp/  (Test account: guestuser2 - Abcd1234!)
+ - Now available at https://pctrung.github.io/TeeApp/  
+ - Test account: guestuser2 - Abcd1234!
 
  ## Tech Stack
  ### Backend
