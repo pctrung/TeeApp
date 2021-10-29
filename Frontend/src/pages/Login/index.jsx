@@ -51,7 +51,7 @@ function Login() {
         <img src={LoginPageImage} alt="login" className="lg:block hidden" />
         <form
           onSubmit={(e) => login(e)}
-          className="container rounded-2xl flex flex-col lg:px-10 md:px-16 xl:px-16"
+          className="container rounded-2xl flex flex-col md:max-w-450"
         >
           <img src={Logo} alt="login" className="h-20 w-20 mx-auto mb-3" />
           <h1 className="text-3xl font-bold text-primary text-green-600 dark:text-green-400 text-center mb-8">
