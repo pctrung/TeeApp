@@ -1,4 +1,5 @@
-export const MAX_IMAGE_SIZE = 1 * 1024 * 1024;
+export const MAX_IMAGE_SIZE_NUMBER = 3;
+export const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_NUMBER * 1024 * 1024;
 
 export const DefaultLimit = {
   NOTIFICATION: 50,

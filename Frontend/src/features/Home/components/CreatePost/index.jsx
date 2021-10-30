@@ -11,7 +11,7 @@ import usePostApi from "hooks/api/usePostApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { MAX_IMAGE_SIZE } from "utils/Constants";
+import { MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_NUMBER } from "utils/Constants";
 import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
 import { addPost } from "app/postSlice";
 
@@ -65,7 +65,7 @@ function CreatePost() {
     newImageFiles.forEach((file) => {
       if (file.size > MAX_IMAGE_SIZE) {
         setPopup({
-          content: "Please upload less than 1MB for each file!",
+          content: `Please upload less than ${MAX_IMAGE_SIZE_NUMBER}MB for each file!`,
           isOpen: true,
         });
         isValid = false;
