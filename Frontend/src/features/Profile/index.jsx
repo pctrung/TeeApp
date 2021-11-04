@@ -339,7 +339,7 @@ function Profile() {
                 {user.aboutMe}
               </div>
             </div>
-            <div className="flex self-end justify-end my-3 md:px-2 px-5 space-x-2">
+            <div className="flex self-end justify-end mt-1 mb-3 md:px-2 px-5 space-x-2">
               {isCurrentUser ? (
                 <>
                   <Button
@@ -360,13 +360,20 @@ function Profile() {
                   </Button>
                 </>
               ) : (
-                <div ref={menuRef} className="relative flex space-x-2">
+                <div
+                  ref={menuRef}
+                  className="relative flex space-x-2 space-y-2 flex-wrap justify-end items-end"
+                >
                   {relationButton}
-                  <Button onClick={() => handleCreateChat(user.userName)}>
-                    <i className="bx bxs-message-rounded-dots text-xl align-middle mr-1"></i>
-                    Message
+                  <Button
+                    className="flex items-center space-x-1"
+                    onClick={() => handleCreateChat(user.userName)}
+                  >
+                    <i className="bx bxs-message-rounded-dots text-xl align-middle"></i>
+                    <span>Message</span>
                   </Button>
                   <Button
+                    className="self-stretch"
                     secondary
                     small
                     onClick={() => setIsOpenMenu((pre) => !pre)}
