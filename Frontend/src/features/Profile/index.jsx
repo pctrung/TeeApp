@@ -213,13 +213,9 @@ function Profile() {
         }
         case RelationType.FRIEND_REQUEST_BY_ME: {
           setRelationButton(
-            <Button
-              secondary
-              className="flex items-center space-x-1"
-              onClick={unfriend}
-            >
+            <Button className="flex items-center space-x-1" onClick={unfriend}>
               <i className="bx bxs-user-x text-xl"></i>
-              <span>Cancel friend request</span>
+              <span>Cancel request</span>
             </Button>,
           );
           break;
