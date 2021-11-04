@@ -1,6 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import { Switch, BrowserRouter, Route, Redirect } from "react-router-dom";
+import {
+  Switch,
+  HashRouter as BrowserRouter,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "app/store";
 

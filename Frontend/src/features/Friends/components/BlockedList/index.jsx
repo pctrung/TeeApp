@@ -4,7 +4,6 @@ import ImageCircle from "components/ImageCircle";
 import Pagination from "components/Pagination";
 import useFriendApi from "hooks/api/useFriendApi.js";
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 export default function BlockedList({ keyword }) {
   const [list, setList] = useState({ items: [] });

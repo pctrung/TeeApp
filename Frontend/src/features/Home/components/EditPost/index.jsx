@@ -1,15 +1,14 @@
-import { updatePost } from "app/postSlice";
 import Button from "components/Button";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
 import Popup from "components/Popup";
 import EmojiPicker from "emoji-picker-react";
+import usePostApi from "hooks/api/usePostApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 import { useEscToClose } from "hooks/utils/useEscToClose";
-import usePostApi from "hooks/api/usePostApi";
 import React, { useEffect, useRef, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_NUMBER } from "utils/Constants";
 import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
@@ -31,7 +30,6 @@ function EditPost({ post, isOpen, setIsOpen }) {
   const emojiRef = useRef();
   const privacyRef = useRef();
   const postApi = usePostApi();
-  const dispatch = useDispatch();
 
   useDisableBodyScroll(isOpen);
 

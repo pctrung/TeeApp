@@ -20,11 +20,14 @@ import UserInfo from "./components/UserInfo";
 import ConfirmModal from "components/ConfirmModal";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import { useHistory } from "react-router-dom";
+import { addSelectedId } from "app/chatSlice";
+import useChatApi from "hooks/api/useChatApi";
 
 function Profile() {
   const { userName } = useParams();
   const userApi = useUserApi();
   const friendApi = useFriendApi();
+  const chatApi = useChatApi();
   const [user, setUser] = useState({});
   const [isOpenChangePassword, setIsOpenChangePassword] = useState(false);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
@@ -47,6 +50,17 @@ function Profile() {
     pagination,
     userName,
   );
+
+  async function handleCreateChat(userName) {
+    const request = {
+      participantUserName: userName,
+    };
+    chatApi.createPrivateChat(request).then((response) => {
+      if (response.id) {
+        dispatch(addSelectedId(response.id));
+      }
+    });
+  }
 
   useEffect(() => {
     if (isCurrentUser) {
@@ -153,21 +167,23 @@ function Profile() {
   function openBlockModal() {
     setConfirmModal({
       isOpen: true,
-      content: `Do you want to block ${user.fullName}?`,
+      content: `Do you want to block ${user.fullName ?? "this user"}?`,
       action: block,
     });
   }
   function openUnfriendModal() {
     setConfirmModal({
       isOpen: true,
-      content: `Do you want to unfriend ${user.fullName}?`,
+      content: `Do you want to unfriend ${user.fullName ?? "this user"}?`,
       action: unfriend,
     });
   }
   function openDeclineModal() {
     setConfirmModal({
       isOpen: true,
-      content: `Do you want to decline friend request from ${user.fullName}?`,
+      content: `Do you want to decline friend request from ${
+        user.fullName ?? "this user"
+      }?`,
       action: unfriend,
     });
   }
@@ -350,6 +366,10 @@ function Profile() {
               ) : (
                 <div ref={menuRef} className="relative flex space-x-2">
                   {relationButton}
+                  <Button onClick={() => handleCreateChat(user.userName)}>
+                    <i className="bx bxs-message-rounded-dots text-xl align-middle mr-1"></i>
+                    Message
+                  </Button>
                   <Button
                     secondary
                     small

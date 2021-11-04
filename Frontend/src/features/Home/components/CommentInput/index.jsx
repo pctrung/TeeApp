@@ -2,9 +2,9 @@ import SendIconNormal from "assets/icons/send-icon.svg";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
 import EmojiPicker from "emoji-picker-react";
-import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import usePostApi from "hooks/api/usePostApi";
-import React, { useEffect, useRef, useState } from "react";
+import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
+import React, { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 function CommentInput({ postId, currentUser = {} }) {

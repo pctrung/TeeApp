@@ -365,7 +365,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
                 <span className="font-normal">{chat?.creatorFullName}</span>
               </div>
               <div className="font-bold dark:text-dark-txt">
-                Created date:{" "}
+                Created at:{" "}
                 <span className="font-normal">
                   {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
                     "MMMM Do YYYY, h:mm:ss a",

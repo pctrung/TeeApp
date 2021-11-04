@@ -1,24 +1,17 @@
-import {
-  appendMessageToChat,
-  readChat,
-  addSelectedId,
-  removeSelectedId,
-} from "app/chatSlice";
-import InfoIcon from "assets/icons/info-icon.svg";
-import LeftArrowIcon from "assets/icons/left-arrow-icon.svg";
+import { appendMessageToChat, readChat, removeSelectedId } from "app/chatSlice";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
+import Pagination from "components/Pagination";
 import useChatApi from "hooks/api/useChatApi";
 import useMessagePagination from "hooks/pagination/useMessagePagination";
 import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import ChatInput from "../ChatInput";
-import EditChat from "../EditChat";
+import { Link, useHistory } from "react-router-dom";
 import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
-import Pagination from "components/Pagination";
-import { Link, useHistory } from "react-router-dom";
+import ChatInput from "../ChatInput";
+import EditChat from "../EditChat";
 
 function ChatWindow({ chat }) {
   const dispatch = useDispatch();

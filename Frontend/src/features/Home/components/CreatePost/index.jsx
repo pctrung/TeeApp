@@ -136,11 +136,7 @@ function CreatePost() {
             className="flex-1 p-1 md:py-2 bg-white hover:bg-gray-100 active:bg-gray-200 dark:bg-dark-secondary dark:hover:bg-dark-third dark:active:bg-dark-hover rounded-lg transition-base flex items-center justify-center space-x-2 text-sm md:text-base"
             onClick={() => setIsOpen(true)}
           >
-            <img
-              src={ImageIcon}
-              alt="Image icon"
-              className="md:w-6 md:h-6 w-4 h-4"
-            />
+            <img src={ImageIcon} alt="icon" className="md:w-6 md:h-6 w-4 h-4" />
             <span>Your Photos</span>
           </span>
           <span
