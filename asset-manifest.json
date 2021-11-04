@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/TeeApp/static/css/main.f24e14ca.chunk.css",
-    "main.js": "/TeeApp/static/js/main.501d9ebb.chunk.js",
-    "main.js.map": "/TeeApp/static/js/main.501d9ebb.chunk.js.map",
+    "main.css": "/TeeApp/static/css/main.be45d209.chunk.css",
+    "main.js": "/TeeApp/static/js/main.06c03125.chunk.js",
+    "main.js.map": "/TeeApp/static/js/main.06c03125.chunk.js.map",
     "runtime-main.js": "/TeeApp/static/js/runtime-main.0609997e.js",
     "runtime-main.js.map": "/TeeApp/static/js/runtime-main.0609997e.js.map",
     "static/css/2.75509a7d.chunk.css": "/TeeApp/static/css/2.75509a7d.chunk.css",
-    "static/js/2.9c7ea4a3.chunk.js": "/TeeApp/static/js/2.9c7ea4a3.chunk.js",
-    "static/js/2.9c7ea4a3.chunk.js.map": "/TeeApp/static/js/2.9c7ea4a3.chunk.js.map",
+    "static/js/2.744375a2.chunk.js": "/TeeApp/static/js/2.744375a2.chunk.js",
+    "static/js/2.744375a2.chunk.js.map": "/TeeApp/static/js/2.744375a2.chunk.js.map",
     "index.html": "/TeeApp/index.html",
     "static/css/2.75509a7d.chunk.css.map": "/TeeApp/static/css/2.75509a7d.chunk.css.map",
-    "static/css/main.f24e14ca.chunk.css.map": "/TeeApp/static/css/main.f24e14ca.chunk.css.map",
-    "static/js/2.9c7ea4a3.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.9c7ea4a3.chunk.js.LICENSE.txt",
+    "static/css/main.be45d209.chunk.css.map": "/TeeApp/static/css/main.be45d209.chunk.css.map",
+    "static/js/2.744375a2.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.744375a2.chunk.js.LICENSE.txt",
     "static/media/angry.5d2c62b0.svg": "/TeeApp/static/media/angry.5d2c62b0.svg",
     "static/media/boxicons.min.css": "/TeeApp/static/media/boxicons.c324d2b5.eot",
     "static/media/care.d36c2862.svg": "/TeeApp/static/media/care.d36c2862.svg",
@@ -22,8 +22,6 @@
     "static/media/forbid.e276990e.svg": "/TeeApp/static/media/forbid.e276990e.svg",
     "static/media/haha.e568dfbb.svg": "/TeeApp/static/media/haha.e568dfbb.svg",
     "static/media/image-icon.c8ad9f46.svg": "/TeeApp/static/media/image-icon.c8ad9f46.svg",
-    "static/media/info-icon.b4879a5e.svg": "/TeeApp/static/media/info-icon.b4879a5e.svg",
-    "static/media/left-arrow-icon.07714e5b.svg": "/TeeApp/static/media/left-arrow-icon.07714e5b.svg",
     "static/media/like.3708582e.svg": "/TeeApp/static/media/like.3708582e.svg",
     "static/media/login-page.0d15c2c6.svg": "/TeeApp/static/media/login-page.0d15c2c6.svg",
     "static/media/logo-circle.97246462.png": "/TeeApp/static/media/logo-circle.97246462.png",
@@ -39,8 +37,8 @@
   "entrypoints": [
     "static/js/runtime-main.0609997e.js",
     "static/css/2.75509a7d.chunk.css",
-    "static/js/2.9c7ea4a3.chunk.js",
-    "static/css/main.f24e14ca.chunk.css",
-    "static/js/main.501d9ebb.chunk.js"
+    "static/js/2.744375a2.chunk.js",
+    "static/css/main.be45d209.chunk.css",
+    "static/js/main.06c03125.chunk.js"
   ]
 }
