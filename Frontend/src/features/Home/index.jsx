@@ -22,7 +22,7 @@ function Home() {
   return (
     <>
       <div className="w-full flex flex-cols items-start justify-between animate-fadeIn md:space-x-2">
-        <div className="sticky top-20 lg:block hidden w-full bg-white dark:bg-dark-secondary rounded-lg shadow">
+        <div className="sticky top-20 lg:block hidden w-full bg-white dark:bg-dark-secondary rounded-lg shadow max-w-350">
           <div className="flex flex-col items-center w-full">
             <Link
               to={`/profile/${user.userName}`}
@@ -46,7 +46,9 @@ function Home() {
                   <div className="font-normal text-center">{`(${user.nickName})`}</div>
                 )}
               </Link>
-              <div className="mx-3 text-center text-sm">{user.aboutMe}</div>
+              <div className="mx-3 text-center text-sm max-row-10">
+                {user.aboutMe}
+              </div>
             </div>
           </div>
         </div>

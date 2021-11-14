@@ -85,4 +85,11 @@
     -webkit-line-clamp: 3; /* number of lines to show */
     -webkit-box-orient: vertical;
   }
+  .max-row-10 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 10; /* number of lines to show */
+    -webkit-box-orient: vertical;
+  }
 }
