@@ -46,10 +46,7 @@ function Register() {
         "checkUsername",
         "Username does not contain special characters",
         (value) => {
-          return checkRegex(
-            value,
-            "^(?=[a-zA-Z0-9._])(?!.*[_.]{2})[^_.].*[^_.]$",
-          );
+          return checkRegex(value, "^[a-zA-Z0-9!@#$%^&*)(+=._-]{6,}$");
         },
       )
       .test(
@@ -171,6 +168,8 @@ function Register() {
       })
       .catch((error) => {
         setIsLoading(false);
+        let message = error?.errors ? objToString(error?.errors) : "";
+        openPopup("Notification", message);
       });
     setIsLoading(false);
   };
@@ -194,7 +193,6 @@ function Register() {
           content={popup.content}
           onClick={() => {
             setPopup({ isOpen: false });
-            history.push("/login");
           }}
         />
       )}
@@ -404,3 +402,12 @@ Date.prototype.toDateInputValue = function () {
   local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
   return local.toJSON()?.slice(0, 10);
 };
+
+function objToString(obj) {
+  let str = "";
+  for (const val of Object.values(obj)) {
+    str += `${val.toString()}, `;
+  }
+  str = str.substring(0, str.length - 2);
+  return str;
+}

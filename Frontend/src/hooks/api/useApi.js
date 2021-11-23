@@ -67,15 +67,11 @@ export default function useApi() {
               ? objToString(error.response?.data?.errors)
               : message;
 
-            if (!message.toLowerCase().includes("username or password")) {
-              openPopup(popupTitle, message);
-            }
+            openPopup(popupTitle, message);
             return Promise.reject(error.response?.data);
         }
       }
-      if (!message.toLowerCase().includes("username or password")) {
-        openPopup(popupTitle, message);
-      }
+
       if (message.toLowerCase().includes("Unable to identify user")) {
         openPopup(popupTitle, message);
         window.localStorage.removeItem("token");
