@@ -3,7 +3,6 @@ import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
 import usePostApi from "hooks/api/usePostApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
-import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -14,7 +13,7 @@ import {
   ReactionName,
   ReactionType,
 } from "utils/Enums";
-import { groupBy } from "utils/ExtensionMethod";
+import { formatDate, groupBy } from "utils/UtilityMethods";
 import CommentInput from "../CommentInput";
 import CommentList from "../CommentList";
 import EditPost from "../EditPost";
@@ -114,11 +113,7 @@ function Post({ post, isOpenComment = false }) {
                 className="text-xs text-gray-500 dark:text-dark-txt hover:underline space-x-2"
                 to={`/posts/${post?.id}`}
               >
-                <span>
-                  {moment(new Date(post?.dateCreated), "YYYYMMDD").format(
-                    "lll",
-                  )}
-                </span>
+                <span>{formatDate(post?.dateCreated)}</span>
                 <i className={PrivacyIcon[post?.privacy]}></i>
               </Link>
             </div>

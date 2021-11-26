@@ -3,9 +3,9 @@ import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
 import Pagination from "components/Pagination";
 import useFriendApi from "hooks/api/useFriendApi.js";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { formatDate } from "utils/UtilityMethods";
 
 export default function FriendRequestList({ keyword }) {
   const [list, setList] = useState({ items: [] });
@@ -129,7 +129,7 @@ const Friend = ({ friendship = {}, user = {}, setConfirmModal, fetchData }) => {
             {user.fullName}
           </div>
           <div className="text-xs dark:text-dark-txt text-gray-500 text-center w-full">
-            {moment(friendship.requestedDate).format("LL")}
+            {formatDate(friendship.requestedDate)}
           </div>
         </div>
       </Link>

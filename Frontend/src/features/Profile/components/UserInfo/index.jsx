@@ -1,6 +1,6 @@
-import moment from "moment";
 import React from "react";
 import { GenderName } from "utils/Enums";
+import { formatDate } from "utils/UtilityMethods";
 
 function UserInfo({ user, className }) {
   return (
@@ -44,7 +44,7 @@ function UserInfo({ user, className }) {
             </span>
             <span className="font-medium max-row-2">
               {new Date(user.dateOfBirth).getFullYear() > 1
-                ? moment(user.dateOfBirth).format("LL")
+                ? formatDate(user.dateOfBirth)
                 : "--"}
             </span>
           </div>

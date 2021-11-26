@@ -1,11 +1,11 @@
 import { addSelectedId } from "app/chatSlice";
 import ClickableIcon from "components/ClickableIcon";
 import ImageCircle from "components/ImageCircle";
-import moment from "moment";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
+import { formatDate } from "utils/UtilityMethods";
 import CreateChat from "../CreateChat";
 
 function ChatList({ className, setChatNotificationNumber, setIsOpen }) {
@@ -120,15 +120,9 @@ function ChatList({ className, setChatNotificationNumber, setIsOpen }) {
                           : chat?.name ?? DefaultName.NO_NAME_GROUP}
                       </span>
                       <span className="text-sm text-gray-500 truncate flex-shrink-0">
-                        {moment(
-                          new Date(
-                            lastMessage?.dateCreated ?? chat?.dateCreated,
-                          ),
-                          "YYYYMMDD",
-                        )
-                          .fromNow()
-                          ?.replace("ago", "")
-                          ?.trim()}
+                        {formatDate(
+                          lastMessage?.dateCreated ?? chat?.dateCreated,
+                        )}
                       </span>
                     </div>
                     <div className="flex">

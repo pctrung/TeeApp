@@ -1,12 +1,12 @@
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
 import ImageCircle from "components/ImageCircle";
+import usePostApi from "hooks/api/usePostApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import { useEscToClose } from "hooks/utils/useEscToClose";
-import usePostApi from "hooks/api/usePostApi";
-import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { formatDate } from "utils/UtilityMethods";
 
 export default function CommentList({
   comments = [],
@@ -133,7 +133,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
             )}
           </div>
           <span className="ml-2 text-tiny md:text-xs text-gray-500 dark:text-dark-txt">
-            {moment(new Date(comment?.dateCreated), "YYYYMMDD").format("lll")}
+            {formatDate(comment?.dateCreated)}
           </span>
         </div>
         <div ref={ref} className="relative self-center mb-5">

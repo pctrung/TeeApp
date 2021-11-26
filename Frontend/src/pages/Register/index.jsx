@@ -6,8 +6,9 @@ import Popup from "components/Popup";
 import useAccountApi from "hooks/api/useAccountApi";
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { Gender } from "utils/Enums";
+import { checkRegex, identityObjectToString } from "utils/UtilityMethods";
 import * as yup from "yup";
 
 function Register() {
@@ -20,7 +21,6 @@ function Register() {
     title: "Notification",
   });
 
-  const history = useHistory();
   const accountApi = useAccountApi();
 
   const INPUT_CLASS =
@@ -168,7 +168,9 @@ function Register() {
       })
       .catch((error) => {
         setIsLoading(false);
-        let message = error?.errors ? objToString(error?.errors) : "";
+        let message = error?.errors
+          ? identityObjectToString(error?.errors)
+          : "";
         openPopup("Notification", message);
       });
     setIsLoading(false);
@@ -389,25 +391,8 @@ function Register() {
 
 export default Register;
 
-function checkRegex(value, regex) {
-  if (value && regex) {
-    var pattern = new RegExp(regex);
-    var res = pattern.test(value);
-    return res;
-  }
-}
-
 Date.prototype.toDateInputValue = function () {
   var local = new Date(this);
   local.setMinutes(this.getMinutes() - this.getTimezoneOffset());
   return local.toJSON()?.slice(0, 10);
 };
-
-function objToString(obj) {
-  let str = "";
-  for (const val of Object.values(obj)) {
-    str += `${val.toString()}, `;
-  }
-  str = str.substring(0, str.length - 2);
-  return str;
-}

@@ -4,12 +4,12 @@ import ImageCircle from "components/ImageCircle";
 import Pagination from "components/Pagination";
 import useChatApi from "hooks/api/useChatApi";
 import useMessagePagination from "hooks/pagination/useMessagePagination";
-import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useHistory } from "react-router-dom";
 import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
+import { formatDate } from "utils/UtilityMethods";
 import ChatInput from "../ChatInput";
 import EditChat from "../EditChat";
 
@@ -156,9 +156,7 @@ function ChatWindow({ chat }) {
             />
             {!isHasMore && (
               <div className="text-gray-500 text-xs text-center pb-2">
-                {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
-                  "MMMM Do YYYY, h:mm:ss a",
-                )}
+                {formatDate(chat?.dateCreated)}
               </div>
             )}
             {[...chat?.messages]
@@ -174,10 +172,7 @@ function ChatWindow({ chat }) {
                     <div className="flex flex-col items-end w-full flex-shrink-0">
                       {showTimeIndexes.includes(index) && (
                         <span className="transition-all animate-fadeIn text-xs text-gray-400 left-0 bottom-full mb-1 ml-1 space-x-2 w-60 truncate overflow-ellipsis text-right">
-                          {moment(
-                            new Date(message?.dateCreated),
-                            "YYYYMMDD",
-                          ).calendar() ?? ""}
+                          {formatDate(message?.dateCreated) ?? ""}
                         </span>
                       )}
                       {message.imageUrl ? (
@@ -241,12 +236,9 @@ function ChatWindow({ chat }) {
                     <div className="flex flex-col w-full items-start">
                       {showTimeIndexes.includes(index) && (
                         <span className="transition-all animate-fadeIn text-xs text-gray-400 bottom-full mb-1 ml-1 space-x-2 w-60 truncate overflow-ellipsis text-left">
-                          {message.senderFullName +
-                            " - " +
-                            moment(
-                              new Date(message?.dateCreated),
-                              "YYYYMMDD",
-                            ).calendar() ?? ""}
+                          {(chat?.type === ChatType.GROUP
+                            ? message.senderFullName + " - "
+                            : "") + formatDate(message.dateCreated) ?? ""}
                         </span>
                       )}
                       {message.imageUrl ? (

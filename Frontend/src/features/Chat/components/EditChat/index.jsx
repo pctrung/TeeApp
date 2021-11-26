@@ -8,11 +8,11 @@ import useUserApi from "hooks/api/useUserApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 import { useEscToClose } from "hooks/utils/useEscToClose";
-import moment from "moment";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DefaultName } from "utils/Constants";
 import { ChatType } from "utils/Enums";
+import { formatDate } from "utils/UtilityMethods";
 
 function EditChat({ isOpen, setIsOpen, chat }) {
   const [isOpenModal, setIsOpenModal] = useState(false);
@@ -367,9 +367,7 @@ function EditChat({ isOpen, setIsOpen, chat }) {
               <div className="font-bold dark:text-dark-txt">
                 Created at:{" "}
                 <span className="font-normal">
-                  {moment(new Date(chat?.dateCreated), "YYYYMMDD").format(
-                    "MMMM Do YYYY, h:mm:ss a",
-                  )}
+                  {formatDate(chat?.dateCreated)}
                 </span>
               </div>
               <div className="font-bold dark:text-dark-txt">

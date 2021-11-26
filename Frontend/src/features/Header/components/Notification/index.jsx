@@ -1,7 +1,7 @@
-import React from "react";
 import ImageCircle from "components/ImageCircle";
-import moment from "moment";
+import React from "react";
 import { NotificationType, ReactionIcon, ReactionName } from "utils/Enums";
+import { formatDate } from "utils/UtilityMethods";
 
 function Notification({ notification, onClick }) {
   return (
@@ -43,9 +43,7 @@ function Notification({ notification, onClick }) {
                 (!notification?.isRead ? "font-bold" : "")
               }
             >
-              {moment(new Date(notification?.dateCreated), "YYYYMMDD").format(
-                "lll",
-              )}
+              {formatDate(notification?.dateCreated)}
             </span>
           </div>
         </div>
