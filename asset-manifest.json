@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/TeeApp/static/css/main.6a68c38a.chunk.css",
-    "main.js": "/TeeApp/static/js/main.44d89eb0.chunk.js",
-    "main.js.map": "/TeeApp/static/js/main.44d89eb0.chunk.js.map",
+    "main.js": "/TeeApp/static/js/main.3eaa76f2.chunk.js",
+    "main.js.map": "/TeeApp/static/js/main.3eaa76f2.chunk.js.map",
     "runtime-main.js": "/TeeApp/static/js/runtime-main.0609997e.js",
     "runtime-main.js.map": "/TeeApp/static/js/runtime-main.0609997e.js.map",
     "static/css/2.75509a7d.chunk.css": "/TeeApp/static/css/2.75509a7d.chunk.css",
-    "static/js/2.4151854c.chunk.js": "/TeeApp/static/js/2.4151854c.chunk.js",
-    "static/js/2.4151854c.chunk.js.map": "/TeeApp/static/js/2.4151854c.chunk.js.map",
+    "static/js/2.a4efa38e.chunk.js": "/TeeApp/static/js/2.a4efa38e.chunk.js",
+    "static/js/2.a4efa38e.chunk.js.map": "/TeeApp/static/js/2.a4efa38e.chunk.js.map",
     "index.html": "/TeeApp/index.html",
     "static/css/2.75509a7d.chunk.css.map": "/TeeApp/static/css/2.75509a7d.chunk.css.map",
     "static/css/main.6a68c38a.chunk.css.map": "/TeeApp/static/css/main.6a68c38a.chunk.css.map",
-    "static/js/2.4151854c.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.4151854c.chunk.js.LICENSE.txt",
+    "static/js/2.a4efa38e.chunk.js.LICENSE.txt": "/TeeApp/static/js/2.a4efa38e.chunk.js.LICENSE.txt",
     "static/media/angry.5d2c62b0.svg": "/TeeApp/static/media/angry.5d2c62b0.svg",
     "static/media/boxicons.min.css": "/TeeApp/static/media/boxicons.c324d2b5.eot",
     "static/media/care.d36c2862.svg": "/TeeApp/static/media/care.d36c2862.svg",
@@ -37,8 +37,8 @@
   "entrypoints": [
     "static/js/runtime-main.0609997e.js",
     "static/css/2.75509a7d.chunk.css",
-    "static/js/2.4151854c.chunk.js",
+    "static/js/2.a4efa38e.chunk.js",
     "static/css/main.6a68c38a.chunk.css",
-    "static/js/main.44d89eb0.chunk.js"
+    "static/js/main.3eaa76f2.chunk.js"
   ]
 }
