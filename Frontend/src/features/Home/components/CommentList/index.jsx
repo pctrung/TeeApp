@@ -133,10 +133,7 @@ const Comment = React.memo(({ comment, postId, isMyComment }) => {
             )}
           </div>
           <span className="ml-2 text-tiny md:text-xs text-gray-500 dark:text-dark-txt">
-            {moment(new Date(comment?.dateCreated), "YYYYMMDD")
-              .fromNow()
-              ?.replace("ago", "")
-              ?.trim()}
+            {moment(new Date(comment?.dateCreated), "YYYYMMDD").format("lll")}
           </span>
         </div>
         <div ref={ref} className="relative self-center mb-5">

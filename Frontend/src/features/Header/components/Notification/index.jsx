@@ -43,10 +43,9 @@ function Notification({ notification, onClick }) {
                 (!notification?.isRead ? "font-bold" : "")
               }
             >
-              {moment(
-                new Date(notification?.dateCreated),
-                "YYYYMMDD",
-              ).fromNow()}
+              {moment(new Date(notification?.dateCreated), "YYYYMMDD").format(
+                "lll",
+              )}
             </span>
           </div>
         </div>

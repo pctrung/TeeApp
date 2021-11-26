@@ -115,10 +115,9 @@ function Post({ post, isOpenComment = false }) {
                 to={`/posts/${post?.id}`}
               >
                 <span>
-                  {moment(new Date(post?.dateCreated), "YYYYMMDD")
-                    .fromNow()
-                    ?.replace("ago", "")
-                    ?.trim()}
+                  {moment(new Date(post?.dateCreated), "YYYYMMDD").format(
+                    "lll",
+                  )}
                 </span>
                 <i className={PrivacyIcon[post?.privacy]}></i>
               </Link>
