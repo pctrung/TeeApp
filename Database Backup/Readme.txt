@@ -1,2 +1,2 @@
-copy thư mục img vào wwwroot
-Chạy file SQL
+Copy img to wwwroot
+Run SQL scripts
