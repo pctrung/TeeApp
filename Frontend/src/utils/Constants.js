@@ -1,5 +1,7 @@
-export const MAX_IMAGE_SIZE_NUMBER = 3;
+export const MAX_IMAGE_SIZE_NUMBER = 10;
 export const MAX_IMAGE_SIZE = MAX_IMAGE_SIZE_NUMBER * 1024 * 1024;
+export const ACCEPTED_FILE_TYPES = "image/png, image/jpg, image/tiff, image/tif, image/jpeg, video/mp4";
+export const ACCEPTED_VIDEO_TYPES = "video/mp4";
 
 export const DefaultLimit = {
   NOTIFICATION: 50,

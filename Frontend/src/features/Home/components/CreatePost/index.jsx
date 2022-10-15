@@ -11,7 +11,7 @@ import usePostApi from "hooks/api/usePostApi";
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import { MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_NUMBER } from "utils/Constants";
+import { ACCEPTED_FILE_TYPES as ACCEPTED_IMAGE_TYPES, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_NUMBER } from "utils/Constants";
 import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
 import { addPost } from "app/postSlice";
 
@@ -256,7 +256,7 @@ function CreatePost() {
                   type="file"
                   multiple
                   onChange={(e) => addFiles(e.target.files)}
-                  accept="image/png, image/jpg, image/tiff, image/tif, image/jpeg"
+                  accept={ACCEPTED_IMAGE_TYPES}
                 />
                 <label
                   htmlFor="imageFiles"
