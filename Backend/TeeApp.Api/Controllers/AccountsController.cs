@@ -67,20 +67,43 @@ namespace TeeApp.Api.Controllers
                 return BadRequest(message);
             }
         }
-
+        
+        [Authorize]
+        [HttpPost("lockout/{userName}")]
+        public async Task<IActionResult> Lock(string userName)
+        {
+            var result = await _accountService.LockoutAsync(userName);
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Message),
+                403 => Forbid(),
+                404 => NotFound(result.Message),
+                _ => BadRequest(result.Message),
+            };
+        }
+        [Authorize]
+        [HttpPost("unlock/{userName}")]
+        public async Task<IActionResult> Unlock(string userName)
+        {
+            var result = await _accountService.UnlockAsync(userName);
+            return result.StatusCode switch
+            {
+                200 => Ok(result.Message),
+                403 => Forbid(),
+                404 => NotFound(result.Message),
+                _ => BadRequest(result.Message),
+            };
+        }
         [AllowAnonymous]
         [HttpPost("login")]
         public async Task<IActionResult> Login(LoginRequest request)
         {
             var result = await _accountService.LoginAsync(request);
-            if (result != null)
+            return result.StatusCode switch
             {
-                return Ok(result);
-            }
-            else
-            {
-                return BadRequest("Username or password is incorrect!");
-            }
+                403 => Forbid(),
+                _ => Ok(result)
+            };
         }
 
         [Authorize]

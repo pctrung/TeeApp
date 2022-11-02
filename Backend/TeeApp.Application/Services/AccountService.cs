@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,6 +12,7 @@ using TeeApp.Application.Identity;
 using TeeApp.Application.Interfaces;
 using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
+using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.Users;
 using TeeApp.Utilities.Constants;
 using TeeApp.Utilities.Extentions;
@@ -43,7 +45,7 @@ namespace TeeApp.Application.Services
             return false;
         }
 
-        public async Task<string> LoginAsync(LoginRequest request)
+        public async Task<ApiResult<string>> LoginAsync(LoginRequest request)
         {
             var username = request.Username;
 
@@ -58,15 +60,19 @@ namespace TeeApp.Application.Services
 
             if (user == null)
             {
-                return null;
+                return ApiResult<string>.NotFound(null,"Username or password is incorrect!");
             }
 
             var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, request.RememberMe, false);
 
-            if (!result.Succeeded)
+            if (result.IsLockedOut)
             {
-                return null;
-            }
+                return ApiResult<string>.BadRequest(null,"Your account is locked! Please contact administration for more detail.");
+            } 
+            if (result.IsNotAllowed || result.RequiresTwoFactor || !result.Succeeded)
+            {
+                return ApiResult<string>.BadRequest(null,"Username or password is incorrect!");
+            } 
 
             var claims = await _userManager.GetClaimsAsync(user);
 
@@ -82,7 +88,7 @@ namespace TeeApp.Application.Services
                 expires: DateTime.Now.AddDays(300),
                 signingCredentials: creds);
 
-            return new JwtSecurityTokenHandler().WriteToken(token);
+            return ApiResult<string>.Ok(new JwtSecurityTokenHandler().WriteToken(token));
         }
 
         public async Task<IdentityResult> ChangePasswordAsync(ChangePasswordRequest request)
@@ -157,6 +163,48 @@ namespace TeeApp.Application.Services
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<ApiResult<bool>> LockoutAsync(string userName)
+        {
+            if (!_currentUser.IsAdmin())
+            {
+                return ApiResult<bool>.Forbid(false,"You do not have permission");
+            }
+            
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
+            if (user == null)
+            {
+                return ApiResult<bool>.NotFound(false, "Not found user.");
+            }
+            var lockoutResult = await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MaxValue);
+
+            if (!lockoutResult.Succeeded)
+            {
+                return ApiResult<bool>.NotFound(false, lockoutResult.Errors?.FirstOrDefault()?.Description);    
+            }
+            return ApiResult<bool>.Ok(true, "Lockout user succeeded.");
+        }
+        
+        public async Task<ApiResult<bool>> UnlockAsync(string userName)
+        {
+            if (!_currentUser.IsAdmin())
+            {
+                return ApiResult<bool>.Forbid(false,"You do not have permission");
+            }
+            
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
+            if (user == null)
+            {
+                return ApiResult<bool>.NotFound(false, "Not found user.");
+            }
+            var lockoutResult = await _userManager.SetLockoutEndDateAsync(user, DateTimeOffset.MinValue);
+
+            if (!lockoutResult.Succeeded)
+            {
+                return ApiResult<bool>.NotFound(false, lockoutResult.Errors?.FirstOrDefault()?.Description);    
+            }
+            return ApiResult<bool>.Ok(true, "Unlock user succeeded.");
         }
     }
 }

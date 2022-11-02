@@ -32,8 +32,13 @@ function Login() {
     await accountApi
       .login(request)
       .then((response) => {
-        window.localStorage.setItem("token", response);
-        window.location.href = process.env.PUBLIC_URL + "/";
+        if(response.statusCode === 200){
+          window.localStorage.setItem("token", response.data);
+          window.location.href = process.env.PUBLIC_URL + "/";
+        } else {
+          var message = response?.message ?? "Oops, something went wrong! Please contact administrator.";
+          setError(message);
+        }
       })
       .catch((error) => {
         var message =

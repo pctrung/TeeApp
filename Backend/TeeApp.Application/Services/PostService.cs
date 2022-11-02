@@ -188,16 +188,15 @@ namespace TeeApp.Application.Services
         }
         public async Task<ApiResult<bool>> HidePost(int postId, string note)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
-
-            if (post == null)
-            {
-                return ApiResult<bool>.NotFound(false, "Not found post.");
-            }
-            
             if (!_currentUser.IsAdmin())
             {
                 return ApiResult<bool>.Forbid(false,"You do not have permission to hide post");
+            }
+            
+            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
+            if (post == null)
+            {
+                return ApiResult<bool>.NotFound(false, "Not found post.");
             }
 
             post.HideByAdminNote = note;
@@ -208,16 +207,17 @@ namespace TeeApp.Application.Services
         }
         public async Task<ApiResult<bool>> UnHidePost(int postId)
         {
-            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
-
-            if (post == null)
-            {
-                return ApiResult<bool>.NotFound(false, "Not found post.");
-            }
             if (!_currentUser.IsAdmin())
             {
                 return ApiResult<bool>.Forbid(false, "You do not have permission to unhide post");
             }
+            
+            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
+            if (post == null)
+            {
+                return ApiResult<bool>.NotFound(false, "Not found post.");
+            }
+            
             post.IsHideByAdmin = false;
             post.HideByAdminNote = "";
             await _context.SaveChangesAsync();
