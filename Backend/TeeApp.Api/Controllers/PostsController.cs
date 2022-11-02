@@ -53,6 +53,15 @@ namespace TeeApp.Api.Controllers
             var result = await _postService.GetNewsFeedPaginationAsync(request);
             return Ok(result);
         }
+        
+        [HttpGet("admin")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<PagedResult<PostViewModel>>> GetAllAdmin([FromQuery] PaginationRequestBase request)
+        {
+            var result = await _postService.GetAllAdminPaginationAsync(request);
+            return Ok(result);
+        }
 
         [HttpGet("{postId:int}")]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -81,6 +90,41 @@ namespace TeeApp.Api.Controllers
                         await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceivePost(result.Data.Post);
                         return Created("", result.Data.Post);
                     }
+                default: return BadRequest(result.Message);
+            }
+        }
+        
+        [HttpPost("{postId:int}/hide")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> HidePost(int postId, string note)
+        {
+            var result = await _postService.HidePost(postId, note);
+
+            switch (result.StatusCode)
+            {
+                case 200:
+                {
+                    return Ok();
+                }
+                default: return BadRequest(result.Message);
+            }
+        }
+        [HttpPost("{postId:int}/unhide")]
+        [Authorize]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UnHidePost(int postId)
+        {
+            var result = await _postService.UnHidePost(postId);
+
+            switch (result.StatusCode)
+            {
+                case 200:
+                {
+                    return Ok();
+                }
                 default: return BadRequest(result.Message);
             }
         }

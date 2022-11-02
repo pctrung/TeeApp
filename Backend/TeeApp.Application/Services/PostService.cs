@@ -23,7 +23,8 @@ namespace TeeApp.Application.Services
     {
         private readonly TeeAppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly User _currentUser;
+        private readonly User _currentUserModel;
+        private readonly ICurrentUser _currentUser;
         private readonly IStorageService _storageService;
 
         public PostService(IMapper mapper, TeeAppDbContext context, ICurrentUser currentUser, IStorageService storageService)
@@ -31,8 +32,9 @@ namespace TeeApp.Application.Services
             _context = context;
             _mapper = mapper;
             _storageService = storageService;
-
-            _currentUser = _context.Users
+            _currentUser = currentUser;
+            
+            _currentUserModel = _context.Users
                 .Include(x => x.Following)
                 .Include(x => x.Followers)
                 .Include(x => x.BlockedByUsers)
@@ -41,7 +43,7 @@ namespace TeeApp.Application.Services
                 .OrderBy(x => x.DateCreated)
                 .FirstOrDefault(x => x.Id.Equals(currentUser.UserId));
 
-            if (_currentUser == null)
+            if (_currentUserModel == null)
             {
                 throw new Exception("Unable to identify user. Please login and try again!");
             }
@@ -49,7 +51,7 @@ namespace TeeApp.Application.Services
 
         private bool IsBlocked(User user)
         {
-            return _currentUser.BlockedByUsers.Contains(user) || _currentUser.BlockedUsers.Contains(user);
+            return _currentUserModel.BlockedByUsers.Contains(user) || _currentUserModel.BlockedUsers.Contains(user);
         }
 
         private Friendship GetFriendship(User user)
@@ -57,8 +59,8 @@ namespace TeeApp.Application.Services
             return _context.Friendships
                 .FirstOrDefault(
                 x =>
-                    x.RequestedUserId.Equals(user.Id) && x.RecievedUserId.Equals(_currentUser.Id) ||
-                    x.RequestedUserId.Equals(_currentUser.Id) && x.RecievedUserId.Equals(user.Id));
+                    x.RequestedUserId.Equals(user.Id) && x.RecievedUserId.Equals(_currentUserModel.Id) ||
+                    x.RequestedUserId.Equals(_currentUserModel.Id) && x.RecievedUserId.Equals(user.Id));
         }
 
         private bool IsMyFriend(User user)
@@ -90,7 +92,7 @@ namespace TeeApp.Application.Services
 
         private bool IsHavePermissionToAccessPostAsync(Post post)
         {
-            var result = post.Creator.Id.Equals(_currentUser.Id);
+            var result = post.Creator.Id.Equals(_currentUserModel.Id);
             return result;
         }
 
@@ -98,7 +100,7 @@ namespace TeeApp.Application.Services
         {
             var posts = await _context.Posts
                 .Where(x => x.DateDeleted == null)
-                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
+                .FilterBlockedAndRequestWithoutPagination(_currentUserModel, request)
                 .Include(x => x.Comments)
                     .ThenInclude(x => x.Creator)
                 .Include(x => x.Reactions)
@@ -111,8 +113,13 @@ namespace TeeApp.Application.Services
 
             posts.ToList().ForEach(post =>
             {
-                if (!post.Creator.Id.Equals(_currentUser.Id))
+                if (!post.Creator.Id.Equals(_currentUserModel.Id))
                 {
+                    if (post.IsHideByAdmin)
+                    {
+                        posts.Remove(post);
+                        return;
+                    }
                     switch (post.Privacy)
                     {
                         case PrivacyType.Private:
@@ -144,12 +151,85 @@ namespace TeeApp.Application.Services
             };
             return result;
         }
+        
+        public async Task<PagedResult<PostViewModel>> GetAllAdminPaginationAsync(PaginationRequestBase request)
+        {
+            if (!_currentUser.IsAdmin())
+            {
+                return null;
+            }
+            var posts = await _context.Posts
+                .Where(x => x.DateDeleted == null)
+                .Include(x => x.Comments)
+                .ThenInclude(x => x.Creator)
+                .Include(x => x.Reactions)
+                .ThenInclude(x => x.Creator)
+                .Include(x => x.Photos)
+                .Include(x => x.Creator)
+                .OrderByDescending(x => x.DateCreated)
+                .AsSplitQuery()
+                .ToListAsync();
+
+            posts.RemoveAll(post => post.Privacy == PrivacyType.Private);
+
+            var totalRecords = posts.Count;
+            var pagedPosts = posts.Paged(request.Page, request.Limit);
+            var pagedPostsViewModels = _mapper.Map<List<PostViewModel>>(pagedPosts);
+
+            var result = new PagedResult<PostViewModel>()
+            {
+                Items = pagedPostsViewModels,
+                Keyword = request.Keyword,
+                Limit = request.Limit,
+                Page = request.Page,
+                TotalRecords = totalRecords
+            };
+            return result;
+        }
+        public async Task<ApiResult<bool>> HidePost(int postId, string note)
+        {
+            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
+
+            if (post == null)
+            {
+                return ApiResult<bool>.NotFound(false, "Not found post.");
+            }
+            
+            if (!_currentUser.IsAdmin())
+            {
+                return ApiResult<bool>.Forbid(false,"You do not have permission to hide post");
+            }
+
+            post.HideByAdminNote = note;
+            post.IsHideByAdmin = true;
+            await _context.SaveChangesAsync();
+
+            return ApiResult<bool>.Ok(true);
+        }
+        public async Task<ApiResult<bool>> UnHidePost(int postId)
+        {
+            var post = await _context.Posts.FirstOrDefaultAsync(post => post.Id == postId);
+
+            if (post == null)
+            {
+                return ApiResult<bool>.NotFound(false, "Not found post.");
+            }
+            if (!_currentUser.IsAdmin())
+            {
+                return ApiResult<bool>.Forbid(false, "You do not have permission to unhide post");
+            }
+            post.IsHideByAdmin = false;
+            post.HideByAdminNote = "";
+            await _context.SaveChangesAsync();
+
+            return ApiResult<bool>.Ok(true);
+        }
 
         public async Task<PagedResult<PostViewModel>> GetNewsFeedPaginationAsync(PaginationRequestBase request)
         {
             var posts = await _context.Posts
-                .Where(x => (_currentUser.Id.Equals(x.Creator.Id) || _currentUser.Following.Contains(x.Creator)) && x.DateDeleted == null)
-                .FilterBlockedAndRequestWithoutPagination(_currentUser, request)
+                .Where(x => (_currentUserModel.Id.Equals(x.Creator.Id) || _currentUserModel.Following.Contains(x.Creator)) && x.DateDeleted == null)
+                .FilterBlockedAndRequestWithoutPagination(_currentUserModel, request)
                 .Include(x => x.Comments)
                     .ThenInclude(x => x.Creator)
                 .Include(x => x.Reactions)
@@ -162,8 +242,13 @@ namespace TeeApp.Application.Services
 
             posts.ToList().ForEach(post =>
             {
-                if (!post.Creator.Id.Equals(_currentUser.Id))
+                if (!post.Creator.Id.Equals(_currentUserModel.Id))
                 {
+                    if (post.IsHideByAdmin)
+                    {
+                        posts.Remove(post);
+                        return;
+                    }
                     switch (post.Privacy)
                     {
                         case PrivacyType.Private:
@@ -217,7 +302,7 @@ namespace TeeApp.Application.Services
 
             posts.ToList().ForEach(post =>
             {
-                if (!post.Creator.Id.Equals(_currentUser.Id))
+                if (!post.Creator.Id.Equals(_currentUserModel.Id))
                 {
                     switch (post.Privacy)
                     {
@@ -269,7 +354,7 @@ namespace TeeApp.Application.Services
                 return ApiResult<PostViewModel>.NotFound(null, "Not found this post.");
             }
 
-            if (!post.Creator.Id.Equals(_currentUser.Id))
+            if (!post.Creator.Id.Equals(_currentUserModel.Id))
             {
                 switch (post.Privacy)
                 {
@@ -297,7 +382,7 @@ namespace TeeApp.Application.Services
                 Content = request.Content,
                 Privacy = request.Privacy,
                 DateCreated = DateTime.UtcNow.ToVNTimeZone(),
-                Creator = _currentUser,
+                Creator = _currentUserModel,
                 Comments = new(),
                 Photos = new(),
                 Reactions = new()

@@ -10,5 +10,7 @@ namespace TeeApp.Models.ViewModels
         public List<ReactionViewModel> Reactions { get; set; }
         public List<PhotoViewModel> Photos { get; set; }
         public PrivacyType Privacy { get; set; }
+        public bool IsHideByAdmin { get; set; }
+        public string HideByAdminNote { get; set; }
     }
 }

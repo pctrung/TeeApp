@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TeeApp.Data.EF;
 
 namespace TeeApp.Data.Migrations
 {
     [DbContext(typeof(TeeAppDbContext))]
-    partial class TeeAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221101160004_AddHidePostField")]
+    partial class AddHidePostField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -11,5 +11,7 @@ namespace TeeApp.Data.Entities
         public List<Reaction> Reactions { get; set; }
         public List<Photo> Photos { get; set; }
         public PrivacyType Privacy { get; set; }
+        public bool IsHideByAdmin { get; set; }
+        public string HideByAdminNote { get; set; }
     }
 }

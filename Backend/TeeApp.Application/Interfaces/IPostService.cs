@@ -22,5 +22,8 @@ namespace TeeApp.Application.Interfaces
         Task<ApiResult<PostResponse>> UpdateAsync(int postId, UpdatePostRequest request);
 
         Task<ApiResult<PostResponse>> DeleteAsync(int postId);
+        Task<PagedResult<PostViewModel>> GetAllAdminPaginationAsync(PaginationRequestBase request);
+        Task<ApiResult<bool>> HidePost(int postId, string note);
+        Task<ApiResult<bool>> UnHidePost(int postId);
     }
 }
