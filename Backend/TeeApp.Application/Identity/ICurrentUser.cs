@@ -17,5 +17,6 @@ namespace TeeApp.Application.Identity
         string FullName { get; }
 
         ClaimsPrincipal User { get; }
+        bool IsAdmin();
     }
 }

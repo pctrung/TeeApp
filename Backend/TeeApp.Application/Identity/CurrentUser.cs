@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
+using TeeApp.Utilities.Constants;
 
 namespace TeeApp.Application.Identity
 {
@@ -18,6 +19,11 @@ namespace TeeApp.Application.Identity
         public CurrentUser(IHttpContextAccessor httpContextAccessor)
         {
             _httpContextAccessor = httpContextAccessor;
+        }
+
+        public bool IsAdmin()
+        {
+            return UserName.Equals(SystemConstants.ADMIN_USERNAME);
         }
     }
 }
