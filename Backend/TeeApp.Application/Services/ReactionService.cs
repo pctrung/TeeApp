@@ -119,7 +119,7 @@ namespace TeeApp.Application.Services
             }
 
             // check exists reaction
-            var reaction = post.Reactions.Where(x => x.Creator.Id.Equals(_currentUser.Id)).FirstOrDefault();
+            var reaction = post.Reactions?.FirstOrDefault(x => x.Creator?.Id?.Equals(_currentUser?.Id) == true);
 
             if (reaction != null)
             {
