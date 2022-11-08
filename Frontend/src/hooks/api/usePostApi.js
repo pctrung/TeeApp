@@ -17,6 +17,21 @@ export default function usePostApi() {
       const url = `${baseApiUrl}`;
       return Api.get(url, { params });
     },
+    getAllAdmin: (params) => {
+      if (!params?.limit) {
+        params = { ...params, limit: DefaultLimit.POST };
+      }
+      const url = `${baseApiUrl}/admin`;
+      return Api.get(url, { params });
+    },
+    hide: (id, note) => {
+      const url = `${baseApiUrl}/${id}/hide`;
+      return Api.post(url, { note });
+    },
+    show: (id) => {
+      const url = `${baseApiUrl}/${id}/show`;
+      return Api.post(url);
+    },
     getNewsFeed: (params) => {
       if (!params?.limit) {
         params = { ...params, limit: DefaultLimit.POST };

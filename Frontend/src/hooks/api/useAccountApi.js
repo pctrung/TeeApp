@@ -39,6 +39,20 @@ export default function useAccountApi() {
       }
       return Promise.reject();
     },
+    lock: (userName) => {
+      if (userName) {
+        const url = `${baseApiUrl}/lockout/${userName}`;
+        return Api.post(url);
+      }
+      return Promise.reject();
+    },
+    unlock: (userName) => {
+      if (userName) {
+        const url = `${baseApiUrl}/unlock/${userName}`;
+        return Api.post(url);
+      }
+      return Promise.reject();
+    },
   };
   return accountApi;
 }

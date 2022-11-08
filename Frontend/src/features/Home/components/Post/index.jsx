@@ -90,7 +90,14 @@ function Post({ post, isOpenComment = false }) {
       {isOpenEdit && (
         <EditPost post={post} isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} />
       )}
-      <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-200 w-full mx-auto bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow">
+      <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-200 w-full mx-auto bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow relative">
+        {post?.isHideByAdmin && <div className="flex items-center justify-center bg-gray-800 h-full w-full z-10 bg-opacity-60 absolute inset-0 rounded-xl">
+          <div className="p-4 text-red-500 bg-white bg-opacity-90 rounded-lg">
+            <div>This post has been hidden by admin.</div>
+            <div>{post?.hideByAdminNote ? `Note: ${post?.hideByAdminNote}` : ""}</div>
+            <div>Please contact administration for more detail!</div>
+          </div>
+        </div>}
         <div className="flex justify-between items-center w-full">
           <div className="flex space-x-2">
             <Link
@@ -177,8 +184,8 @@ function Post({ post, isOpenComment = false }) {
                         (index === 1
                           ? "transform -translate-x-1"
                           : index === 2
-                          ? "transform -translate-x-2"
-                          : "")
+                            ? "transform -translate-x-2"
+                            : "")
                       }
                     />
                   </div>
@@ -194,8 +201,8 @@ function Post({ post, isOpenComment = false }) {
           >
             {post?.comments?.length > 0 &&
               post?.comments?.length +
-                " comment" +
-                (post?.comments?.length > 1 ? "s" : "")}
+              " comment" +
+              (post?.comments?.length > 1 ? "s" : "")}
           </span>
         </div>
         <div className="w-full text-center flex justify-between items-center select-none cursor-pointer border-t border-b dark:border-dark-third space-x-1 text-gray-600 dark:text-dark-txt font-semibold text-sm p-1">

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
@@ -60,6 +61,10 @@ namespace TeeApp.Api.Controllers
         public ActionResult<UserViewModel> GetCurrentUser()
         {
             var result = _userService.GetCurrentUser();
+            if (DateTime.Compare(DateTime.Now, result.LockoutEnd.DateTime) < 0)
+            {
+                return Unauthorized("Please login and try again!");
+            }
             return Ok(result);
         }
 

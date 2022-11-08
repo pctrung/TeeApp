@@ -98,9 +98,9 @@ namespace TeeApp.Api.Controllers
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> HidePost(int postId, string note)
+        public async Task<IActionResult> HidePost(int postId, [FromBody] HidePostRequest request)
         {
-            var result = await _postService.HidePost(postId, note);
+            var result = await _postService.HidePost(postId, request.Note);
 
             switch (result.StatusCode)
             {
@@ -111,7 +111,7 @@ namespace TeeApp.Api.Controllers
                 default: return BadRequest(result.Message);
             }
         }
-        [HttpPost("{postId:int}/unhide")]
+        [HttpPost("{postId:int}/show")]
         [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]

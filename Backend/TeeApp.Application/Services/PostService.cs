@@ -99,7 +99,7 @@ namespace TeeApp.Application.Services
         public async Task<PagedResult<PostViewModel>> GetAllPaginationAsync(PaginationRequestBase request)
         {
             var posts = await _context.Posts
-                .Where(x => x.DateDeleted == null)
+                .Where(x => x.DateDeleted == null && !x.IsHideByAdmin)
                 .FilterBlockedAndRequestWithoutPagination(_currentUserModel, request)
                 .Include(x => x.Comments)
                     .ThenInclude(x => x.Creator)
@@ -158,6 +158,7 @@ namespace TeeApp.Application.Services
             {
                 return null;
             }
+
             var posts = await _context.Posts
                 .Where(x => x.DateDeleted == null)
                 .Include(x => x.Comments)
@@ -169,6 +170,13 @@ namespace TeeApp.Application.Services
                 .OrderByDescending(x => x.DateCreated)
                 .AsSplitQuery()
                 .ToListAsync();
+            
+            var keyword = request.Keyword ?? "";
+
+            posts = posts
+                .Where(x => x.Content.ToLower().Contains(keyword, StringComparison.OrdinalIgnoreCase) 
+                                     || x.Creator.FullName.ToLower().Contains(keyword, StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
             posts.RemoveAll(post => post.Privacy == PrivacyType.Private);
 
@@ -228,7 +236,7 @@ namespace TeeApp.Application.Services
         public async Task<PagedResult<PostViewModel>> GetNewsFeedPaginationAsync(PaginationRequestBase request)
         {
             var posts = await _context.Posts
-                .Where(x => (_currentUserModel.Id.Equals(x.Creator.Id) || _currentUserModel.Following.Contains(x.Creator)) && x.DateDeleted == null)
+                .Where(x => (_currentUserModel.Id.Equals(x.Creator.Id) || _currentUserModel.Following.Contains(x.Creator)) && x.DateDeleted == null && !x.IsHideByAdmin)
                 .FilterBlockedAndRequestWithoutPagination(_currentUserModel, request)
                 .Include(x => x.Comments)
                     .ThenInclude(x => x.Creator)
@@ -289,7 +297,9 @@ namespace TeeApp.Application.Services
                 return ApiResult<PagedResult<PostViewModel>>.NotFound(null, "Not found user.");
             }
             var posts = await _context.Posts
-            .Where(x => (user.Id.Equals(x.Creator.Id) && x.DateDeleted == null && x.Content.ToLower().Contains(request.Keyword.ToLower())))
+            .Where(x => user.Id.Equals(x.Creator.Id) 
+                        && x.DateDeleted == null 
+                        && x.Content.ToLower().Contains(request.Keyword.ToLower()))
             .Include(x => x.Comments)
                 .ThenInclude(x => x.Creator)
             .Include(x => x.Reactions)
@@ -304,6 +314,11 @@ namespace TeeApp.Application.Services
             {
                 if (!post.Creator.Id.Equals(_currentUserModel.Id))
                 {
+                    if (post.IsHideByAdmin)
+                    {
+                        posts.Remove(post);
+                        return;
+                    }
                     switch (post.Privacy)
                     {
                         case PrivacyType.Private:
@@ -356,15 +371,19 @@ namespace TeeApp.Application.Services
 
             if (!post.Creator.Id.Equals(_currentUserModel.Id))
             {
+                if (post.IsHideByAdmin && !_currentUser.IsAdmin())
+                {
+                    return ApiResult<PostViewModel>.NotFound(null);
+                }
                 switch (post.Privacy)
                 {
                     case PrivacyType.Private:
-                        return ApiResult<PostViewModel>.Forbid(null);
+                        return ApiResult<PostViewModel>.NotFound(null);
 
                     case PrivacyType.Friend:
                         if (!IsMyFriend(post.Creator))
                         {
-                            return ApiResult<PostViewModel>.Forbid(null);
+                            return ApiResult<PostViewModel>.NotFound(null);
                         }
                         break;
                 }

@@ -16,6 +16,7 @@ import Register from "pages/Register";
 import "./index.css";
 import "boxicons/css/boxicons.min.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import AdminDashboard from "pages/AdminDashboard";
 
 ReactDOM.render(
   <React.StrictMode>
@@ -24,6 +25,7 @@ ReactDOM.render(
         <Switch>
           <Route exact path="/login" component={Login} />
           <Route exact path="/register" component={Register} />
+          <PrivateRoute path="/admin" component={AdminDashboard} />
           <PrivateRoute path="*" component={App} />
         </Switch>
       </BrowserRouter>

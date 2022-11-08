@@ -10,10 +10,7 @@ namespace TeeApp.Utilities.Extentions
     {
         public static DateTime ToVNTimeZone(this DateTime dateTime)
         {
-            string vnTimeZoneKey = "SE Asia Standard Time";
-            TimeZoneInfo vnTimeZone = TimeZoneInfo.FindSystemTimeZoneById(vnTimeZoneKey);
-            DateTime vnTimeNow = TimeZoneInfo.ConvertTimeFromUtc(dateTime, vnTimeZone);
-            return vnTimeNow;
+            return dateTime.AddHours(7);
         }
     }
 }

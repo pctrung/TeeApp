@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using TeeApp.Data.Entities;
 using TeeApp.Models.RequestModels.Common;
+using TeeApp.Utilities.Constants;
 using TeeApp.Utilities.Enums.Types;
 
 namespace TeeApp.Application.Common
@@ -67,14 +69,18 @@ namespace TeeApp.Application.Common
         public static IQueryable<User> FilterBlockedAndRequestWithoutPagination(this IQueryable<User> source, User currentUser, PaginationRequestBase request)
         {
             request.Keyword = request.Keyword.ToLower();
-            var query = source
-                .Where(
-                    x =>
-                    !currentUser.BlockedByUsers.Contains(x) &&
-                    !currentUser.BlockedUsers.Contains(x) &&
-                   (x.FirstName.ToLower().Contains(request.Keyword) ||
-                        x.LastName.ToLower().Contains(request.Keyword) ||
-                        x.UserName.ToLower().Contains(request.Keyword)));
+            var query = source.AsQueryable();
+            if (!currentUser.UserName.Equals(SystemConstants.ADMIN_USERNAME))
+            {
+                query = query.Where(x => !currentUser.BlockedByUsers.Contains(x) && !currentUser.BlockedUsers.Contains(x));
+            }
+            query = source
+                .Where(x => 
+                    x.FirstName.ToLower().Contains(request.Keyword) ||
+                    x.LastName.ToLower().Contains(request.Keyword) ||
+                    x.UserName.ToLower().Contains(request.Keyword) ||
+                    x.Email.ToLower().Contains(request.Keyword) ||
+                    x.PhoneNumber.ToLower().Contains(request.Keyword));
 
             if (request.SortType == SortType.Ascending)
             {

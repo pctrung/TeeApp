@@ -26,7 +26,7 @@ function ConfirmModal({
           <h3 className="font-semibold text-2xl break-words dark:text-dark-txt">
             {title !== "" ? title : "Notification"}
           </h3>
-          <span className="break-words dark:text-dark-txt">{content}</span>
+          <span className="break-words dark:text-dark-txt w-full">{content}</span>
           <div className="w-full flex justify-end space-x-2">
             <Button outline content="No" onClick={closeAction} />
             <Button

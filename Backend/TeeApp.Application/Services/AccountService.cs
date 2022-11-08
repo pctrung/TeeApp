@@ -67,7 +67,7 @@ namespace TeeApp.Application.Services
 
             if (result.IsLockedOut)
             {
-                return ApiResult<string>.BadRequest(null,"Your account is locked! Please contact administration for more detail.");
+                return ApiResult<string>.BadRequest(null,"Your account has been locked! Please contact administration for more detail.");
             } 
             if (result.IsNotAllowed || result.RequiresTwoFactor || !result.Succeeded)
             {
@@ -169,7 +169,12 @@ namespace TeeApp.Application.Services
         {
             if (!_currentUser.IsAdmin())
             {
-                return ApiResult<bool>.Forbid(false,"You do not have permission");
+                return ApiResult<bool>.Forbid(false,"You do not have permission.");
+            }
+
+            if (userName.Equals(SystemConstants.ADMIN_USERNAME))
+            {
+                return ApiResult<bool>.BadRequest(false, "You cannot lock admin account.");
             }
             
             var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName.Equals(userName));
@@ -181,7 +186,7 @@ namespace TeeApp.Application.Services
 
             if (!lockoutResult.Succeeded)
             {
-                return ApiResult<bool>.NotFound(false, lockoutResult.Errors?.FirstOrDefault()?.Description);    
+                return ApiResult<bool>.BadRequest(false, lockoutResult.Errors?.FirstOrDefault()?.Description);    
             }
             return ApiResult<bool>.Ok(true, "Lockout user succeeded.");
         }
