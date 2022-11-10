@@ -160,7 +160,7 @@ export default function ManagePosts() {
                 content={<div className="w-full mt-4">
                     <Textarea onChange={(e) => {
                         setNote(e?.target?.value);
-                    }} placeholder={"Write your note to hide this post"}></Textarea>
+                    }} placeholder={"Write the reason to hide this post"}></Textarea>
                 </div>}
                 confirmButtonTitle="Hide post"
                 confirmButtonAction={hidePost}
@@ -171,7 +171,7 @@ export default function ManagePosts() {
                     <Card>
                         <CardHeader className="grid" size="sm" color="lightBlue" contentPosition="space-between">
                             <div className="flex justify-between">
-                                <h2 className="text-white text-2xl">All posts</h2>
+                                <h2 className="text-white text-2xl">Post Management</h2>
                                 <NavbarInput placeholder="Search" onChange={e => setKeyword(e?.target?.value)} />
                             </div>
                         </CardHeader>

@@ -14,12 +14,17 @@ const navbarItems = [
     {
         link: '/admin/posts',
         icon: "text_snippet",
-        label: "Manage Posts"
+        label: "Posts"
     },
     {
         link: '/admin/users',
         icon: "group",
-        label: "Manage Users"
+        label: "Users"
+    },
+    {
+        link: '/admin/blocked-keywords',
+        icon: "hearing_disabled",
+        label: "Blocked Keywords"
     }
 ]
 

@@ -106,7 +106,7 @@ export default function ManageUsers() {
                     <Card>
                         <CardHeader className="grid" size="sm" color="lightBlue" contentPosition="space-between">
                             <div className="flex justify-between">
-                                <h2 className="text-white text-2xl">All Users</h2>
+                                <h2 className="text-white text-2xl">User Management</h2>
                                 <NavbarInput placeholder="Search" onChange={e => setKeyword(e?.target?.value)} />
                             </div>
                         </CardHeader>
