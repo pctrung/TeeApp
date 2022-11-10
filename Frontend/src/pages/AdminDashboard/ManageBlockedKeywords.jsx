@@ -103,7 +103,7 @@ export default function ManageBlockedKeywords() {
             <ConfirmModal
                 isOpen={isOpenModalAddKeyword}
                 closeAction={() => setIsOpenModalAddKeyword(false)}
-                title="Create new keyword"
+                title="Add new keyword"
                 content={<div className="w-full mt-4">
                     <Input
                         onChange={(e) => {
