@@ -1,13 +1,13 @@
 import {
     Button,
-    Card, CardBody, CardFooter, CardHeader, Input, NavbarInput
+    Card, CardBody, CardFooter, CardHeader, Input
 } from "@material-tailwind/react";
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
 import LoadingSpinner from "components/LoadingSpinner";
 import useBlockedKeywordApi from "hooks/api/useBlockedKeywordApi";
 import { useEffect, useState } from "react";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function ManageBlockedKeywords() {
