@@ -14,6 +14,7 @@ using TeeApp.Models.RequestModels.Common;
 using TeeApp.Models.RequestModels.Posts;
 using TeeApp.Models.ResponseModels.Posts;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Constants;
 using TeeApp.Utilities.Enums.Types;
 using TeeApp.Utilities.Extentions;
 
@@ -396,6 +397,25 @@ namespace TeeApp.Application.Services
 
         public async Task<ApiResult<PostResponse>> CreateAsync(CreatePostRequest request)
         {
+            var blockedKeywords = new List<string>(); 
+            await _context.BlockedKeywordGroups.ForEachAsync(group =>
+            {
+                blockedKeywords.AddRange(group.Keywords?.Split(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR) ?? Array.Empty<string>());
+            });
+
+            var keywords = new List<string>();
+            blockedKeywords.ForEach(x =>
+            {
+                if (!string.IsNullOrWhiteSpace(x) && request?.Content?.Contains(x) == true)
+                {
+                    keywords.Add(x);
+                }
+            });
+            if (keywords.Count > 0)
+            {
+                return ApiResult<PostResponse>.BadRequest(null, $"Cannot upload. Content includes blocked keywords: {string.Join(", ", keywords)}.");
+            }
+
             var post = new Post()
             {
                 Content = request.Content,

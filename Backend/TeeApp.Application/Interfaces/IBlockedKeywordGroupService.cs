@@ -9,8 +9,8 @@ namespace TeeApp.Application.Interfaces
 {
     public interface IBlockedKeywordGroupService
     {
-        Task<ApiResult<BlockedKeywordGroup>> Update(BlockedKeywordGroupRequest request);
-        Task<ApiResult<BlockedKeywordGroup>> Delete(int id);
-        Task<List<BlockedKeywordGroupViewModel>> GetAll();
+        Task<ApiResult<BlockedKeywordGroupViewModel>> UpdateAsync(BlockedKeywordGroupRequest request);
+        Task<ApiResult<BlockedKeywordGroupViewModel>> DeleteAsync(int id);
+        Task<List<BlockedKeywordGroupViewModel>> GetAllAsync();
     }
 }

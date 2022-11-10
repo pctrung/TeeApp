@@ -10,6 +10,7 @@ using TeeApp.Data.Entities;
 using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.BlockedKeywords;
 using TeeApp.Models.ViewModels;
+using TeeApp.Utilities.Constants;
 
 namespace TeeApp.Application.Services
 {
@@ -24,24 +25,25 @@ namespace TeeApp.Application.Services
             _currentUser = currentUser;
         }
         
-        public async Task<ApiResult<BlockedKeywordGroup>> Update(BlockedKeywordGroupRequest request)
+        public async Task<ApiResult<BlockedKeywordGroupViewModel>> UpdateAsync(BlockedKeywordGroupRequest request)
         {
             if (!_currentUser.IsAdmin())
             {
-                return ApiResult<BlockedKeywordGroup>.Forbid(null,"You do not have permission");
+                return ApiResult<BlockedKeywordGroupViewModel>.Forbid(null,"You do not have permission");
             }
             if (string.IsNullOrWhiteSpace(request.Name))
             {
-                return ApiResult<BlockedKeywordGroup>.BadRequest(null, "Please enter group name");
+                return ApiResult<BlockedKeywordGroupViewModel>.BadRequest(null, "Please enter group name");
             }
             BlockedKeywordGroup group;
             if (request.Id == 0)
             {
+                request.Keywords = request.Keywords?.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
                 group = new BlockedKeywordGroup
                 {
                     DateCreated = DateTime.Now,
                     Name = request.Name,
-                    Keywords = string.Join(',', request.Keywords ?? new List<string>())  
+                    Keywords = string.Join(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR, request.Keywords ?? new List<string>())  
                 };
 
                 await _context.BlockedKeywordGroups.AddAsync(group); 
@@ -49,32 +51,44 @@ namespace TeeApp.Application.Services
             else
             {
                 group = await _context.BlockedKeywordGroups.FirstOrDefaultAsync(x => x.Id == request.Id);
-                group.Keywords = string.Join(',', request.Keywords ?? new List<string>());
+                group.Keywords = string.Join(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR, request.Keywords ?? new List<string>());
                 group.Name = request.Name;
 
                 _context.BlockedKeywordGroups.Update(group);
             }
             
             await _context.SaveChangesAsync();
-            return ApiResult<BlockedKeywordGroup>.Ok(group);
+            var result = new BlockedKeywordGroupViewModel
+            {
+                Id = group.Id,
+                Name = group.Name,
+                Keywords = group.Keywords.Split(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR).ToList()
+            };
+            return ApiResult<BlockedKeywordGroupViewModel>.Ok(result);
         }
-        public async Task<ApiResult<BlockedKeywordGroup>> Delete(int id)
+        public async Task<ApiResult<BlockedKeywordGroupViewModel>> DeleteAsync(int id)
         {
             if (!_currentUser.IsAdmin())
             {
-                return ApiResult<BlockedKeywordGroup>.Forbid(null,"You do not have permission");
+                return ApiResult<BlockedKeywordGroupViewModel>.Forbid(null,"You do not have permission");
             }
             var group = await _context.BlockedKeywordGroups.FirstOrDefaultAsync(x => x.Id == id);
             if (group == null)
             {
-                return ApiResult<BlockedKeywordGroup>.BadRequest(null, "Not found group");
+                return ApiResult<BlockedKeywordGroupViewModel>.BadRequest(null, "Not found group");
             }
             _context.BlockedKeywordGroups.Remove(group);
             await _context.SaveChangesAsync();
-            return ApiResult<BlockedKeywordGroup>.Ok(group);
+            var result = new BlockedKeywordGroupViewModel
+            {
+                Id = group.Id,
+                Name = group.Name,
+                Keywords = group.Keywords.Split(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR).ToList()
+            };
+            return ApiResult<BlockedKeywordGroupViewModel>.Ok(result);
         }
 
-        public async Task<List<BlockedKeywordGroupViewModel>> GetAll()
+        public async Task<List<BlockedKeywordGroupViewModel>> GetAllAsync()
         {
             if (!_currentUser.IsAdmin())
             {
@@ -85,7 +99,7 @@ namespace TeeApp.Application.Services
             {
                 Id = x.Id,
                 Name = x.Name,
-                Keywords = x.Keywords?.Split(",").ToList()
+                Keywords = x.Keywords?.Split(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR).ToList()
             }));
             return result;
         }

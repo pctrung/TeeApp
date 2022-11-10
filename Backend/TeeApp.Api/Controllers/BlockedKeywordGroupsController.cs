@@ -27,14 +27,14 @@ namespace TeeApp.Api.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<ActionResult<List<BlockedKeywordGroupViewModel>>> GetAll()
         {
-            var result = await _blockedKeywordGroupService.GetAll();
+            var result = await _blockedKeywordGroupService.GetAllAsync();
             return Ok(result);
         }
 
         [HttpPut]
         public async Task<IActionResult> Update(BlockedKeywordGroupRequest request)
         {
-            var result = await _blockedKeywordGroupService.Update(request);
+            var result = await _blockedKeywordGroupService.UpdateAsync(request);
 
             switch (result.StatusCode)
             {
@@ -45,9 +45,9 @@ namespace TeeApp.Api.Controllers
             }
         }
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> Update(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var result = await _blockedKeywordGroupService.Delete(id);
+            var result = await _blockedKeywordGroupService.DeleteAsync(id);
 
             switch (result.StatusCode)
             {

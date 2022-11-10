@@ -85,6 +85,7 @@ namespace TeeApp.Api
             services.AddTransient<IPostPhotoService, PostPhotoService>();
             services.AddTransient<IFriendService, FriendService>();
             services.AddTransient<INotificationService, NotificationService>();
+            services.AddTransient<IBlockedKeywordGroupService, BlockedKeywordGroupService>();
 
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {
@@ -176,6 +177,8 @@ namespace TeeApp.Api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("ClientPermission");
+
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var dbcontext = serviceScope.ServiceProvider.GetRequiredService<TeeAppDbContext>();
@@ -195,8 +198,6 @@ namespace TeeApp.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
-
-            app.UseCors("ClientPermission");
 
             app.UseAuthentication();
 
