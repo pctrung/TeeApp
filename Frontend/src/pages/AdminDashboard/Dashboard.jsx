@@ -14,7 +14,7 @@ export default function Dashboard() {
     useEffect(() => {
         (async () => {
             const postsResponse = await postApi.getAll({ limit: 999 });
-            const usersResponse = await userApi.getAll({ limit: 999 });
+            const usersResponse = await userApi.getUserList({ limit: 999 });
 
             setCardData({
                 allPosts: postsResponse.totalRecords,
