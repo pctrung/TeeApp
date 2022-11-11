@@ -136,6 +136,7 @@ export default function ManageBlockedKeywords() {
                             <div className="flex justify-end mt-2 mb-4">
                                 <Button onClick={() => setIsOpenModalCreateNewGroup(true)}>Create group</Button>
                             </div>
+                            {blockedKeywordGroups?.length === 0 && <div className="text-center">No blocked keyword groups found.</div>}
                             {isLoading
                                 ? <div className="flex justify-center pt-10">
                                     <LoadingSpinner />
