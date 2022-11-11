@@ -20,7 +20,7 @@ export default function ChartBar({ chartData }) {
                 ],
                 datasets: [
                     {
-                        label: "Posts Total",
+                        label: "Total Posts",
                         backgroundColor: '#03a9f4',
                         borderColor: '#03a9f4',
                         data: chartData.postsTotal,
@@ -28,7 +28,7 @@ export default function ChartBar({ chartData }) {
                         barThickness: 8,
                     },
                     {
-                        label: "Users Total",
+                        label: "Total Active Users",
                         fill: false,
                         backgroundColor: '#f44336',
                         borderColor: '#f44336',
@@ -100,14 +100,14 @@ export default function ChartBar({ chartData }) {
         };
         let ctx = document.getElementById('bar-chart').getContext('2d');
         window.myBar = new Chart(ctx, config);
-    }, []);
+    }, [chartData]);
     return (
         <Card>
             <CardHeader color="pink" contentPosition="left">
                 <h6 className="uppercase text-gray-200 text-xs font-medium">
                     Overview
                 </h6>
-                <h2 className="text-white text-2xl">By Chart Bar</h2>
+                <h2 className="text-white text-2xl">Active Users & New Posts Monthly</h2>
             </CardHeader>
             <CardBody>
                 <div className="relative h-96">

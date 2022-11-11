@@ -1,9 +1,10 @@
 import {
     Button,
-    Card, CardBody, CardFooter, CardHeader, Input
+    Card, CardBody, CardFooter, CardHeader
 } from "@material-tailwind/react";
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
+import Input from "components/Input";
 import LoadingSpinner from "components/LoadingSpinner";
 import useBlockedKeywordApi from "hooks/api/useBlockedKeywordApi";
 import { useEffect, useState } from "react";
@@ -90,12 +91,18 @@ export default function ManageBlockedKeywords() {
                 isOpen={isOpenModalCreateNewGroup}
                 closeAction={() => setIsOpenModalCreateNewGroup(false)}
                 title="Create new group"
-                content={<div className="w-full mt-4">
+                content={<div className="w-full mt-4 space-y-2">
+                    <label
+                        htmlFor="fistName"
+                        className="md:text-base text-sm dark:text-dark-txt "
+                    >
+                        Group name
+                    </label>
                     <Input
-                        onChange={(e) => {
-                            setNewGroupName(e?.target?.value);
-                        }}
-                        placeholder={"Group name"}></Input>
+                        id="firstName"
+                        value={newGroupName}
+                        onChange={(e) => setNewGroupName(e.target.value)}
+                    />
                 </div>}
                 confirmButtonTitle="Add group"
                 confirmButtonAction={addGroup}
@@ -104,12 +111,18 @@ export default function ManageBlockedKeywords() {
                 isOpen={isOpenModalAddKeyword}
                 closeAction={() => setIsOpenModalAddKeyword(false)}
                 title="Add new keyword"
-                content={<div className="w-full mt-4">
+                content={<div className="w-full mt-4 space-y-2">
+                    <label
+                        htmlFor="fistName"
+                        className="md:text-base text-sm dark:text-dark-txt"
+                    >
+                        Keyword
+                    </label>
                     <Input
-                        onChange={(e) => {
-                            setNewKeyword(e?.target?.value);
-                        }}
-                        placeholder={"Keyword"}></Input>
+                        id="firstName"
+                        value={newKeyword}
+                        onChange={(e) => setNewKeyword(e.target.value)}
+                    />
                 </div>}
                 confirmButtonTitle="Add keyword"
                 confirmButtonAction={addKeyword}

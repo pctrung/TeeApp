@@ -16,6 +16,7 @@ import { Pagination } from "./components/Pagination";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import _ from "lodash";
+import Input from "components/Input";
 
 export default function ManagePosts() {
     const [pagination, setPagination] = useState({ page: 1, limit: 10, pageCount: 0 });
@@ -157,10 +158,18 @@ export default function ManagePosts() {
                 isOpen={isOpenModal}
                 closeAction={() => setIsOpenModal(false)}
                 title="Are you sure?"
-                content={<div className="w-full mt-4">
-                    <Textarea onChange={(e) => {
-                        setNote(e?.target?.value);
-                    }} placeholder={"Write the reason to hide this post"}></Textarea>
+                content={<div className="w-full mt-4 space-y-3">
+                    <label
+                        htmlFor="fistName"
+                        className="md:text-base text-sm dark:text-dark-txt"
+                    >
+                        Write the note to hide this post
+                    </label>
+                    <Input
+                        id="firstName"
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                    />
                 </div>}
                 confirmButtonTitle="Hide post"
                 confirmButtonAction={hidePost}

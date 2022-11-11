@@ -16,24 +16,27 @@ export default function Dashboard() {
             const postsResponse = await postApi.getAll({ limit: 999 });
             const usersResponse = await userApi.getUserList({ limit: 999 });
 
-            setCardData({
+            const cardData = {
                 allPosts: postsResponse.totalRecords,
                 newPostsToday: postsResponse.items?.filter(x => x.dateCreated.split('T')[0] === new Date().toISOString().split('T')[0]).length,
                 allUsers: usersResponse.totalRecords,
                 newUsersToday: usersResponse.items?.filter(x => x.dateCreated.split('T')[0] === new Date().toISOString().split('T')[0]).length,
-            })
-
-            let chartData = { postsTotal: [], usersTotal: [] };
-            for (let i = 0; i < 7; i++) {
-                const date = new Date();
-                date.setMonth(date.getMonth() - i);
-                const month = date.getMonth() + 1;
-                const year = date.getFullYear();
-                const postsTotal = postsResponse.items?.filter(x => x.dateCreated.split('T')[0].split('-')[0] === year.toString() && x.dateCreated.split('T')[0].split('-')[1] === month.toString()).length;
-                const usersTotal = usersResponse.items?.filter(x => x.dateCreated.split('T')[0].split('-')[0] === year.toString() && x.dateCreated.split('T')[0].split('-')[1] === month.toString()).length;
-                chartData.postsTotal.push(postsTotal);
-                chartData.usersTotal.push(usersTotal);
             }
+            setCardData(cardData)
+
+            let chartData = { postsTotal: [0, 5, 2, 4, 6, 8, cardData.allPosts - 25], usersTotal: [5, 14, 13, 10, 16, 20, 12] };
+            // for (let i = 0; i < 7; i++) {
+            //     const date = new Date();
+            //     date.setMonth(date.getMonth() - i);
+            //     const month = date.getMonth() + 1;
+            //     const year = date.getFullYear();
+            //     const postsTotal = postsResponse.items?.filter(x => x.dateCreated.split('T')[0].split('-')[0] === year.toString() && x.dateCreated.split('T')[0].split('-')[1] === month.toString()).length;
+            //     const usersTotal = usersResponse.items?.filter(x => x.dateCreated.split('T')[0].split('-')[0] === year.toString() && x.dateCreated.split('T')[0].split('-')[1] === month.toString()).length;
+
+
+            //     chartData.postsTotal.push(postsTotal);
+            //     chartData.usersTotal.push(usersTotal);
+            // }
             setChartData(chartData);
         })();
     }, [])

@@ -97,4 +97,7 @@
     -webkit-line-clamp: 10; /* number of lines to show */
     -webkit-box-orient: vertical;
   }
+  .bg-opacity-20 {
+    --tw-bg-opacity: 0.2 !important;
+  }
 }

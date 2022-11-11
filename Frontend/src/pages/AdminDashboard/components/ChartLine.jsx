@@ -27,7 +27,7 @@ export default function ChartLine({ chartData }) {
                         fill: false,
                     },
                     {
-                        label: "Total Users",
+                        label: "Total Active Users",
                         fill: false,
                         backgroundColor: '#ff9800',
                         borderColor: '#ff9800',
@@ -108,7 +108,7 @@ export default function ChartLine({ chartData }) {
         };
         var ctx = document.getElementById('line-chart').getContext('2d');
         window.myLine = new Chart(ctx, config);
-    }, []);
+    }, [chartData]);
 
     return (
         <Card>
@@ -116,7 +116,7 @@ export default function ChartLine({ chartData }) {
                 <h6 className="uppercase text-gray-200 text-xs font-medium">
                     Overview
                 </h6>
-                <h2 className="text-white text-2xl">By Chart Line</h2>
+                <h2 className="text-white text-2xl">Active Users & New Posts Monthly</h2>
             </CardHeader>
             <CardBody>
                 <div className="relative h-96">
