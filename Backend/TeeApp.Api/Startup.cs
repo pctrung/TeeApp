@@ -206,8 +206,8 @@ namespace TeeApp.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>(Configuration["ChatHubUrl"]);
-                endpoints.MapHub<AppHub>(Configuration["AppHubUrl"]);
+                endpoints.MapHub<ChatHub>(Configuration[SystemConstants.CHAT_HUB_CONFIG]);
+                endpoints.MapHub<AppHub>(Configuration[SystemConstants.APP_HUB_CONFIG]);
             });
         }
     }
