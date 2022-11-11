@@ -163,7 +163,7 @@ export default function ManagePosts() {
                         htmlFor="fistName"
                         className="md:text-base text-sm dark:text-dark-txt"
                     >
-                        Write the note to hide this post
+                        Write your note to hide this post
                     </label>
                     <Input
                         id="firstName"
