@@ -18,6 +18,7 @@ namespace TeeApp.Models.ViewModels
         public string AboutMe { get; set; }
         public Gender Gender { get; set; }
         public DateTime DateOfBirth { get; set; }
+        public DateTime DateCreated { get; set; }
         public DateTimeOffset LockoutEnd { get; set; }
     }
 }

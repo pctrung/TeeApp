@@ -5,6 +5,13 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom/cjs/react-router-dom.min';
 
+const locationName = {
+    '/admin': 'Dashboard',
+    '/admin/users': 'Manage Users',
+    '/admin/blocked-keywords': 'Manage Blocked Keywords',
+    '/admin/posts': 'Manage Posts',
+}
+
 export default function AdminNavbar({ showSidebar, setShowSidebar }) {
     const location = useLocation().pathname;
     const user = useSelector((state) => state.users.currentUser);
@@ -44,9 +51,7 @@ export default function AdminNavbar({ showSidebar, setShowSidebar }) {
 
                 <div className="flex justify-between items-center w-full">
                     <h4 className="uppercase text-white text-sm tracking-wider mt-1">
-                        {location === '/'
-                            ? 'DASHBOARD'
-                            : location.toUpperCase().replace('/', '')}
+                        {locationName[location]}
                     </h4>
 
                     <div className="flex">
