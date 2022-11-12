@@ -406,14 +406,14 @@ namespace TeeApp.Application.Services
             var keywords = new List<string>();
             blockedKeywords.ForEach(x =>
             {
-                if (!string.IsNullOrWhiteSpace(x) && request?.Content?.Contains(x) == true)
+                if (!string.IsNullOrWhiteSpace(x) && request?.Content?.ToLower().Contains(x.ToLower()) == true)
                 {
                     keywords.Add(x);
                 }
             });
             if (keywords.Count > 0)
             {
-                return ApiResult<PostResponse>.BadRequest(null, $"Cannot upload. Content includes blocked keywords: {string.Join(", ", keywords)}.");
+                return ApiResult<PostResponse>.BadRequest(null, $"Cannot create post. Content includes blocked keywords: {string.Join(", ", keywords)}.");
             }
 
             var post = new Post()
@@ -463,6 +463,25 @@ namespace TeeApp.Application.Services
             if (!IsHavePermissionToAccessPostAsync(post))
             {
                 return ApiResult<PostResponse>.Forbid(null);
+            }
+            
+            var blockedKeywords = new List<string>(); 
+            await _context.BlockedKeywordGroups.ForEachAsync(group =>
+            {
+                blockedKeywords.AddRange(group.Keywords?.Split(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR) ?? Array.Empty<string>());
+            });
+
+            var keywords = new List<string>();
+            blockedKeywords.ForEach(x =>
+            {
+                if (!string.IsNullOrWhiteSpace(x) && request?.Content?.ToLower().Contains(x.ToLower()) == true)
+                {
+                    keywords.Add(x);
+                }
+            });
+            if (keywords.Count > 0)
+            {
+                return ApiResult<PostResponse>.BadRequest(null, $"Cannot update. Content includes blocked keywords: {string.Join(", ", keywords)}.");
             }
 
             post.Content = request.Content;
