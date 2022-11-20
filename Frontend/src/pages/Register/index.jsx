@@ -134,7 +134,8 @@ function Register() {
         watch.gender &&
         watch.dateOfBirth &&
         watch.password &&
-        watch.confirmPassword;
+        watch.confirmPassword &&
+        watch.acceptPolicy;
 
       if (isValid) {
         setIsChanged(true);
@@ -368,6 +369,10 @@ function Register() {
             <div className="text-red-500 text-sm">
               {errors.confirmPassword?.message}
             </div>
+          </div>
+          <div className="my-2">
+            <input type="checkbox" id="acceptPolicy" {...register("acceptPolicy")} />
+            <label htmlFor="acceptPolicy" className="ml-3 cursor-pointer">I agree to the <Link to="/policy" className="text-green-500 font-semibold" target="_blank">TeeApp Terms & Policy</Link>.</label>
           </div>
           <Button
             disabled={!isChanged}
