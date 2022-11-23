@@ -86,6 +86,7 @@ namespace TeeApp.Api
             services.AddTransient<IFriendService, FriendService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IBlockedKeywordGroupService, BlockedKeywordGroupService>();
+            services.AddTransient<IPostReportService, PostReportService>();
 
             services.AddSingleton(provider => new MapperConfiguration(cfg =>
             {

@@ -16,6 +16,7 @@ namespace TeeApp.Data.EF
         public DbSet<Friendship> Friendships { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<BlockedKeywordGroup> BlockedKeywordGroups { get; set; }
+        public DbSet<PostReport> PostReports { get; set; }
 
         public TeeAppDbContext(DbContextOptions options) : base(options)
         {
