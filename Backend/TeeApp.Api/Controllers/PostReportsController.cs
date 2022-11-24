@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using TeeApp.Application.Interfaces;
 using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.BlockedKeywords;
@@ -29,7 +31,13 @@ namespace TeeApp.Api.Controllers
         public async Task<ActionResult<List<BlockedKeywordGroupViewModel>>> GetAll()
         {
             var result = await _postReportService.GetAllAsync();
-            return Ok(result);
+            return Ok(JsonConvert.SerializeObject(result, Formatting.Indented,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                }
+            ));
         }
         
         [HttpPost]

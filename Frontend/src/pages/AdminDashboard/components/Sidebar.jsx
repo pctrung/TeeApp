@@ -25,6 +25,11 @@ const navbarItems = [
         link: '/admin/blocked-keywords',
         icon: "hearing_disabled",
         label: "Blocked Keywords"
+    },
+    {
+        link: '/admin/post-reports',
+        icon: "gpp_maybe",
+        label: "Reports"
     }
 ]
 

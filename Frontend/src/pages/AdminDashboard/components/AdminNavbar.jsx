@@ -10,6 +10,7 @@ const locationName = {
     '/admin/users': 'Manage Users',
     '/admin/blocked-keywords': 'Manage Blocked Keywords',
     '/admin/posts': 'Manage Posts',
+    '/admin/post-reports': 'Manage Reports',
 }
 
 export default function AdminNavbar({ showSidebar, setShowSidebar }) {

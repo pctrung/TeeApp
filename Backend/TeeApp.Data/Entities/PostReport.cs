@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
-namespace TeeApp.Data.Entities
+﻿namespace TeeApp.Data.Entities
 {
     public class PostReport : EntityBase
     {

@@ -10,6 +10,7 @@ import Popup from "components/Popup";
 import { setPopup } from "app/appSlice";
 import ManageUsers from "./ManageUsers";
 import ManageBlockedKeywords from "./ManageBlockedKeywords";
+import ManagePostReports from "./ManagePostReports";
 
 function AdminDashboard({ message }) {
   const currentUser = useSelector((state) => state.users.currentUser);
@@ -43,6 +44,7 @@ function AdminDashboard({ message }) {
           <Route path="/admin/posts" component={ManagePosts} />
           <Route path="/admin/users" component={ManageUsers} />
           <Route path="/admin/blocked-keywords" component={ManageBlockedKeywords} />
+          <Route path="/admin/post-reports" component={ManagePostReports} />
           <Route path="*" component={Dashboard} />
         </Switch>
         <Footer />

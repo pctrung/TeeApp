@@ -81,7 +81,12 @@ namespace TeeApp.Application.Services
             {
                 return null;
             } 
-            return await _context.PostReports.ToListAsync();
+            return await _context.PostReports
+                .Include(x => x.ReportedPost)
+                .ThenInclude(x => x.Creator)
+                .Include(x => x.ReportedPost)
+                .ThenInclude(x => x.Photos)
+                .ToListAsync();
         }
     }
 }

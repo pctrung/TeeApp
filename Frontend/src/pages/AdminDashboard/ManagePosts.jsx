@@ -1,22 +1,21 @@
 import {
     Card, CardBody, CardFooter, CardHeader, Dropdown,
     DropdownItem,
-    NavbarInput,
-    Textarea
+    NavbarInput
 } from "@material-tailwind/react";
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
+import Input from "components/Input";
 import LoadingSpinner from "components/LoadingSpinner";
 import useAccountApi from "hooks/api/useAccountApi";
 import { useDebounce } from "hooks/api/useDebounce";
 import usePostApi from "hooks/api/usePostApi";
+import _ from "lodash";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { Pagination } from "./components/Pagination";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import _ from "lodash";
-import Input from "components/Input";
+import { Pagination } from "./components/Pagination";
 
 export default function ManagePosts() {
     const [pagination, setPagination] = useState({ page: 1, limit: 10, pageCount: 0 });
