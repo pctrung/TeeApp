@@ -63,7 +63,7 @@ export default function ManagePostReports() {
             ...pagination,
             pageCount: Math.ceil(filteredPostReports.length / pagination.limit),
         })
-    }, [filteredPostReports, pagination]);
+    }, [filteredPostReports]);
 
     const getTextClass = (post) => {
         return post?.isHandled ? "text-gray-400" : ""
