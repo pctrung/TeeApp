@@ -305,7 +305,7 @@ function Header({ className }) {
                   <div className="animate-fadeIn transition-base absolute top-full transform translate-y-1 right-0 border border-gray-200 bg-white w-60 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-30">
                     {isAdmin && <button
                       className="flex items-center space-x-3 w-full pl-2 pr-4 py-2 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
-                      onClick={() => goTo("/admin")}
+                      onClick={() => window.location.href = "/admin"}
                     >
                       <i className="text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7 bx bx-lock-alt"></i>
                       <span>Admin page</span>

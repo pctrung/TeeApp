@@ -11,15 +11,24 @@ import { setPopup } from "app/appSlice";
 import ManageUsers from "./ManageUsers";
 import ManageBlockedKeywords from "./ManageBlockedKeywords";
 import ManagePostReports from "./ManagePostReports";
+import useUserApi from "hooks/api/useUserApi";
+import { setCurrentUser } from "app/userSlice";
 
 function AdminDashboard({ message }) {
   const currentUser = useSelector((state) => state.users.currentUser);
   const history = useHistory();
   const popup = useSelector((state) => state.app.popup);
   const dispatch = useDispatch();
+  const userApi = useUserApi();
 
   useEffect(() => {
-    if (currentUser?.userName !== "teeadmin") {
+    userApi.getCurrentUser().then((response) => {
+      dispatch(setCurrentUser(response));
+    });
+  }, []);
+
+  useEffect(() => {
+    if (currentUser?.userName && currentUser?.userName !== "teeadmin") {
       history.push("/NotFound");
     }
   }, [currentUser])
