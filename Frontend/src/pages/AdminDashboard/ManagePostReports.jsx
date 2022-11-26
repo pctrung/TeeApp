@@ -186,7 +186,7 @@ export default function ManagePostReports() {
                                 <HeaderCell>Report Id</HeaderCell>
                                 <HeaderCell className="col-span-3">Report Content</HeaderCell>
                                 <HeaderCell className="col-span-2">Creator</HeaderCell>
-                                <HeaderCell className="col-span-3">Content</HeaderCell>
+                                <HeaderCell className="col-span-3">Post Content</HeaderCell>
                                 <HeaderCell className="col-span-2">Handled</HeaderCell>
                                 <HeaderCell>Action</HeaderCell>
                             </div>
