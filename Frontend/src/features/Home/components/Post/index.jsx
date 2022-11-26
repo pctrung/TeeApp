@@ -1,7 +1,10 @@
 import ClickableIcon from "components/ClickableIcon";
 import ConfirmModal from "components/ConfirmModal";
+import Popup from "components/Popup";
 import ImageCircle from "components/ImageCircle";
+import Input from "components/Input";
 import usePostApi from "hooks/api/usePostApi";
+import usePostReportApi from "hooks/api/usePostReportApi";
 import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import React, { useEffect, useRef, useState } from "react";
 import { useSelector } from "react-redux";
@@ -23,12 +26,19 @@ import ReactionInput from "../ReactionInput";
 function Post({ post, isOpenComment = false }) {
   const currentUser = useSelector((state) => state.users.currentUser);
   const [isOpenEdit, setIsOpenEdit] = useState(false);
+
+  const [isOpenReportModal, setIsOpenReportModal] = useState(false);
+  const [isOpenReportSuccessModal, setIsOpenReportSuccessModal] = useState(false);
+  const [reportContent, setReportContent] = useState("");
+
   const [isOpenReaction, setIsOpenReaction] = useState(false);
   const [isOpenCommentList, setIsOpenCommentList] = useState(isOpenComment);
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isOpenConfirm, setIsOpenConfirm] = useState(false);
   const [topThreeType, setTopThreeType] = useState();
+
   const postApi = usePostApi();
+  const postReportApi = usePostReportApi();
   const ref = useRef();
   const reactionRef = useRef();
 
@@ -75,6 +85,14 @@ function Post({ post, isOpenComment = false }) {
       postApi.deletePost(post.id);
     }
   };
+  const reportPost = async () => {
+    if (post.id) {
+      setIsOpenReportModal(false);
+      await postReportApi.add({ postId: post.id, content: reportContent });
+      setReportContent("");
+      setIsOpenReportSuccessModal(true);
+    }
+  };
   return (
     <>
       {isOpenConfirm && (
@@ -87,6 +105,34 @@ function Post({ post, isOpenComment = false }) {
           confirmButtonAction={() => deletePost()}
         />
       )}
+      {isOpenReportModal && (
+        <ConfirmModal
+          isOpen={isOpenReportModal}
+          closeAction={() => setIsOpenReportModal(false)}
+          title="Are you sure?"
+          content={<div className="w-full mt-4 space-y-3">
+            <label
+              htmlFor="reportContent"
+              className="md:text-base text-sm dark:text-dark-txt"
+            >
+              Please enter problem. If someone is in immediate danger, get help before reporting to TeeApp. Don't wait.
+            </label>
+            <Input
+              id="reportContent"
+              value={reportContent}
+              onChange={(e) => setReportContent(e.target.value)}
+            />
+          </div>}
+          confirmButtonTitle="Submit"
+          confirmButtonAction={() => reportPost()}
+        />
+      )}
+      <Popup
+        title={"Report success"}
+        isOpen={isOpenReportSuccessModal}
+        content={"Thank you for your report. We will review it as soon as possible."}
+        onClick={() => setIsOpenReportSuccessModal(false)}
+      />
       {isOpenEdit && (
         <EditPost post={post} isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} />
       )}
@@ -125,33 +171,44 @@ function Post({ post, isOpenComment = false }) {
               </Link>
             </div>
           </div>
-          {post?.creator?.userName === currentUser?.userName && (
-            <div className="relative" ref={ref}>
-              <ClickableIcon
-                iconClass="bx bx-dots-horizontal-rounded"
-                secondMode
-                onClick={() => setIsOpenMenu(!isOpenMenu)}
-              />
-              {isOpenMenu && (
-                <div className="animate-fadeIn transition-base absolute top-5 right-0 border border-gray-200 bg-white w-48 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
-                  <button
-                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
-                    onClick={() => setIsOpenEdit(true)}
-                  >
-                    <i className="bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
-                    <span className="text-sm">Edit post</span>
-                  </button>
-                  <button
-                    className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
-                    onClick={() => setIsOpenConfirm(true)}
-                  >
-                    <i className="bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
-                    <span className="text-sm">Delete post</span>
-                  </button>
-                </div>
-              )}
-            </div>
-          )}
+          <div className="relative" ref={ref}>
+            <ClickableIcon
+              iconClass="bx bx-dots-horizontal-rounded"
+              secondMode
+              onClick={() => setIsOpenMenu(!isOpenMenu)}
+            />
+            {isOpenMenu && (
+              <div className="animate-fadeIn transition-base absolute top-5 right-0 border border-gray-200 bg-white w-48 rounded-lg shadow-lg overflow-hidden p-1 dark:bg-dark-secondary dark:border-dark-hover mt-2 select-none z-10">
+                {post?.creator?.userName === currentUser?.userName &&
+                  <>
+                    <button
+                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                      onClick={() => setIsOpenEdit(true)}
+                    >
+                      <i className="bx bx-edit-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                      <span className="text-sm">Edit post</span>
+                    </button>
+                    <button
+                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                      onClick={() => setIsOpenConfirm(true)}
+                    >
+                      <i className="bx bx-trash text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                      <span className="text-sm">Delete post</span>
+                    </button>
+                  </>}
+                {post?.creator?.userName !== currentUser?.userName &&
+                  <>
+                    <button
+                      className="flex items-center space-x-3 w-full pl-2 pr-4 py-1 rounded-md text-left hover:bg-gray-100 active:bg-gray-200 transition-base transform active:scale-95 dark:hover:bg-dark-third"
+                      onClick={() => setIsOpenReportModal(true)}
+                    >
+                      <i className="bx bx-error-alt text-center text-xl align-middle text-black dark:text-dark-txt w-7 h-7"></i>
+                      <span className="text-sm">Report post</span>
+                    </button>
+                  </>}
+              </div>
+            )}
+          </div>
         </div>
         <span className="text-sm break-words overflow-ellipsis max-w-full">
           {post?.content}

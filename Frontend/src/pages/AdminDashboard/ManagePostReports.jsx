@@ -177,7 +177,10 @@ export default function ManagePostReports() {
                             <div className="flex justify-end">
                                 <input type="checkbox" name="showUnhandled" id="showUnhandled" className="cursor-pointer"
                                     checked={showUnhandledReportOnly} onChange={(e) => setShowUnhandledReportOnly(e.target.checked)} />
-                                <label onClick={() => setShowUnhandledReportOnly(pre => !pre)} name="showUnhandled" className="cursor-pointer ml-2">Show unhandled report only</label>
+                                <label onClick={() => {
+                                    setShowUnhandledReportOnly(pre => !pre);
+                                    setPagination({ ...pagination, page: 1 })
+                                }} name="showUnhandled" className="cursor-pointer ml-2">Show unhandled report only</label>
                             </div>
                             <div className="grid grid-cols-12">
                                 <HeaderCell>Report Id</HeaderCell>
