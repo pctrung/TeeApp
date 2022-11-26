@@ -4,6 +4,7 @@ import Button from "components/Button";
 import Loader from "components/Loader";
 import Popup from "components/Popup";
 import useAccountApi from "hooks/api/useAccountApi";
+import { useDebounce } from "hooks/api/useDebounce";
 import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { Link } from "react-router-dom";
@@ -104,15 +105,16 @@ function Register() {
   const watch = useWatch({
     control,
   });
+  const debounceUserName = useDebounce(watch.userName);
 
   useEffect(() => {
-    accountApi.checkUserNameExists(watch.userName).then((response) => {
+    accountApi.checkUserNameExists(debounceUserName).then((response) => {
       if (response.isExists) {
         setError(
           "userName",
           {
             type: "required",
-            message: `Username '${watch.userName}' is already taken`,
+            message: `Username '${debounceUserName}' is already taken`,
           },
           { shouldFocus: true },
         );
@@ -122,7 +124,7 @@ function Register() {
         setIsExistsUserName(false);
       }
     });
-  }, [watch.userName]);
+  }, [debounceUserName]);
 
   useEffect(() => {
     const onChange = () => {

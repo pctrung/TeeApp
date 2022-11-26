@@ -6,9 +6,12 @@ import FollowingList from "./components/FollowingList";
 import FriendList from "./components/FriendList";
 import FriendRequestList from "./components/FriendRequestList";
 import AllUserList from "./components/AllUserList";
+import { useDebounce } from "hooks/api/useDebounce";
 
 function Friends() {
   const [keyword, setKeyword] = useState("");
+  const debounceKeyword = useDebounce(keyword);
+
   const [activeTabType, setActiveTabType] = useState(FriendOptionType.FRIENDS);
 
   return (
@@ -46,22 +49,22 @@ function Friends() {
         </div>
         <div className="pt-2">
           {activeTabType === FriendOptionType.FRIENDS && (
-            <FriendList keyword={keyword} />
+            <FriendList keyword={debounceKeyword} />
           )}
           {activeTabType === FriendOptionType.FRIEND_REQUESTS && (
-            <FriendRequestList keyword={keyword} />
+            <FriendRequestList keyword={debounceKeyword} />
           )}
           {activeTabType === FriendOptionType.BLOCKED && (
-            <BlockedList keyword={keyword} />
+            <BlockedList keyword={debounceKeyword} />
           )}
           {activeTabType === FriendOptionType.FOLLOWERS && (
-            <FollowerList keyword={keyword} />
+            <FollowerList keyword={debounceKeyword} />
           )}
           {activeTabType === FriendOptionType.FOLLOWING && (
-            <FollowingList keyword={keyword} />
+            <FollowingList keyword={debounceKeyword} />
           )}
           {activeTabType === FriendOptionType.ALL && (
-            <AllUserList keyword={keyword} />
+            <AllUserList keyword={debounceKeyword} />
           )}
         </div>
       </div>
