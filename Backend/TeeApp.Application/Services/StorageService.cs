@@ -14,7 +14,7 @@ namespace TeeApp.Application.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string _imagePath;
         private readonly string _imageUrl;
-        private readonly string[] IMAGE_TYPES = new string[] { ".tiff", ".tiff", ".jpg", ".jpeg", ".gif", ".png" };
+        private readonly string[] IMAGE_TYPES = new string[] { ".tiff", ".tiff", ".jpg", ".jpeg", ".gif", ".png", ".mp4" };
         private const int LIMIT_SIZE = 3;
         private const int LIMIT = 1024 * 1024 * LIMIT_SIZE;
 
@@ -49,7 +49,7 @@ namespace TeeApp.Application.Services
             var extension = Path.GetExtension(originalFileName);
             if (Array.IndexOf(IMAGE_TYPES, extension.ToLower()) < 0)
             {
-                throw new Exception("Please upload image file!");
+                throw new Exception("Please upload image or mp4 file!");
             }
 
             var fileSize = file.Length;

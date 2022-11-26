@@ -12,6 +12,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { ACCEPTED_FILE_TYPES, MAX_IMAGE_SIZE, MAX_IMAGE_SIZE_NUMBER } from "utils/Constants";
 import { PrivacyIcon, PrivacyName, PrivacyType } from "utils/Enums";
+import { isVideo } from "utils/UtilityMethods";
 
 function EditPost({ post, isOpen, setIsOpen }) {
   const currentUser = useSelector((state) => state.users.currentUser);
@@ -85,12 +86,12 @@ function EditPost({ post, isOpen, setIsOpen }) {
     }
   }
   useEffect(() => {
-    if (content.trim() || imageFiles.length > 0) {
+    if (content.trim() || imageFiles.length > 0 || oldPhotoIds?.length > 0) {
       setIsValidButton(true);
     } else {
       setIsValidButton(false);
     }
-  }, [content, imageFiles]);
+  }, [content, imageFiles, oldPhotoIds]);
 
   async function onSubmit(e) {
     e.preventDefault();
@@ -196,9 +197,8 @@ function EditPost({ post, isOpen, setIsOpen }) {
                 onChange={(e) => setContent(e.target.value)}
                 rows="3"
                 className="w-full text-lg md:text-2xl placeholder-gray-500 dark:placeholder-dark-txt focus:placeholder-gray-300 dark:focus:placeholder-dark-hover outline-none transition-base bg-white dark:bg-dark-secondary resize-none"
-                placeholder={`What's on your mind${
-                  currentUser.firstName ? ", " + currentUser.firstName : ""
-                }?`}
+                placeholder={`What's on your mind${currentUser.firstName ? ", " + currentUser.firstName : ""
+                  }?`}
               ></textarea>
               <div ref={emojiRef} className="relative w-full flex justify-end">
                 <ClickableIcon
@@ -236,7 +236,9 @@ function EditPost({ post, isOpen, setIsOpen }) {
                         key={"oldPhotos" + index}
                         className="relative cursor-pointer h-24 w-20 md:h-28 md:w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
                       >
-                        <img src={photo.imageUrl} alt="Preview" />
+                        {isVideo(photo)
+                          ? <video src={photo.imageUrl}></video>
+                          : <img src={photo.imageUrl} alt="Preview" />}
                         <ClickableIcon
                           onClick={() => removeOldPhoto(photo.id)}
                           iconClass="bx bx-x"
@@ -251,10 +253,9 @@ function EditPost({ post, isOpen, setIsOpen }) {
                       key={"imageFiles" + index}
                       className="relative cursor-pointer h-24 w-20 md:h-28 md:w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
                     >
-                      <img
-                        src={imageFile ? URL.createObjectURL(imageFile) : ""}
-                        alt="Preview"
-                      />
+                      {imageFile?.type?.match('video.*')
+                        ? <video src={URL.createObjectURL(imageFile)}></video>
+                        : <img src={URL.createObjectURL(imageFile)} alt="Preview" />}
                       <ClickableIcon
                         onClick={() => removeImage(index)}
                         iconClass="bx bx-x"

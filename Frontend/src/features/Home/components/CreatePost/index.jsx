@@ -124,9 +124,8 @@ function CreatePost() {
             <input
               disabled
               type="text"
-              placeholder={`What's on your mind${
-                currentUser.firstName ? ", " + currentUser.firstName : ""
-              }?`}
+              placeholder={`What's on your mind${currentUser.firstName ? ", " + currentUser.firstName : ""
+                }?`}
               className="bg-gray-100 dark:bg-dark-third rounded-3xl w-full py-2 px-4 pr-12 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 outline-none transition-all duration-200 relative placeholder-gray-500 dark:placeholder-dark-txt hover:bg-gray-200 dark:hover:bg-dark-hover cursor-pointer text-sm md:text-base"
             />
           </div>
@@ -232,9 +231,8 @@ function CreatePost() {
                 onChange={(e) => setContent(e.target.value)}
                 rows="3"
                 className="w-full text-lg md:text-2xl placeholder-gray-500 dark:placeholder-dark-txt focus:placeholder-gray-300 dark:focus:placeholder-dark-hover outline-none transition-base bg-white dark:bg-dark-secondary resize-none"
-                placeholder={`What's on your mind${
-                  currentUser.firstName ? ", " + currentUser.firstName : ""
-                }?`}
+                placeholder={`What's on your mind${currentUser.firstName ? ", " + currentUser.firstName : ""
+                  }?`}
               ></textarea>
               <div ref={emojiRef} className="relative w-full flex justify-end">
                 <ClickableIcon
@@ -270,7 +268,9 @@ function CreatePost() {
                       key={"imageFiles" + index}
                       className="relative cursor-pointer h-24 w-20 md:h-28 md:w-28 bg-gray-100 dark:bg-dark-third rounded-xl flex-center transition-base overflow-hidden flex-shrink-0 "
                     >
-                      <img src={URL.createObjectURL(imageFile)} alt="Preview" />
+                      {imageFile?.type?.match('video.*')
+                        ? <video src={URL.createObjectURL(imageFile)}></video>
+                        : <img src={URL.createObjectURL(imageFile)} alt="Preview" />}
                       <ClickableIcon
                         onClick={() => removeImage(index)}
                         iconClass="bx bx-x"

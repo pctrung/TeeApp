@@ -7,7 +7,7 @@ namespace TeeApp.Utilities.Constants
     {
         public const string ADMIN_USERNAME = "teeadmin";
         public const string CONNECTION_NAME = "DefaultConnection";
-        public const string IMAGE_FOLDER = "img";
+        public const string IMAGE_FOLDER = "files";
         public const string DEFAULT_FOLDER = "default";
         public const string CHAT_HUB_CONFIG = "ChatHubUrl";
         public const string APP_HUB_CONFIG = "AppHubUrl";

@@ -44,3 +44,7 @@ export function identityObjectToString(obj) {
   str = str.substring(0, str.length - 2);
   return str;
 }
+
+export function isVideo(fileUrl) {
+  return fileUrl?.imageUrl?.toString()?.match(/\.(mp4|webm|ogg|mov|avi|wmv|flv|mpeg|mpg|mkv)$/i);
+}

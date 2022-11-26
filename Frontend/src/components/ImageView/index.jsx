@@ -3,8 +3,9 @@ import DefaultImage from "assets/img/default-image.jpg";
 import { useDisableBodyScroll } from "hooks/utils/useDisableBodyScroll";
 import { useEscToClose } from "hooks/utils/useEscToClose";
 import React, { useEffect, useRef, useState } from "react";
+import { isVideo } from "utils/UtilityMethods";
 
-function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
+function ImageView({ photos: files = [], startIndex = 0, setIsOpen, isOpen }) {
   const [index, setIndex] = useState(startIndex);
   const imageRef = useRef();
   const closeRef = useRef();
@@ -15,7 +16,7 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
   useEscToClose(setIsOpen);
 
   function nextImage() {
-    if (index < photos.length - 1) {
+    if (index < files.length - 1) {
       setIndex(index + 1);
     }
   }
@@ -78,16 +79,20 @@ function ImageView({ photos = [], startIndex = 0, setIsOpen, isOpen }) {
           iconClass="bx bxs-chevron-right"
           className={
             "absolute md:right-10 right-5 animate-swipeUp " +
-            (index < photos.length - 1 ? "" : "hidden")
+            (index < files.length - 1 ? "" : "hidden")
           }
         />
 
-        <img
-          ref={imageRef}
-          src={photos[index]?.imageUrl ?? DefaultImage}
-          alt={photos[index]?.caption ?? `Post photo ${index}`}
-          className="animate-swipeDown max-h-11/12 max-w-full md:max-w-3/4 min-w-2/12 object-contain rounded"
-        />
+        {isVideo(files[index])
+          ? <video className="animate-swipeDown max-h-11/12 max-w-full md:max-w-3/4 min-w-5/12 object-contain rounded" controls>
+            <source src={files[index]?.imageUrl} type="video/mp4" />
+          </video>
+          : <img
+            ref={imageRef}
+            src={files[index]?.imageUrl ?? DefaultImage}
+            alt={files[index]?.caption ?? `Post photo ${index}`}
+            className="animate-swipeDown max-h-11/12 max-w-full md:max-w-3/4 min-w-4/12 object-contain rounded"
+          />}
       </div>
     </>
   );
