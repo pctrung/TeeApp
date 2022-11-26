@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { HashRouter as BrowserRouter, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 import { addNotification, setPopup } from "app/appSlice";
 import Loader from "components/Loader";
@@ -99,7 +99,7 @@ function App(props) {
 
   return (
     <>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <BrowserRouter>
         {isLoading && <Loader isOpen={isLoading} className="z-50" />}
         {popup.isOpen && (
           <Popup

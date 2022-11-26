@@ -2,7 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {
   Switch,
-  HashRouter as BrowserRouter,
+  BrowserRouter,
   Route,
   Redirect,
 } from "react-router-dom";
@@ -22,7 +22,7 @@ import Policy from "pages/Policy";
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <BrowserRouter basename={process.env.PUBLIC_URL}>
+      <BrowserRouter>
         <Switch>
           <Route exact path="/login" component={Login} />
           <Route exact path="/policy" component={Policy} />
