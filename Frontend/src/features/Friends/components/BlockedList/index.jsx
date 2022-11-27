@@ -4,13 +4,14 @@ import ImageCircle from "components/ImageCircle";
 import Pagination from "components/Pagination";
 import useFriendApi from "hooks/api/useFriendApi.js";
 import React, { useEffect, useState } from "react";
+import { DefaultPagination } from "utils/Constants";
 
 export default function BlockedList({ keyword }) {
   const [list, setList] = useState({ items: [] });
   const [confirmModal, setConfirmModal] = useState({});
   const friendApi = useFriendApi();
   const [isLoading, setIsLoading] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1 });
+  const [pagination, setPagination] = useState(DefaultPagination);
   const [error, setError] = useState("");
   const [isHasMore, setIsHasMore] = useState(true);
 
@@ -19,7 +20,7 @@ export default function BlockedList({ keyword }) {
   }, [keyword]);
   useEffect(() => {
     // auto fetch data when page = 1
-    if ((isHasMore && pagination) || pagination.page === 1) {
+    if ((isHasMore && pagination?.page) || pagination.page === 1) {
       setIsLoading(true);
       setError(false);
       friendApi
@@ -40,7 +41,7 @@ export default function BlockedList({ keyword }) {
           setError(e);
         });
     }
-  }, [pagination]);
+  }, [pagination?.page, pagination?.limit, pagination?.keyword]);
 
   function loadMore() {
     if (isHasMore) {

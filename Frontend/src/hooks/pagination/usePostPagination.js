@@ -14,7 +14,7 @@ export default function usePostPagination(pagination, userName = "") {
 
   useEffect(() => {
     // auto fetch data when page = 1
-    if ((isHasMore && pagination) || pagination.page === 1) {
+    if ((isHasMore && pagination?.page) || pagination.page === 1) {
       setIsLoading(true);
       setError(false);
       if (userName) {

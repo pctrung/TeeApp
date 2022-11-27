@@ -3,25 +3,26 @@ import Post from "features/Home/components/Post";
 import useAllPostPagination from "hooks/pagination/useAllPostPagination";
 import React, { useEffect, useState } from "react";
 import { useParams, useHistory } from "react-router-dom";
+import { DefaultPagination } from "utils/Constants";
 
 function Search() {
   const history = useHistory();
   const { keyword } = useParams();
   const [searchKeyword, setSearchKeyword] = useState("");
-  const [pagination, setPagination] = useState({ page: -1 });
+  const [pagination, setPagination] = useState(DefaultPagination);
   const { posts, isHasMore, isLoading, error } =
     useAllPostPagination(pagination);
 
   useEffect(() => {
     if (keyword) {
-      setPagination({ keyword, page: 1 });
+      setPagination({ ...pagination, keyword, page: 1 });
     } else {
-      setPagination({ keyword, page: -1 });
+      setPagination({ ...pagination, keyword, page: -1 });
     }
   }, [keyword]);
   function loadMore() {
     if (isHasMore) {
-      setPagination({ keyword, page: pagination.page + 1 });
+      setPagination({ ...pagination, keyword, page: pagination.page + 1 });
     }
   }
   const search = (e) => {

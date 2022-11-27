@@ -22,6 +22,7 @@ import { useCloseOnClickOutside } from "hooks/utils/useCloseOnClickOutside";
 import { useHistory } from "react-router-dom";
 import { addSelectedId } from "app/chatSlice";
 import useChatApi from "hooks/api/useChatApi";
+import { DefaultPagination } from "utils/Constants";
 
 function Profile() {
   const { userName } = useParams();
@@ -45,7 +46,7 @@ function Profile() {
   const menuRef = useRef();
   useCloseOnClickOutside(isOpenMenu, setIsOpenMenu, menuRef);
 
-  const [pagination, setPagination] = useState(1);
+  const [pagination, setPagination] = useState(DefaultPagination);
   const { posts, isHasMore, isLoading, error } = usePostPagination(
     pagination,
     userName,
@@ -181,9 +182,8 @@ function Profile() {
   function openDeclineModal() {
     setConfirmModal({
       isOpen: true,
-      content: `Do you want to decline friend request from ${
-        user.fullName ?? "this user"
-      }?`,
+      content: `Do you want to decline friend request from ${user.fullName ?? "this user"
+        }?`,
       action: unfriend,
     });
   }

@@ -5,6 +5,7 @@ import Pagination from "components/Pagination";
 import useFriendApi from "hooks/api/useFriendApi.js";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { DefaultPagination } from "utils/Constants";
 import { formatDate } from "utils/UtilityMethods";
 
 export default function FriendRequestList({ keyword }) {
@@ -12,7 +13,7 @@ export default function FriendRequestList({ keyword }) {
   const [confirmModal, setConfirmModal] = useState({});
   const friendApi = useFriendApi();
   const [isLoading, setIsLoading] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1 });
+  const [pagination, setPagination] = useState(DefaultPagination);
   const [error, setError] = useState("");
   const [isHasMore, setIsHasMore] = useState(true);
 
@@ -21,7 +22,7 @@ export default function FriendRequestList({ keyword }) {
   }, [keyword]);
   useEffect(() => {
     // auto fetch data when page = 1
-    if ((isHasMore && pagination) || pagination.page === 1) {
+    if ((isHasMore && pagination?.page) || pagination.page === 1) {
       setIsLoading(true);
       setError(false);
       friendApi
@@ -42,7 +43,7 @@ export default function FriendRequestList({ keyword }) {
           setError(e);
         });
     }
-  }, [pagination]);
+  }, [pagination?.page, pagination?.limit, pagination?.keyword]);
 
   function loadMore() {
     if (isHasMore) {

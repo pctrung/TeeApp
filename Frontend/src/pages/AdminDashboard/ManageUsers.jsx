@@ -15,9 +15,10 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Pagination } from "./components/Pagination";
 import { GenderName } from "utils/Enums";
+import { DefaultPagination } from "utils/Constants";
 
 export default function ManageUsers() {
-    const [pagination, setPagination] = useState({ page: 1, limit: 10, pageCount: 0 });
+    const [pagination, setPagination] = useState(DefaultPagination);
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);
@@ -39,7 +40,7 @@ export default function ManageUsers() {
                 setIsLoading(false);
             }
         })();
-    }, [pagination]);
+    }, [pagination?.keyword, pagination?.page, pagination?.limit]);
 
     const getTextClass = (user) => {
         return isUserLocked(user) ? "text-gray-400" : ""

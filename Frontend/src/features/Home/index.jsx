@@ -8,9 +8,10 @@ import CreatePost from "./components/CreatePost";
 import Post from "./components/Post";
 import { Link } from "react-router-dom";
 import OnlineUserList from "./components/OnlineUserList";
+import { DefaultPagination } from "utils/Constants";
 
 function Home() {
-  const [pagination, setPagination] = useState({ page: 1 });
+  const [pagination, setPagination] = useState(DefaultPagination);
   const { posts, isHasMore, isLoading, error } = usePostPagination(pagination);
   const user = useSelector((state) => state.users.currentUser);
 

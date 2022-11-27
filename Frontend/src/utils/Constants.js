@@ -9,6 +9,8 @@ export const DefaultLimit = {
   FRIEND: 50,
 };
 
+export const DefaultPagination = { page: 1, limit: 10, pageCount: 0, keyword: "" }
+
 export const DefaultName = {
   NO_NAME_GROUP: "No name",
   NO_NAME_USER: "Unknown",

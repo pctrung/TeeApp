@@ -15,11 +15,12 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { DefaultPagination } from "utils/Constants";
 import { isVideo } from "utils/UtilityMethods";
 import { Pagination } from "./components/Pagination";
 
 export default function ManagePosts() {
-    const [pagination, setPagination] = useState({ page: 1, limit: 10, pageCount: 0 });
+    const [pagination, setPagination] = useState(DefaultPagination);
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [note, setNote] = useState("");
     const [selectedPostId, setSelectedPostId] = useState(0);
@@ -44,7 +45,7 @@ export default function ManagePosts() {
                 setIsLoading(false);
             }
         })();
-    }, [pagination]);
+    }, [pagination?.keyword, pagination?.page, pagination?.limit]);
 
     const getTextClass = (post) => {
         return post?.isHideByAdmin ? "text-gray-400" : ""

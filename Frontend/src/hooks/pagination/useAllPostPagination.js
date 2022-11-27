@@ -38,7 +38,7 @@ export default function useAllPostPagination(pagination) {
           setError(e);
         });
     }
-  }, [pagination]);
+  }, [pagination?.page, pagination?.limit, pagination?.keyword]);
 
   return { posts, isLoading, error, isHasMore };
 }

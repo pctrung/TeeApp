@@ -13,7 +13,7 @@ export default function FriendList({ keyword }) {
   const [confirmModal, setConfirmModal] = useState({});
   const friendApi = useFriendApi();
   const [isLoading, setIsLoading] = useState(false);
-  const [pagination, setPagination] = useState({ page: 1 });
+  const [pagination, setPagination] = useState({ page: 1, keyword: "" });
   const [error, setError] = useState("");
   const [isHasMore, setIsHasMore] = useState(true);
 
@@ -22,7 +22,7 @@ export default function FriendList({ keyword }) {
   }, [keyword]);
   useEffect(() => {
     // auto fetch data when page = 1
-    if ((isHasMore && pagination) || pagination.page === 1) {
+    if ((isHasMore && pagination?.page) || pagination.page === 1) {
       setIsLoading(true);
       setError(false);
       friendApi
@@ -43,7 +43,7 @@ export default function FriendList({ keyword }) {
           setError(e);
         });
     }
-  }, [pagination]);
+  }, [pagination?.page, pagination?.limit, pagination?.keyword]);
 
   function loadMore() {
     if (isHasMore) {

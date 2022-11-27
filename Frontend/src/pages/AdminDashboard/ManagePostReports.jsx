@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { DefaultPagination } from "utils/Constants";
 
 export default function ManagePostReports() {
     const [isOpenModal, setIsOpenModal] = useState(false);
@@ -25,7 +26,7 @@ export default function ManagePostReports() {
     const [isLoading, setIsLoading] = useState(false);
     const [showUnhandledReportOnly, setShowUnhandledReportOnly] = useState(false);
     const [keyword, setKeyword] = useState("");
-    const [pagination, setPagination] = useState({ page: 1, limit: 10, pageCount: 0 });
+    const [pagination, setPagination] = useState(DefaultPagination);
 
     const postApi = usePostApi();
     const postReportApi = usePostReportApi();
