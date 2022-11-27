@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { isVideo } from "utils/UtilityMethods";
 import { Pagination } from "./components/Pagination";
 
 export default function ManagePosts() {
@@ -214,11 +215,9 @@ export default function ManagePosts() {
                                                 <div
                                                     className="col-span-1 w-full flex justify-center max-h-128 bg-gray-100 dark:bg-dark-third rounded-xl shadow overflow-hidden"
                                                 >
-                                                    <img
-                                                        className="object-contain md:max-h-128 max-h-112 h-full w-full"
-                                                        src={post?.photos?.[0]?.imageUrl}
-                                                        alt={post?.photos?.[0]?.caption ?? `Post photo ${index}`}
-                                                    />
+                                                    {isVideo(post?.photos?.[0])
+                                                        ? <video src={post?.photos?.[0]?.imageUrl}></video>
+                                                        : <img className="object-contain md:max-h-128 max-h-112 h-full w-full" src={post?.photos?.[0]?.imageUrl} alt="Preview" />}
                                                 </div>}
                                         </TableCell>
                                         <TableCell>
