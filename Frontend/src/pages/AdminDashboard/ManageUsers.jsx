@@ -18,7 +18,7 @@ import { GenderName } from "utils/Enums";
 import { DefaultPagination } from "utils/Constants";
 
 export default function ManageUsers() {
-    const [pagination, setPagination] = useState(DefaultPagination);
+    const [pagination, setPagination] = useState({...DefaultPagination, limit: 10});
     const [users, setUsers] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [hasMore, setHasMore] = useState(true);

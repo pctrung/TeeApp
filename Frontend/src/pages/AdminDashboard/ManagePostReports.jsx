@@ -26,7 +26,7 @@ export default function ManagePostReports() {
     const [isLoading, setIsLoading] = useState(false);
     const [showUnhandledReportOnly, setShowUnhandledReportOnly] = useState(false);
     const [keyword, setKeyword] = useState("");
-    const [pagination, setPagination] = useState(DefaultPagination);
+    const [pagination, setPagination] = useState({...DefaultPagination, limit: 10});
 
     const postApi = usePostApi();
     const postReportApi = usePostReportApi();

@@ -20,7 +20,7 @@ import { isVideo } from "utils/UtilityMethods";
 import { Pagination } from "./components/Pagination";
 
 export default function ManagePosts() {
-    const [pagination, setPagination] = useState(DefaultPagination);
+    const [pagination, setPagination] = useState({...DefaultPagination, limit: 10});
     const [isOpenModal, setIsOpenModal] = useState(false);
     const [note, setNote] = useState("");
     const [selectedPostId, setSelectedPostId] = useState(0);
