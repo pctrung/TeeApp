@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using TeeApp.Application.Identity;
@@ -86,6 +87,7 @@ namespace TeeApp.Application.Services
                 .ThenInclude(x => x.Creator)
                 .Include(x => x.ReportedPost)
                 .ThenInclude(x => x.Photos)
+                .OrderByDescending(x => x.DateCreated)
                 .ToListAsync();
         }
     }
