@@ -11,7 +11,7 @@ namespace TeeApp.Hubs.Hubs
     public class ChatHub : Hub<IChatClient>
     {
         private static readonly List<string> _onlineUserNameList = new();
-        private const int DELAY_TIME = 4000;
+        private const int DELAY_TIME = 2500;
 
         public override async Task OnConnectedAsync()
         {
