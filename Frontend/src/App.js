@@ -111,7 +111,7 @@ function App(props) {
         )}
         <Chat />
         <Header className="fixed top-0 w-screen" />
-        <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-16 pb-10">
+        <div className="p-2 bg-gray-100 dark:bg-dark-primary dark:text-white min-h-screen pt-16 pb-10 w-screen">
           <div className="w-full md:max-w-screen-xl mx-auto pt-2 md:pt-4">
             <Switch>
               <Route path="/search/:keyword?" component={Search} />
