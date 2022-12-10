@@ -11,9 +11,12 @@ namespace TeeApp.Hubs.Hubs
     public class ChatHub : Hub<IChatClient>
     {
         private static readonly List<string> _onlineUserNameList = new();
+        private const int DELAY_TIME = 4000;
 
         public override async Task OnConnectedAsync()
         {
+            await Task.Delay(DELAY_TIME);
+
             await base.OnConnectedAsync();
 
             if (!_onlineUserNameList.Contains(Context.UserIdentifier))
@@ -25,6 +28,8 @@ namespace TeeApp.Hubs.Hubs
 
         public override async Task OnDisconnectedAsync(Exception e)
         {
+            await Task.Delay(DELAY_TIME);
+
             await base.OnDisconnectedAsync(e);
 
             if (_onlineUserNameList.Contains(Context.UserIdentifier))
