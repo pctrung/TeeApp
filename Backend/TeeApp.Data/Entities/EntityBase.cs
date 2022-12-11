@@ -1,4 +1,5 @@
 ﻿using System;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Data.Entities
 {
@@ -11,7 +12,7 @@ namespace TeeApp.Data.Entities
 
         public EntityBase()
         {
-            DateCreated = DateTime.Now;
+            DateCreated = DateTime.UtcNow.ToVNTimeZone();
         }
     }
 }

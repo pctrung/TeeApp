@@ -124,6 +124,7 @@ namespace TeeApp.Application.Services
             notifier.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
+            notification.DateCreated = notification.DateCreated.AddHours(-7);
             return _mapper.Map<NotificationViewModel>(notification);
         }
 
@@ -150,6 +151,7 @@ namespace TeeApp.Application.Services
             notifier.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
+            notification.DateCreated = notification.DateCreated.AddHours(-7);
             return _mapper.Map<NotificationViewModel>(notification);
         }
 
@@ -176,6 +178,7 @@ namespace TeeApp.Application.Services
             notifier.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
+            notification.DateCreated = notification.DateCreated.AddHours(-7);
             return _mapper.Map<NotificationViewModel>(notification);
         }
 
@@ -204,6 +207,7 @@ namespace TeeApp.Application.Services
             post.Creator.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
+            notification.DateCreated = notification.DateCreated.AddHours(-7);
             return _mapper.Map<NotificationViewModel>(notification);
         }
 
@@ -233,6 +237,7 @@ namespace TeeApp.Application.Services
             post.Creator.Notifications.Add(notification);
             await _context.SaveChangesAsync();
 
+            notification.DateCreated = notification.DateCreated.AddHours(-7);
             return _mapper.Map<NotificationViewModel>(notification);
         }
     }

@@ -11,6 +11,7 @@ using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.BlockedKeywords;
 using TeeApp.Models.ViewModels;
 using TeeApp.Utilities.Constants;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
 {
@@ -41,7 +42,7 @@ namespace TeeApp.Application.Services
                 request.Keywords = request.Keywords?.Where(x => !string.IsNullOrWhiteSpace(x)).ToList();
                 group = new BlockedKeywordGroup
                 {
-                    DateCreated = DateTime.Now,
+                    DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                     Name = request.Name,
                     Keywords = string.Join(SystemConstants.BLOCKED_KEYWORDS_SEPARATOR, request.Keywords ?? new List<string>())  
                 };

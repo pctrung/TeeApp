@@ -228,6 +228,8 @@ namespace TeeApp.Api.Controllers
                         var notification = await _notificationService.CreateCommentNotificationAsync(postId);
 
                         await _appHub.Clients.User(notification.RecipientUserName).ReceiveNotification(notification);
+                        
+                        result.Data.Comment.DateCreated = result.Data.Comment.DateCreated.AddHours(-7);
                         await _appHub.Clients.All.ReceiveComment(result.Data);
                         //await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveComment(result.Data);
 
@@ -249,11 +251,12 @@ namespace TeeApp.Api.Controllers
             switch (result.StatusCode)
             {
                 case 200:
-                    {
-                        await _appHub.Clients.All.ReceiveUpdatedComment(result.Data);
-                        //await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedComment(result.Data);
-                        return Ok(result.Data);
-                    }
+                {
+                    result.Data.Comment.DateCreated = result.Data.Comment.DateCreated.AddHours(-7); 
+                    await _appHub.Clients.All.ReceiveUpdatedComment(result.Data);
+                    //await _appHub.Clients.Users(result.Data.RecipientUserNames).ReceiveUpdatedComment(result.Data);
+                    return Ok(result.Data);
+                }
                 case 403: return Forbid();
                 default: return NotFound(result.Message);
             }

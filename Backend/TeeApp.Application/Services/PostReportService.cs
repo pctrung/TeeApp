@@ -9,6 +9,7 @@ using TeeApp.Data.EF;
 using TeeApp.Data.Entities;
 using TeeApp.Models.Common;
 using TeeApp.Models.RequestModels.PostReport;
+using TeeApp.Utilities.Extentions;
 
 namespace TeeApp.Application.Services
 {
@@ -38,7 +39,7 @@ namespace TeeApp.Application.Services
 
             var report = new PostReport
             {
-                DateCreated = DateTime.Now,
+                DateCreated = DateTime.UtcNow.ToVNTimeZone(),
                 ReportedPost = post,
                 Content = request.Content,
                 IsHandled = false
