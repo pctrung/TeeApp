@@ -137,7 +137,7 @@ function Post({ post, isOpenComment = false }) {
         <EditPost post={post} isOpen={isOpenEdit} setIsOpen={setIsOpenEdit} />
       )}
       <div className="py-4 px-5 max-w-xl md:min-w-500 min-w-200 w-full mx-auto bg-white dark:bg-dark-secondary flex flex-col justify-start items-start space-y-3 rounded-xl shadow relative">
-        {post?.isHideByAdmin && <div className="flex items-center justify-center bg-gray-800 h-full w-full z-10 bg-opacity-60 absolute inset-0 rounded-xl">
+        {post?.isHideByAdmin && <div style={{zIndex: 5}} className="flex items-center justify-center bg-gray-800 h-full w-full bg-opacity-60 absolute inset-0 rounded-xl">
           <div className="p-4 text-red-500 bg-white bg-opacity-90 rounded-lg">
             <div>This post has been hidden by admin.</div>
             <div>{post?.hideByAdminNote ? `Note: ${post?.hideByAdminNote}` : ""}</div>
@@ -171,7 +171,7 @@ function Post({ post, isOpenComment = false }) {
               </Link>
             </div>
           </div>
-          <div className="relative" ref={ref}>
+          <div className="relative" style={{zIndex: 6}} ref={ref}>
             <ClickableIcon
               iconClass="bx bx-dots-horizontal-rounded"
               secondMode
